@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneShoppingList", "OneShoppingList\OneShoppingList.csproj", "{BFA95757-DABA-428D-8577-BE21728CBBA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneShoppingList_uTest", "OneShoppingList_uTest\OneShoppingList_uTest.csproj", "{7C308C7F-43AD-4635-86E8-E893D72953A8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BFA95757-DABA-428D-8577-BE21728CBBA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFA95757-DABA-428D-8577-BE21728CBBA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFA95757-DABA-428D-8577-BE21728CBBA5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{BFA95757-DABA-428D-8577-BE21728CBBA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFA95757-DABA-428D-8577-BE21728CBBA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFA95757-DABA-428D-8577-BE21728CBBA5}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

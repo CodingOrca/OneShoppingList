@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<About>
+  <!-- The App element allows you to override the values that are extracted from the WMAppManifest.xml file automatically -->
+  <!-- Important: if you use app title localization as described in: http://msdn.microsoft.com/en-us/library/ff967550(v=VS.92).aspx
+       ...then you need to override the 'Title' attribute of the 'App' node to provide the correct title explicitly here! -->
+  <!-- The AdditionalNotes attribute has no equivalent in the WMAppManifest.xml; you can only define its content here -->
+  <!-- Explicitly set any of the attributes to an empty string to remove it (including its label) from the dialog -->
+  <App Author="Artur Pusztai"
+       Publisher="Artur Pusztai"       
+       AdditionalNotes="Thanks to Lumi, Ada and David for their ideas, help and patience. Thanks to Sten, Tommi and their partners for testing and for their ideas."/>
+  <Items>
+    <!-- Create a MainItem entry to configure the front page -->
+    <!-- The Titel attribute defines the title of the pivot item -->
+    <!-- The Label (and review buttong content) attributes can override the default values to what you like, and also help with localization -->
+    <MainItem Title="about"
+              AppAuthorLabel="by"
+              AppDescriptionLabel="Description:"
+              AppPublisherLabel="Publisher:"
+              AppVersionLabel="Version:"
+              AppAdditionalNotesLabel="Additional Notes:"
+              AppReviewButtonContent="Review this app!">
+      <Links>
+        <!-- A collection of links presented on the front page. -->
+        <!-- By using different protocols like http or mailto you can invoke the respective applications -->
+        <!-- The Label attribute defines an additional label placed in front of the hyperlink -->
+        <!-- Use this to provide contact/support details for your app -->
+        <Link NavigateUri="mailto:artur.pusztai@live.com"
+               Content="artur.pusztai@live.com"
+               Label="Support:" />
+      </Links>
+    </MainItem>
+    <!-- For each additional pivot item, add a separate Item entry. Ideas for items are: license, tutorial or help, version history, show room for other apps from you etc. -->
+    <!-- The Title attribute defines the title of the pivot item -->
+    <!-- Each Item can be a remote item (fetched from a Uri) or a local item (using its content), or both (local content is the fallback value if fetching the network content fails) -->
+    <!-- Supported types are "text" and "xaml", where text is nicely formatted automatically, and XAML is handled by the built-in XamlReader -->
+    <Item Title="help"
+          Type="text">
+      One Shopping List
+      You have only one shopping list to manage.
+      It is sorted according to the store where you are currently shopping, so that the order on your list corresponds to your path through that store.
+
+      Your shopping paths
+      Manage your stores: choose the available product categories and the order in which you encounter them on your way through the store.
+
+      SkyDrive Sync
+      Share your shopping list with your family.
+      The app will combine all the changes from all participating devices using a timestamp on product item level.
+      To activate this feature log in with your Microsoft account.
+      Make sure you use the same account on all devices you want to keep in sync.
+
+      Autocomplete
+      One way to add items to your list is by typing a part of the product name and choosing from the list of matching items.
+      Use this function if some items you need to buy just came into your mind.
+
+      Favorites
+      The other way is to review the list of your preferred products and mark some of them to be added to the shopping list.
+      Use this function at home, before doing your weekend shopping, to check if you are out of some basic products.
+
+      Send as email
+      If your partner does not own a windows phone, send him/her an email with the sorted shopping list.
+    </Item>
+
+    <Item Title="history"
+           Type="text">
+      1.0.0.3
+      Bug Fixes:
+      - Solves sync issue for deletion of products from the product list
+
+      New Features:
+      - When the app is closing and automatic sync is turned on, and there are local changes, sync is performed.
+      - You can send the shopping list by email now.
+      - About Box with help and version history.
+      - The shopping basket is not saved anymore. The order of the items in the shopping basket is the same with the order in which you added them to the shopping basket. This makes it easier for you to find items which you moved to the shopping basket by mistake, and can move them back to the shopping list.
+      - Animations when you move items to the shopping basket or from the shopping basket back to the shopping list.
+
+      1.0.0.2
+      App sometimes hangs
+
+      1.0.0.1
+      Bug fixes:
+      - Solves error in synchronization
+      - Solves error when adding new products: very often an old product got overwritten.
+
+      1.0.0.0
+      First version, not public
+    </Item>
+  </Items>
+</About>

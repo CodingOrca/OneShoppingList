@@ -1,0 +1,218 @@
+﻿<toolkit:ContextMenu
+    x:Class="OneShoppingList.ShoppingItemContextMenu"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    d:DesignHeight="480" d:DesignWidth="480"
+    Margin="12,0,0,0"
+    Width="468"
+    x:Name="contextMenu" 
+    IsFadeEnabled="True"
+    IsZoomEnabled="False"
+    Padding="0">
+
+    <toolkit:MenuItem 
+        Name="menuItem"
+        toolkit:TiltEffect.SuppressTilt="True"
+        Padding="0"
+        Width="456"
+        Header="{Binding}"
+        Margin="0"
+        >
+        <toolkit:MenuItem.HeaderTemplate>
+            <DataTemplate>
+                <Grid Margin="0,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button 
+                        x:Name="removeButton"
+                        Grid.Row="0" Grid.Column="0"
+                        toolkit:TiltEffect.IsTiltEnabled="True"
+                        Height="72"
+                        Width="72"
+                        Margin="0,0,0,0"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Command="{Binding Main.RemoveFromShoppingListCommand, Source={StaticResource Locator}}"
+                        CommandParameter="{Binding}"
+                        Click="removeButton_Click"
+                        Visibility="{Binding Parent.RemoveVisibility, ElementName=menuItem}"
+                        Style="{StaticResource PopupIconButton}"
+                        Content="{StaticResource cancelBrush}">
+                    </Button>
+                    <TextBlock 
+                        x:Name="removeText"
+                        HorizontalAlignment="Center"
+                        Text="remove" 
+                        Margin="0,-12,0,0"
+                        Grid.Row="1" Grid.Column="0"
+                        Foreground="{StaticResource PhoneBackgroundBrush}"
+                        Visibility="{Binding Parent.RemoveVisibility, ElementName=menuItem}"
+                        Style="{StaticResource PhoneTextSmallStyle}"/>
+                    
+                    <Button 
+                        x:Name="deleteButton"
+                        Grid.Row="0" Grid.Column="1"
+                        toolkit:TiltEffect.IsTiltEnabled="True"
+                        Height="72"
+                        Width="72"
+                        Margin="-12,0,0,0"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Command="{Binding Main.DeleteProductItemCommand, Source={StaticResource Locator}}"
+                        CommandParameter="{Binding}"
+                        Click="deleteButton_Click"
+                        Visibility="{Binding Parent.DeleteVisibility, ElementName=menuItem}"
+                        Style="{StaticResource PopupIconButton}"
+                        Content="{StaticResource deleteBrush}">
+                    </Button>
+                    <TextBlock 
+                        x:Name="deleteText"
+                        HorizontalAlignment="Center"
+                        Text="delete" 
+                        Margin="-12,-12,0,0"
+                        Grid.Row="1" Grid.Column="1"
+                        Foreground="{StaticResource PhoneBackgroundBrush}"
+                        Visibility="{Binding Parent.DeleteVisibility, ElementName=menuItem}"
+                        Style="{StaticResource PhoneTextSmallStyle}"/>
+                    
+                    <Button 
+                        x:Name="editButton"
+                        Grid.Row="0" Grid.Column="3"
+                        toolkit:TiltEffect.IsTiltEnabled="True"
+                        Height="72"
+                        Width="72"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Click="editButton_Click"
+                        Style="{StaticResource PopupIconButton}"
+                        Content="{StaticResource editBrush}">
+                    </Button>
+                    <TextBlock 
+                        Name="editText"
+                        Text="edit" 
+                        Margin="0,-12,0,0"
+                        HorizontalAlignment="Center"
+                        Grid.Row="1" Grid.Column="3"
+                        Foreground="{StaticResource PhoneBackgroundBrush}"
+                        Style="{StaticResource PhoneTextSmallStyle}"/>
+
+                    <Button 
+                        x:Name="addtoFavButton"
+                        Grid.Row="0" Grid.Column="4"
+                        toolkit:TiltEffect.IsTiltEnabled="True"
+                        Height="72"
+                        Width="72"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Click="addtoFavButton_Click"
+                        Command="{Binding Main.AddToFavoritesCommand, Source={StaticResource Locator}}"
+                        CommandParameter="{Binding}"
+                        Visibility="{Binding IsFavorite,Converter={StaticResource toVisibilityInvertor}}"
+                        Style="{StaticResource PopupIconButton}"
+                        Content="{StaticResource addtoFavBrush}">
+                    </Button>
+                    <TextBlock
+                        x:Name="addtoFavText"
+                        Text="fav."
+                        Margin="0,-12,0,0"
+                        HorizontalAlignment="Center"
+                        Grid.Row="1" Grid.Column="4"
+                        Visibility="{Binding IsFavorite,Converter={StaticResource toVisibilityInvertor}}"
+                        Foreground="{StaticResource PhoneBackgroundBrush}"
+                        Style="{StaticResource PhoneTextSmallStyle}"/>
+
+                    <Button 
+                        x:Name="removeFavButton"
+                        Grid.Row="0" Grid.Column="4"
+                        toolkit:TiltEffect.IsTiltEnabled="True"
+                        Height="72"
+                        Width="72"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Click="removeFavButton_Click"
+                        Command="{Binding Main.RemoveFavoriteCommand, Source={StaticResource Locator}}"
+                        CommandParameter="{Binding}"
+                        Visibility="{Binding IsFavorite,Converter={StaticResource toVisibilityConverter}}"
+                        Style="{StaticResource PopupIconButton}"
+                        Content="{StaticResource removeFavBrush}">
+                    </Button>
+                    <TextBlock 
+                        Name="removeFavText"
+                        Text="no fav." 
+                        Margin="0,-12,0,0"
+                        HorizontalAlignment="Center"
+                        Grid.Row="1" Grid.Column="4"
+                        Visibility="{Binding IsFavorite,Converter={StaticResource toVisibilityConverter}}"
+                        Foreground="{StaticResource PhoneBackgroundBrush}"
+                        Style="{StaticResource PhoneTextSmallStyle}"/>
+
+                    <Button 
+                        x:Name="lessButton"
+                        Grid.Row="0" Grid.Column="8"
+                        toolkit:TiltEffect.IsTiltEnabled="True"
+                        Height="72"
+                        Width="72"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Command="{Binding Main.DecreaseQuantityCommand, Source={StaticResource Locator}}"
+                        CommandParameter="{Binding}"
+                        Style="{StaticResource PopupIconButton}"
+                        Content="{StaticResource minusBrush}">
+                    </Button>
+                    <TextBlock 
+                        Name="lessText"
+                        Text="less" 
+                        HorizontalAlignment="Center"
+                        Margin="0,-12,0,0"
+                        Grid.Row="1" Grid.Column="8"
+                        Foreground="{StaticResource PhoneBackgroundBrush}"
+                        Style="{StaticResource PhoneTextSmallStyle}"/>
+
+                    <Button 
+                        x:Name="moreButton"
+                        Grid.Row="0" Grid.Column="9"
+                        toolkit:TiltEffect.IsTiltEnabled="True"
+                        Height="72"
+                        Width="72"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Command="{Binding Main.IncreaseQuantityCommand, Source={StaticResource Locator}}"
+                        CommandParameter="{Binding}"
+                        Style="{StaticResource PopupIconButton}"
+                        Content="{StaticResource addBrush}">
+                    </Button>
+                    <TextBlock 
+                        Name="moreText"
+                        Text="more" 
+                        Margin="0,-12,0,0"
+                        HorizontalAlignment="Center"
+                        Grid.Row="1" Grid.Column="9"
+                        Foreground="{StaticResource PhoneBackgroundBrush}"
+                        Style="{StaticResource PhoneTextSmallStyle}"/>
+                </Grid>
+            </DataTemplate>
+        </toolkit:MenuItem.HeaderTemplate>
+    </toolkit:MenuItem>
+</toolkit:ContextMenu>

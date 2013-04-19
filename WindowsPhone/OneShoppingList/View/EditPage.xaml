@@ -1,0 +1,473 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="OneShoppingList.View.EditPage"
+    xmlns:local="clr-namespace:OneShoppingList"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:mm="clr-namespace:MetroInMotionUtils"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    mc:Ignorable="d"
+    d:DesignWidth="480" d:DesignHeight="696" FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    LayoutUpdated="PhoneApplicationPage_LayoutUpdated"
+    DataContext="{Binding Main,Source={StaticResource Locator}}"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <controls:Pivot 
+            Name="pivot"
+            Title="ONE SHOPPING LIST"
+            SelectionChanged="pivot_SelectionChanged">
+            <controls:PivotItem
+                Name="latestPivotItem"
+                Margin="12,28,0,0"
+                Header="{Binding Localized.latestTitle}">
+                <ListBox ItemsSource="{Binding RecentList}"
+                         mm:MetroInMotion.IsPivotAnimated="True"
+                         Grid.Row="1"
+                         Margin="0,0,0,3"
+                         toolkit:TiltEffect.IsTiltEnabled="False">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid 
+                                mm:MetroInMotion.AnimationLevel="2"
+                                HorizontalAlignment="Stretch"
+                                Width="468" 
+                                Background="Transparent"
+                                Tap="Grid_Tap"
+                                >
+                                <toolkit:ContextMenuService.ContextMenu>
+                                    <local:ShoppingItemContextMenu 
+                                        DeleteVisibility="Collapsed"
+                                        RemoveVisibility="Collapsed"
+                                        OnEdit="EditButton_Click" 
+                                        OnDelete="CloseContextMenu"
+                                        OnAddFavorite="CloseContextMenu"
+                                        OnRemoveFavorite="CloseContextMenu"
+                                        Opened="menu_Opened"/>
+                                </toolkit:ContextMenuService.ContextMenu>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="72"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="44"/>
+                                    <RowDefinition Height="32"/>
+                                </Grid.RowDefinitions>
+
+
+                                <Border
+                                    Margin="0,0,0,0"
+                                    BorderBrush="{StaticResource PhoneChromeBrush}"
+                                    BorderThickness="1"
+                                    Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                                    VerticalAlignment="Top"/>
+
+                                <CheckBox 
+                                    IsChecked="{Binding IsOnShoppingList,Mode=TwoWay}"
+                                    Grid.Row="1" Grid.Column="1" Grid.RowSpan="2"
+                                    Margin="12,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Click="CheckBox_Click"
+                                    />
+
+                                <TextBlock 
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
+                                    Grid.Row="1" Grid.Column="0"
+                                    Text="{Binding Caption}"
+                                    TextWrapping="NoWrap"
+                                    Margin="12,0,60,0"
+                                    Style="{StaticResource PhoneTextLargeStyle}"/>
+
+                                <TextBlock 
+                                    mm:MetroInMotion.AnimationLevel="1"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
+                                    Text="{Binding PreferredShop}"
+                                    Margin="12,0,0,0"
+                                    Grid.Row="2" Grid.Column="0"
+                                    TextWrapping="NoWrap"
+                                    Style="{StaticResource PhoneTextSubtleStyle}"/>
+
+                                <TextBlock
+                                    Grid.Row="1" Grid.Column="0"
+                                    Text="{Binding DefaultQuantity}"
+                                    VerticalAlignment="Top"
+                                    TextWrapping="NoWrap"
+                                    Margin="0"
+                                    HorizontalAlignment="Right"
+                                    Style="{StaticResource PhoneTextLargeStyle}"
+                                    />
+
+                                <TextBlock
+                                    mm:MetroInMotion.AnimationLevel="1"
+                                    Grid.Row="2" Grid.Column="0"
+                                    Text="{Binding UnitSize}"
+                                    TextWrapping="NoWrap"
+                                    HorizontalAlignment="Right"
+                                    Margin="0"
+                                    Style="{StaticResource PhoneTextSubtleStyle}"
+                                    />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </controls:PivotItem>
+            
+            <controls:PivotItem
+                Name="favoritesPivotItem"
+                Margin="12,28,0,0"
+                Header="{Binding Localized.favoritesTitle}">
+                
+                <toolkit:LongListSelector 
+                    mm:MetroInMotion.IsPivotAnimated="True"
+                    Name="favoritesListSelector"
+                    toolkit:TiltEffect.IsTiltEnabled="False"
+                    ItemsSource="{Binding FavoritesViewModel.GroupsView}"
+                    GroupViewOpened="LongListSelector_GroupViewOpened"
+                    GroupViewClosing="LongListSelector_GroupViewClosing"
+                    ScrollingStarted="longListSelector_ScrollingStarted"
+                    Link="longListSelector_Link"
+                    Unlink="longListSelector_Unlink"
+                    >
+
+                    <toolkit:LongListSelector.GroupItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel 
+                                Orientation="Vertical"
+                                Width="468"
+                                Margin="12,0,0,0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                toolkit:TiltEffect.IsTiltEnabled="True"/>
+                        </ItemsPanelTemplate>
+                    </toolkit:LongListSelector.GroupItemsPanel>
+
+                    <toolkit:LongListSelector.GroupItemTemplate>
+                        <DataTemplate>
+                            <Button
+                                Background="{StaticResource PhoneAccentBrush}"
+                                Style="{StaticResource TiltButtonStyle}"
+                                Height="54"
+                                Margin="0,6,0,6"
+                                >
+                                <TextBlock
+                                    Text="{Binding Key,Converter={StaticResource toUpperConverter}}"
+                                    Style="{StaticResource PhoneTextLargeStyle}"
+                                    HorizontalAlignment="Center"/>
+                                <Button.Projection>
+                                    <PlaneProjection RotationX="-90"/>
+                                </Button.Projection>
+                            </Button>
+                        </DataTemplate>
+                    </toolkit:LongListSelector.GroupItemTemplate>
+
+                    <toolkit:LongListSelector.GroupFooterTemplate>
+                        <DataTemplate>
+                            <Grid Height="24" Width="468"/>
+                        </DataTemplate>
+                    </toolkit:LongListSelector.GroupFooterTemplate>
+
+                    <toolkit:LongListSelector.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <Border 
+                                mm:MetroInMotion.AnimationLevel="0"
+                                Width="468"
+                                Height="54"    
+                                Background="{StaticResource PhoneAccentBrush}"
+                                Margin="0,0,0,0"
+                                >
+                                <TextBlock Text="{Binding Key,Converter={StaticResource toUpperConverter}}" 
+                                    VerticalAlignment="Center"
+                                    Margin="12,6,0,6"
+                                    Style="{StaticResource PhoneTextLargeStyle}"
+                                    />
+                            </Border>
+                        </DataTemplate>
+                    </toolkit:LongListSelector.GroupHeaderTemplate>
+
+                    <toolkit:LongListSelector.ItemTemplate>
+                        <DataTemplate>
+                            <Grid 
+                                mm:MetroInMotion.AnimationLevel="2"
+                                HorizontalAlignment="Stretch"
+                                Width="468" 
+                                Background="Transparent"
+                                Tap="Grid_Tap"
+                                >
+                                <toolkit:ContextMenuService.ContextMenu>
+                                    <local:ShoppingItemContextMenu 
+                                        DeleteVisibility="Visible"
+                                        RemoveVisibility="Collapsed"
+                                        OnEdit="EditButton_Click" 
+                                        OnDelete="CloseContextMenu"
+                                        OnAddFavorite="CloseContextMenu"
+                                        OnRemoveFavorite="CloseContextMenu"
+                                        Opened="menu_Opened"/>
+                                </toolkit:ContextMenuService.ContextMenu>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="72"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="44"/>
+                                    <RowDefinition Height="32"/>
+                                </Grid.RowDefinitions>
+
+
+                                <Border
+                                    Margin="0,0,0,0"
+                                    BorderBrush="{StaticResource PhoneChromeBrush}"
+                                    BorderThickness="1"
+                                    Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                                    VerticalAlignment="Top"/>
+
+                                <CheckBox 
+                                    IsChecked="{Binding IsOnShoppingList,Mode=TwoWay}"
+                                    Grid.Row="1" Grid.Column="1" Grid.RowSpan="2"
+                                    Margin="12,0,0,0"
+                                    Click="CheckBox_Click"
+                                    />
+
+                                <TextBlock 
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
+                                    Grid.Row="1" Grid.Column="0"
+                                    Text="{Binding Caption}"
+                                    TextWrapping="NoWrap"
+                                    Margin="12,0,60,0"
+                                    Style="{StaticResource PhoneTextLargeStyle}"/>
+
+                                <TextBlock 
+                                    mm:MetroInMotion.AnimationLevel="1"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
+                                    Text="{Binding PreferredShop}"
+                                    Margin="12,0,0,0"
+                                    Grid.Row="2" Grid.Column="0"
+                                    TextWrapping="NoWrap"
+                                    Style="{StaticResource PhoneTextSubtleStyle}"/>
+
+                                <TextBlock
+                                    Grid.Row="1" Grid.Column="0"
+                                    Text="{Binding DefaultQuantity}"
+                                    VerticalAlignment="Top"
+                                    TextWrapping="NoWrap"
+                                    Margin="0"
+                                    HorizontalAlignment="Right"
+                                    Style="{StaticResource PhoneTextLargeStyle}"
+                                    />
+
+                                <TextBlock
+                                    mm:MetroInMotion.AnimationLevel="1"
+                                    Grid.Row="2" Grid.Column="0"
+                                    Text="{Binding UnitSize}"
+                                    TextWrapping="NoWrap"
+                                    HorizontalAlignment="Right"
+                                    Margin="0"
+                                    Style="{StaticResource PhoneTextSubtleStyle}"
+                                    />
+                            </Grid>
+                        </DataTemplate>
+                    </toolkit:LongListSelector.ItemTemplate>
+                </toolkit:LongListSelector>
+            </controls:PivotItem>
+
+            <controls:PivotItem
+                Name="allPivotItem"
+                Margin="12,28,0,0"
+                Header="{Binding Localized.allTitle}">
+
+                <toolkit:LongListSelector 
+                    mm:MetroInMotion.IsPivotAnimated="True"
+                    Name="allItemsListSelector"
+                    toolkit:TiltEffect.IsTiltEnabled="False"
+                    ItemsSource="{Binding AllItemsViewModel.GroupsView}"
+                    GroupViewOpened="LongListSelector_GroupViewOpened"
+                    GroupViewClosing="LongListSelector_GroupViewClosing"
+                    ScrollingStarted="longListSelector_ScrollingStarted"
+                    Link="longListSelector_Link"
+                    Unlink="longListSelector_Unlink"
+                    >
+
+                    <toolkit:LongListSelector.GroupItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel 
+                                Orientation="Vertical"
+                                Width="468"
+                                Margin="12,0,0,0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                toolkit:TiltEffect.IsTiltEnabled="True"/>
+                        </ItemsPanelTemplate>
+                    </toolkit:LongListSelector.GroupItemsPanel>
+
+                    <toolkit:LongListSelector.GroupItemTemplate>
+                        <DataTemplate>
+                            <Button
+                                Background="{StaticResource PhoneAccentBrush}"
+                                Style="{StaticResource TiltButtonStyle}"
+                                Height="54"
+                                Margin="0,6,0,6"
+                                >
+                                <TextBlock
+                                    Text="{Binding Key,Converter={StaticResource toUpperConverter}}"
+                                    Style="{StaticResource PhoneTextLargeStyle}"
+                                    HorizontalAlignment="Center"/>
+                                <Button.Projection>
+                                    <PlaneProjection RotationX="-90"/>
+                                </Button.Projection>
+                            </Button>
+                        </DataTemplate>
+                    </toolkit:LongListSelector.GroupItemTemplate>
+
+                    <toolkit:LongListSelector.GroupFooterTemplate>
+                        <DataTemplate>
+                            <Grid Height="24" Width="468"/>
+                        </DataTemplate>
+                    </toolkit:LongListSelector.GroupFooterTemplate>
+
+                    <toolkit:LongListSelector.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <Border 
+                                mm:MetroInMotion.AnimationLevel="0"
+                                Width="468"
+                                Height="54"    
+                                Background="{StaticResource PhoneAccentBrush}"
+                                Margin="0,0,0,0"
+                                >
+                                <TextBlock Text="{Binding Key,Converter={StaticResource toUpperConverter}}" 
+                                    VerticalAlignment="Center"
+                                    Margin="12,6,0,6"
+                                    Style="{StaticResource PhoneTextLargeStyle}"
+                                    />
+                            </Border>
+                        </DataTemplate>
+                    </toolkit:LongListSelector.GroupHeaderTemplate>
+
+                    <toolkit:LongListSelector.ItemTemplate>
+                        <DataTemplate>
+                            <Grid 
+                                mm:MetroInMotion.AnimationLevel="2"
+                                HorizontalAlignment="Stretch"
+                                Width="468" 
+                                Background="Transparent"
+                                Tap="Grid_Tap"
+                                >
+                                <toolkit:ContextMenuService.ContextMenu>
+                                    <local:ShoppingItemContextMenu 
+                                        DeleteVisibility="Visible"
+                                        RemoveVisibility="Collapsed"
+                                        OnAddFavorite="CloseContextMenu"
+                                        OnRemoveFavorite="CloseContextMenu"
+                                        OnEdit="EditButton_Click" 
+                                        OnDelete="CloseContextMenu"
+                                        Opened="menu_Opened"/>
+                                </toolkit:ContextMenuService.ContextMenu>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="72"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="44"/>
+                                    <RowDefinition Height="32"/>
+                                </Grid.RowDefinitions>
+
+
+                                <Border 
+                                    Margin="0,0,0,0"
+                                    BorderBrush="{StaticResource PhoneChromeBrush}"
+                                    BorderThickness="1"
+                                    Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4"
+                                    VerticalAlignment="Top"/>
+
+                                <CheckBox 
+                                    IsChecked="{Binding IsOnShoppingList,Mode=TwoWay}"
+                                    Grid.Row="1" Grid.Column="1" Grid.RowSpan="2"
+                                    Margin="12,0,0,0"
+                                    Click="CheckBox_Click"
+                                    />
+
+                                <TextBlock 
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
+                                    Grid.Row="1" Grid.Column="0"
+                                    Text="{Binding Caption}"
+                                    TextWrapping="NoWrap"
+                                    Margin="12,0,60,0"
+                                    Style="{StaticResource PhoneTextLargeStyle}"/>
+
+                                <TextBlock 
+                                    mm:MetroInMotion.AnimationLevel="1"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
+                                    Text="{Binding PreferredShop}"
+                                    Margin="12,0,0,0"
+                                    Grid.Row="2" Grid.Column="0"
+                                    TextWrapping="NoWrap"
+                                    Style="{StaticResource PhoneTextSubtleStyle}"/>
+
+                                <TextBlock
+                                    Grid.Row="1" Grid.Column="0"
+                                    Text="{Binding DefaultQuantity}"
+                                    VerticalAlignment="Top"
+                                    TextWrapping="NoWrap"
+                                    HorizontalAlignment="Right"
+                                    Margin="0"
+                                    Style="{StaticResource PhoneTextLargeStyle}"
+                                    />
+
+                                <TextBlock
+                                    mm:MetroInMotion.AnimationLevel="1"
+                                    Grid.Row="2" Grid.Column="0"
+                                    Text="{Binding UnitSize}"
+                                    TextWrapping="NoWrap"
+                                    HorizontalAlignment="Right"
+                                    Margin="0"
+                                    Style="{StaticResource PhoneTextSubtleStyle}"
+                                    />
+
+                                <Grid 
+                                    Grid.Row="2" Grid.Column="0"
+                                    HorizontalAlignment="Right"
+                                    Margin="0,0,80,0"
+                                    Height="32"
+                                    Width="32"
+                                    Opacity="{Binding IsFavorite}"
+                                    OpacityMask="{StaticResource favoritesBrush}" 
+                                    Background="{StaticResource PhoneDisabledBrush}"
+                                    />
+                            </Grid>
+                        </DataTemplate>
+                    </toolkit:LongListSelector.ItemTemplate>
+                </toolkit:LongListSelector>
+            </controls:PivotItem>
+        </controls:Pivot>
+    </Grid>
+
+    <!--Sample code showing usage of ApplicationBar-->
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+            <shell:ApplicationBarIconButton x:Name="addButton" IconUri="/Images/appbar.add.rest.png" Text="add" Click="addButton_Click" />
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar.check.rest.png" Text="ok" Click="ApplicationBarIconButton_Click" />
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem x:Name="appbar_clearList" Text="einkaufsliste leeren" Click="appbar_clearList_Click"/>
+                <shell:ApplicationBarMenuItem x:Name="appbar_shopsConfig" Text="läden bearbeiten" Click="ShopsConfiguration_Click" />
+                <shell:ApplicationBarMenuItem x:Name="appbar_settings" Text="Settings" Click="SettingsMenuItem_Click" />
+            </shell:ApplicationBar.MenuItems>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+
+</phone:PhoneApplicationPage>

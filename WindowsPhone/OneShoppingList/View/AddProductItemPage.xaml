@@ -1,0 +1,185 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="OneShoppingList.View.AddProductItemPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d" d:DesignHeight="696" d:DesignWidth="480"
+    DataContext="{Binding AddProductItem,Source={StaticResource Locator}}"
+    shell:SystemTray.IsVisible="True"
+    >
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel contains the name of the application and page title-->
+        <TextBlock 
+            Name="titlePanel" 
+            Grid.Row="0" 
+            Margin="24,5,0,12"
+            Text="{Binding Localized.addProductTitle}" 
+            FontSize="{StaticResource PhoneFontSizeLarge}"/>
+
+        <Grid Grid.Row="1"
+                    Margin="12,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="50*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock 
+                Text="{Binding Localized.productName}"
+                Grid.Row="0" Grid.Column="0"
+                Style="{StaticResource PhoneTextSubtleStyle}"
+                />
+
+            <toolkit:AutoCompleteBox 
+                Name="productNameBox"
+                Text="{Binding ProductName,Mode=TwoWay}"
+                VerticalAlignment="Top" 
+                FilterMode="ContainsOrdinal"
+                MinimumPrefixLength="2"
+                Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                ItemsSource="{Binding ProductItems}" 
+                ValueMemberPath="Caption"
+                SelectedItem="{Binding SelectedProductItem,Mode=TwoWay}" 
+                DropDownOpening="AutoCompleteBox_DropDownOpening" 
+                TextChanged="AutoCompleteBox_TextChanged"
+                GotFocus="AutoCompleteBox_GotFocus" 
+                LostFocus="AutoCompleteBox_LostFocus">
+                
+                <toolkit:AutoCompleteBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,7">
+                            <TextBlock
+                                Margin="8,0"
+                                Text="{Binding Caption}"/>
+                            <TextBlock
+                                FontSize="{StaticResource PhoneFontSizeNormal}"
+                                Foreground="#ff666666"
+                                Margin="8,-6,8,2"
+                                Text="{Binding Category}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </toolkit:AutoCompleteBox.ItemTemplate>
+                
+            </toolkit:AutoCompleteBox>
+
+            <TextBlock 
+                Text="{Binding Localized.productCategory}"
+                Grid.Row="2" Grid.Column="0" 
+                Style="{StaticResource PhoneTextSubtleStyle}"
+                />
+
+            <toolkit:AutoCompleteBox 
+                Name="productCategoryBox"
+                Text="{Binding ProductCategory,Mode=TwoWay}"
+                Grid.Row="3" Grid.Column="0"
+                FilterMode="ContainsOrdinal"
+                MinimumPrefixLength="0"
+                VerticalAlignment="Top" 
+                ItemsSource="{Binding ProductCategories}" 
+                TextChanged="AutoCompleteBox_TextChanged"
+                DropDownOpening="AutoCompleteBox_DropDownOpening" 
+                GotFocus="AutoCompleteBox_GotFocus" 
+                LostFocus="AutoCompleteBox_LostFocus" />
+                
+            <TextBlock 
+                Text="{Binding Localized.unitSize}"
+                Grid.Row="4" Grid.Column="1"
+                Style="{StaticResource PhoneTextSubtleStyle}"
+                />
+
+            <toolkit:AutoCompleteBox 
+                Name="unitSizesBox"
+                Text="{Binding UnitSize,Mode=TwoWay}"
+                Grid.Row="5" Grid.Column="1"
+                VerticalAlignment="Top"
+                FilterMode="ContainsOrdinal"
+                MinimumPrefixLength="0"
+                ItemsSource="{Binding UnitSizes}" 
+                TextChanged="AutoCompleteBox_TextChanged"
+                DropDownOpening="AutoCompleteBox_DropDownOpening" 
+                LostFocus="AutoCompleteBox_LostFocus" 
+                GotFocus="AutoCompleteBox_GotFocus" />
+
+                <TextBlock 
+                Text="{Binding Localized.quantity}"
+                Grid.Row="2" Grid.Column="1"
+                Style="{StaticResource PhoneTextSubtleStyle}"
+                />
+
+            <TextBox
+                Grid.Row="3" Grid.Column="1"
+                Name="quantityBox"
+                Text="{Binding Quantity, Mode=TwoWay}"
+                InputScope="Number" 
+                />
+
+            <TextBlock 
+                Text="{Binding Localized.preferredStore}"
+                Grid.Row="4" Grid.Column="0"
+                Style="{StaticResource PhoneTextSubtleStyle}"
+                />
+
+            <toolkit:AutoCompleteBox 
+                Grid.Row="5" Grid.Column="0"
+                Text="{Binding PreferredShop,Mode=TwoWay}"
+                Name="shopPicker"
+                FilterMode="ContainsOrdinal"
+                MinimumPrefixLength="0"
+                ItemsSource="{Binding Shops}"
+                TextChanged="AutoCompleteBox_TextChanged"
+                DropDownOpening="AutoCompleteBox_DropDownOpening" 
+                GotFocus="AutoCompleteBox_GotFocus" 
+                LostFocus="AutoCompleteBox_LostFocus">
+            </toolkit:AutoCompleteBox>
+            
+        </Grid>
+    </Grid>
+
+    <shell:SystemTray.ProgressIndicator>
+        
+        <shell:ProgressIndicator
+            x:Name="progressIndicator" 
+            IsVisible="False" 
+            Text="Saving..." />
+        
+    </shell:SystemTray.ProgressIndicator>
+
+    <!--Sample code showing usage of ApplicationBar-->
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="false">
+            <shell:ApplicationBarIconButton x:Name="appbar_delete" IconUri="/Images/appbar.delete.rest.png" Text="delete" Click="Delete_Click" IsEnabled="False"/>
+            <shell:ApplicationBarIconButton x:Name="appbar_save" IconUri="/Images/appbar.save.rest.png" Text="add" Click="Save_Click" />
+            <shell:ApplicationBarIconButton x:Name="appbar_cancel" IconUri="/Images/appbar.cancel.rest.png" Text="cancel" Click="Cancel_Click" />
+            <!--<shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="MenuItem 1"/>
+                <shell:ApplicationBarMenuItem Text="MenuItem 2"/>
+            </shell:ApplicationBar.MenuItems>-->
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+
+</phone:PhoneApplicationPage>
