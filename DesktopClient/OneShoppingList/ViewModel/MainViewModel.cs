@@ -5,6 +5,7 @@ using System.Runtime.Serialization.Json;
 using System.IO;
 using System;
 using System.Collections.ObjectModel;
+using System.Windows.Threading;
 
 namespace OneShoppingList.ViewModel
 {
@@ -22,13 +23,8 @@ namespace OneShoppingList.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        public string Welcome
-        {
-            get
-            {
-                return "Welcome to MVVM Light";
-            }
-        }
+        public delegate void ErrorNotificationHandler(string ErrorMessage);
+        public event ErrorNotificationHandler ErrorNotification;
 
         /// <summary>
         /// The <see cref="ShoppingItems" /> property's name.
@@ -78,10 +74,54 @@ namespace OneShoppingList.ViewModel
             }
         }
 
+        FileSystemWatcher fileWatcher = null;
         public void LoadData()
         {
-            string filename = Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), @"SkyDrive\AppData\OneFamily\ShoppingList\OneShoppingList.txt");
-            using (FileStream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            string homedir = Environment.GetEnvironmentVariable("USERPROFILE");
+            string skydrivedir = Path.Combine(homedir, @"SkyDrive");
+            string oneshoppinghome = Path.Combine(skydrivedir, @"AppData\OneFamily\ShoppingList");
+            string productsfile = Path.Combine(oneshoppinghome, @"OneShoppingList.txt");
+
+            if (!Directory.Exists(homedir))
+            {
+                // this should never happen
+                NotifyError(homedir);
+                return;
+            }
+            else if (!Directory.Exists(skydrivedir))
+            {
+                NotifyError("SkyDrive not installed. Download from here: http://windows.microsoft.com/en-US/skydrive/download");
+                return;
+            }
+            else
+            {
+                if (!Directory.Exists(oneshoppinghome))
+                {
+                    Directory.CreateDirectory(oneshoppinghome);
+                }
+                if (File.Exists(productsfile))
+                {
+                    ReloadProductsFile(productsfile);
+                }
+            }
+
+            fileWatcher = new FileSystemWatcher(oneshoppinghome, "*.*");
+            fileWatcher.Changed += fileWatcher_Changed;
+            fileWatcher.Created += fileWatcher_Changed;
+            fileWatcher.EnableRaisingEvents = true;
+        }
+
+        void fileWatcher_Changed(object sender, FileSystemEventArgs e)
+        {
+            if( e.ChangeType == WatcherChangeTypes.Changed || e.ChangeType == WatcherChangeTypes.Created)
+            {
+                ReloadProductsFile(e.FullPath);
+            }
+        }
+
+        private void ReloadProductsFile(string productsfile)
+        {
+            using (FileStream fileStream = new FileStream(productsfile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(List<ShoppingItem>));
                 List<ShoppingItem> tmpList = jsonSerializer.ReadObject(fileStream) as List<ShoppingItem>;
@@ -93,6 +133,14 @@ namespace OneShoppingList.ViewModel
                         ShoppingItems.Add(si);
                     }
                 }
+            }
+        }
+
+        private void NotifyError(string errorstring)
+        {
+            if (ErrorNotification != null)
+            {
+                ErrorNotification(String.Format("User profile location take from environment variable USERPROFILE not found: {0}", errorstring));
             }
         }
 
