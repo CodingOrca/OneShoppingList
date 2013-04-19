@@ -1,0 +1,85 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="OneShoppingList.View.ShopConfigurationPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    DataContext="{Binding Main,Source={StaticResource Locator}}"
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <!--Pivot Control-->
+        <controls:Pivot 
+            Name="pivot"
+            Title="{Binding Localized.shopConfigurationPageName}"
+            ItemsSource="{Binding Shops}"
+            SelectedItem="{Binding CurrentShop,Mode=TwoWay}"
+            SelectionChanged="ShopSelectionChanged"
+            >
+            <controls:Pivot.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </controls:Pivot.HeaderTemplate>
+            <controls:Pivot.ItemTemplate>
+                <DataTemplate>
+                    <ListBox
+                        Name="listBox"
+                        ItemContainerStyle="{StaticResource ListBoxItemStyle1}"
+                        SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                        ItemsSource="{Binding CategoryAssignements.ItemsView}"
+                        SelectionMode="Single"
+                        >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox
+                                        IsChecked="{Binding IsAssigned,Mode=TwoWay}"
+                                        Margin="12,0,0,-6"
+                                        VerticalAlignment="Center"
+                                        Grid.Column="0"
+                                        Click="CheckBox_Click"/>
+                                    <TextBlock 
+                                        VerticalAlignment="Center"
+                                        Grid.Column="1"
+                                        Style="{StaticResource PhoneTextExtraLargeStyle}"
+                                        Text="{Binding CategoryName}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DataTemplate>
+            </controls:Pivot.ItemTemplate>
+        </controls:Pivot>
+    </Grid>
+
+    <!--Sample code showing usage of ApplicationBar-->
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+            <shell:ApplicationBarIconButton x:Name="appbar_up" IconUri="/Images/appbar.up.rest.png" Text="up" IsEnabled="False" Click="appbar_up_Click"/>
+            <shell:ApplicationBarIconButton x:Name="appbar_renameCat" IconUri="/Images/appbar.edit.rest.png" Text="rename" IsEnabled="False" Click="appbar_renameCat_Click"/>
+            <shell:ApplicationBarIconButton x:Name="appbar_down" IconUri="/Images/appbar.down.rest.png" Text="down" IsEnabled="False" Click="appbar_down_Click"/>
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem x:Name="appbar_newShop" Text="neuen laden" Click="appbar_newShop_Click"/>
+                <shell:ApplicationBarMenuItem x:Name="appbar_renameShop" Text="laden umbenennen" Click="appbar_renameShop_Click"/>
+                <shell:ApplicationBarMenuItem x:Name="appbar_deleteShop" Text="laden löschen" Click="appbar_deleteShop_Click"/>
+            </shell:ApplicationBar.MenuItems>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+    
+</phone:PhoneApplicationPage>
