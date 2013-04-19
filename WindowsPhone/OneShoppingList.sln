@@ -6,6 +6,18 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneShoppingList_uTest", "OneShoppingList_uTest\OneShoppingList_uTest.csproj", "{7C308C7F-43AD-4635-86E8-E893D72953A8}"
 EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs12
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = OneShoppingList\\OneShoppingList.csproj
+		SccProjectName1 = OneShoppingList
+		SccLocalPath1 = OneShoppingList
+		SccProjectUniqueName2 = OneShoppingList_uTest\\OneShoppingList_uTest.csproj
+		SccProjectName2 = OneShoppingList_uTest
+		SccLocalPath2 = OneShoppingList_uTest
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
