@@ -59,9 +59,9 @@
                         Click="removeButton_Click"
                         Visibility="{Binding Parent.RemoveVisibility, ElementName=menuItem}"
                         Style="{StaticResource PopupIconButton}"
-                        Content="{StaticResource cancelBrush}">
+                        Content="{StaticResource checkBrush}">
                     </Button>
-                    <TextBlock 
+                    <!--<TextBlock 
                         x:Name="removeText"
                         HorizontalAlignment="Center"
                         Text="remove" 
@@ -69,7 +69,7 @@
                         Grid.Row="1" Grid.Column="0"
                         Foreground="{StaticResource PhoneBackgroundBrush}"
                         Visibility="{Binding Parent.RemoveVisibility, ElementName=menuItem}"
-                        Style="{StaticResource PhoneTextSmallStyle}"/>
+                        Style="{StaticResource PhoneTextSmallStyle}"/>-->
                     
                     <Button 
                         x:Name="deleteButton"
@@ -87,7 +87,7 @@
                         Style="{StaticResource PopupIconButton}"
                         Content="{StaticResource deleteBrush}">
                     </Button>
-                    <TextBlock 
+                    <!--<TextBlock 
                         x:Name="deleteText"
                         HorizontalAlignment="Center"
                         Text="delete" 
@@ -95,7 +95,7 @@
                         Grid.Row="1" Grid.Column="1"
                         Foreground="{StaticResource PhoneBackgroundBrush}"
                         Visibility="{Binding Parent.DeleteVisibility, ElementName=menuItem}"
-                        Style="{StaticResource PhoneTextSmallStyle}"/>
+                        Style="{StaticResource PhoneTextSmallStyle}"/>-->
                     
                     <Button 
                         x:Name="editButton"
@@ -109,14 +109,14 @@
                         Style="{StaticResource PopupIconButton}"
                         Content="{StaticResource editBrush}">
                     </Button>
-                    <TextBlock 
+                    <!--<TextBlock 
                         Name="editText"
                         Text="edit" 
                         Margin="0,-12,0,0"
                         HorizontalAlignment="Center"
                         Grid.Row="1" Grid.Column="3"
                         Foreground="{StaticResource PhoneBackgroundBrush}"
-                        Style="{StaticResource PhoneTextSmallStyle}"/>
+                        Style="{StaticResource PhoneTextSmallStyle}"/>-->
 
                     <Button 
                         x:Name="addtoFavButton"
@@ -133,7 +133,7 @@
                         Style="{StaticResource PopupIconButton}"
                         Content="{StaticResource addtoFavBrush}">
                     </Button>
-                    <TextBlock
+                    <!--<TextBlock
                         x:Name="addtoFavText"
                         Text="fav."
                         Margin="0,-12,0,0"
@@ -141,7 +141,7 @@
                         Grid.Row="1" Grid.Column="4"
                         Visibility="{Binding IsFavorite,Converter={StaticResource toVisibilityInvertor}}"
                         Foreground="{StaticResource PhoneBackgroundBrush}"
-                        Style="{StaticResource PhoneTextSmallStyle}"/>
+                        Style="{StaticResource PhoneTextSmallStyle}"/>-->
 
                     <Button 
                         x:Name="removeFavButton"
@@ -158,7 +158,7 @@
                         Style="{StaticResource PopupIconButton}"
                         Content="{StaticResource removeFavBrush}">
                     </Button>
-                    <TextBlock 
+                    <!--<TextBlock 
                         Name="removeFavText"
                         Text="no fav." 
                         Margin="0,-12,0,0"
@@ -166,7 +166,7 @@
                         Grid.Row="1" Grid.Column="4"
                         Visibility="{Binding IsFavorite,Converter={StaticResource toVisibilityConverter}}"
                         Foreground="{StaticResource PhoneBackgroundBrush}"
-                        Style="{StaticResource PhoneTextSmallStyle}"/>
+                        Style="{StaticResource PhoneTextSmallStyle}"/>-->
 
                     <Button 
                         x:Name="lessButton"
@@ -181,14 +181,14 @@
                         Style="{StaticResource PopupIconButton}"
                         Content="{StaticResource minusBrush}">
                     </Button>
-                    <TextBlock 
+                    <!--<TextBlock 
                         Name="lessText"
                         Text="less" 
                         HorizontalAlignment="Center"
                         Margin="0,-12,0,0"
                         Grid.Row="1" Grid.Column="8"
                         Foreground="{StaticResource PhoneBackgroundBrush}"
-                        Style="{StaticResource PhoneTextSmallStyle}"/>
+                        Style="{StaticResource PhoneTextSmallStyle}"/>-->
 
                     <Button 
                         x:Name="moreButton"
@@ -203,14 +203,14 @@
                         Style="{StaticResource PopupIconButton}"
                         Content="{StaticResource addBrush}">
                     </Button>
-                    <TextBlock 
+                    <!--<TextBlock 
                         Name="moreText"
                         Text="more" 
                         Margin="0,-12,0,0"
                         HorizontalAlignment="Center"
                         Grid.Row="1" Grid.Column="9"
                         Foreground="{StaticResource PhoneBackgroundBrush}"
-                        Style="{StaticResource PhoneTextSmallStyle}"/>
+                        Style="{StaticResource PhoneTextSmallStyle}"/>-->
                 </Grid>
             </DataTemplate>
         </toolkit:MenuItem.HeaderTemplate>

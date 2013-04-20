@@ -249,7 +249,7 @@ namespace OneShoppingList
             NavigationService.Navigate(new Uri("/View/EditPage.xaml", UriKind.Relative));
         }
 
-        private void addButton_Click(object sender, EventArgs e)
+        private void appAddButton_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/View/AddProductItemPage.xaml", UriKind.Relative));
         }
@@ -577,6 +577,21 @@ namespace OneShoppingList
         private void addPathButton_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Uri("/View/AddShopPage.xaml", UriKind.Relative));
+        }
+
+        private void favButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/View/EditPage.xaml", UriKind.Relative));
+        }
+
+        private void addButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/View/AddProductItemPage.xaml", UriKind.Relative));
+        }
+
+        private void aboutButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/YourLastAboutDialog;component/AboutPage.xaml", UriKind.Relative));
         }
 
     }

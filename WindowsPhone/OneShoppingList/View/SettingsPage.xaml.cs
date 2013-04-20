@@ -15,6 +15,7 @@ using Microsoft.Live;
 using OneShoppingList.ViewModel;
 using YourLastAboutDialog;
 using OneShoppingList.Model;
+using Microsoft.Phone.Shell;
 
 namespace OneShoppingList
 {
@@ -30,7 +31,16 @@ namespace OneShoppingList
             locator = App.Current.Resources["Locator"] as ViewModelLocator;
             viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).Settings;
             Framework.WPHacks.WireOrientationHack(this);
-            this.DataContext = viewModel;
+            LayoutRoot.DataContext = viewModel;
+            appbar = ApplicationBar as ApplicationBar;
+            syncButton = appbar.Buttons[1] as ApplicationBarIconButton;
+            syncButton.IsEnabled = locator.Main.SyncCommand.CanExecute(null) && viewModel.IsUserKnown;
+            locator.Main.SyncCommand.CanExecuteChanged += SyncCommand_CanExecuteChanged;
+        }
+
+        void SyncCommand_CanExecuteChanged(object sender, EventArgs e)
+        {
+            syncButton.IsEnabled = locator.Main.SyncCommand.CanExecute(null) && viewModel.IsUserKnown;
         }
 
         private void signInButton_SessionChanged(object sender, Microsoft.Live.Controls.LiveConnectSessionChangedEventArgs e)
@@ -47,6 +57,7 @@ namespace OneShoppingList
                 isLoggingOut = true;
                 viewModel.LoggedOut();
             }
+            syncButton.IsEnabled = locator.Main.SyncCommand.CanExecute(null) && viewModel.IsUserKnown;
         }
 
         private bool isLoggingOut = false;
@@ -58,18 +69,18 @@ namespace OneShoppingList
                 if (!isLoggingOut)
                 {
                     viewModel.UserName = e.Result["name"] as string;
-                    locator.Main.SyncCommand.Execute(null);
                 }
             }
             else
             {
                 MessageBox.Show("Error calling API: " + e.Error.ToString());
             }
+            syncButton.IsEnabled = locator.Main.SyncCommand.CanExecute(null) && viewModel.IsUserKnown;
         }
 
         private void ApplicationBarIconButton_Click(object sender, EventArgs e)
         {
-            NavigationService.GoBack();
+            locator.Main.SyncCommand.Execute(null);
         }
 
         private void ApplicationBarIconButton_Click_1(object sender, EventArgs e)
@@ -81,6 +92,8 @@ namespace OneShoppingList
         {
             DataLocator.Current.ProductItems.Clear();
             DataLocator.Current.Shops.Clear();
+            locator.Main.ResetSyncHandler();
+            syncButton.IsEnabled = locator.Main.SyncCommand.CanExecute(null) && viewModel.IsUserKnown;
         }
 
 

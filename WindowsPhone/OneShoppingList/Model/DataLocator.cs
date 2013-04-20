@@ -85,6 +85,7 @@ namespace OneShoppingList.Model
         public void LoadDefaultData( string itemsfilename, string shopsfilename)
         {
             ProductItems.Clear();
+            DateTime now = DateTime.Now;
             StreamResourceInfo info = Application.GetResourceStream(new Uri(itemsfilename, UriKind.Relative));
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<ShoppingItem>));
             object o = ser.ReadObject(info.Stream);
@@ -93,6 +94,7 @@ namespace OneShoppingList.Model
             {
                 for (int i = 0; i < readItems.Count; i++)
                 {
+                    readItems[i].TimeStamp = now;
                     ProductItems.Add(readItems[i]);
                 }
             }
@@ -106,6 +108,7 @@ namespace OneShoppingList.Model
             {
                 for (int i = 0; i < shopItems.Count; i++)
                 {
+                    shopItems[i].TimeStamp = now;
                     Shops.Add(shopItems[i]);
                 }
             }

@@ -170,7 +170,7 @@ namespace OneShoppingList
             get
             {
                 var ordered = from pi in DataLocator.Current.ProductItems 
-                              where !pi.IsDeleted && !pi.IsOnShoppingList
+                              where !pi.IsDeleted
                               orderby pi.TimeStamp descending
                               select pi;
                 return ordered.Take(25).ToList();
