@@ -322,7 +322,7 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to start with a small database of usual products like Milk, Butter, Apples and Bananas?.
+        ///   Looks up a localized string similar to Do you want to start with a small database?.
         /// </summary>
         public static string importDescription {
             get {
@@ -340,7 +340,7 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make your choice:.
+        ///   Looks up a localized string similar to It contains usual products: Milk, Butter, Apples, ....
         /// </summary>
         public static string importPicker {
             get {
@@ -529,7 +529,7 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Or do you prefer to start from scratch with an empty database?.
+        ///   Looks up a localized string similar to Or do you prefer to start with an empty database?.
         /// </summary>
         public static string scratchDescription {
             get {
@@ -667,7 +667,7 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Join now.
+        ///   Looks up a localized string similar to Join syncing, and you&apos;re done!.
         /// </summary>
         public static string syncButton {
             get {
@@ -685,7 +685,7 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Already syncing your database from another device? Join using the sync button below and you&apos;re done!.
+        ///   Looks up a localized string similar to Already synced your database before?.
         /// </summary>
         public static string syncDescription {
             get {

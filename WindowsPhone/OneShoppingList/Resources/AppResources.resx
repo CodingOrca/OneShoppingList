@@ -313,28 +313,28 @@ The data remain private, protected with your Microsoft account. The complete net
     <value>Import</value>
   </data>
   <data name="importDescription" xml:space="preserve">
-    <value>Do you want to start with a small database of usual products like Milk, Butter, Apples and Bananas?</value>
+    <value>Do you want to start with a small database?</value>
   </data>
   <data name="importHeader" xml:space="preserve">
     <value>import some sample data</value>
   </data>
   <data name="importPicker" xml:space="preserve">
-    <value>Make your choice:</value>
+    <value>It contains usual products: Milk, Butter, Apples, ...</value>
   </data>
   <data name="scratchButton" xml:space="preserve">
     <value>Create a shopping path</value>
   </data>
   <data name="scratchDescription" xml:space="preserve">
-    <value>Or do you prefer to start from scratch with an empty database?</value>
+    <value>Or do you prefer to start with an empty database?</value>
   </data>
   <data name="scratchHeader" xml:space="preserve">
     <value>start from scratch</value>
   </data>
   <data name="syncButton" xml:space="preserve">
-    <value>Join now</value>
+    <value>Join syncing, and you're done!</value>
   </data>
   <data name="syncDescription" xml:space="preserve">
-    <value>Already syncing your database from another device? Join using the sync button below and you're done!</value>
+    <value>Already synced your database before?</value>
   </data>
   <data name="syncHeader" xml:space="preserve">
     <value>synchronization</value>
