@@ -21,10 +21,13 @@ namespace OneShoppingList
     public partial class SettingsPage : PhoneApplicationPage
     {
         SettingsViewModel viewModel;
+        ViewModelLocator locator;
+
 
         public SettingsPage()
         {
             InitializeComponent();
+            locator = App.Current.Resources["Locator"] as ViewModelLocator;
             viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).Settings;
             Framework.WPHacks.WireOrientationHack(this);
             this.DataContext = viewModel;
@@ -55,6 +58,7 @@ namespace OneShoppingList
                 if (!isLoggingOut)
                 {
                     viewModel.UserName = e.Result["name"] as string;
+                    locator.Main.SyncCommand.Execute(null);
                 }
             }
             else

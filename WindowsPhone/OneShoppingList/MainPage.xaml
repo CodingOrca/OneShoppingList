@@ -159,7 +159,11 @@
                 </DataTemplate>
             </controls:Pivot.ItemTemplate>
         </controls:Pivot>
-        <StackPanel Margin="0,17,12,28" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal">
+        <StackPanel Margin="0,17,12,28" 
+                    HorizontalAlignment="Right" 
+                    VerticalAlignment="Top" 
+                    Orientation="Horizontal"
+                    Visibility="{Binding Shops.Count, Converter={StaticResource toVisibilityConverter}}">
             <TextBlock Text="{Binding UnsortedShoppingList.Count}" />
             <TextBlock Text="{Binding Localized.itemsName}" />
         </StackPanel>
@@ -184,23 +188,25 @@
             <ScrollViewer x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0"
                               DataContext="{Binding Main,Source={StaticResource Locator}}"
                           >
-                <StackPanel Orientation="Vertical">
-                    <StackPanel Orientation="Vertical" DataContext="{StaticResource Locator}"
+                <StackPanel Orientation="Vertical" DataContext="{StaticResource Locator}">
+                    <StackPanel Orientation="Vertical"
                             Visibility="{Binding Settings.IsUserKnown, Converter={StaticResource toVisibilityInvertor}}">
-                        <TextBlock Margin="12,0,0,12"
+                        <TextBlock Margin="12,0,0,0"
                                Text="{Binding Main.Localized.syncDescription}"
                                TextWrapping="Wrap"
                                Style="{StaticResource PhoneTextNormalStyle}"/>
-                        <!--<Button x:Name="syncButton"
-                            Margin="12,12,0,24" Content="{Binding Main.Localized.syncButton}"
-                            Click="syncButton_Click"/>-->
-                    </StackPanel>
-                    <Border 
+                        <Button x:Name="syncButton"
+                            Margin="12,12,0,12" Content="{Binding Main.Localized.syncButton}"
+                            Click="syncButton_Click"/>
+                        <Border 
                         Margin="12,0,12,0"
                         BorderBrush="{StaticResource PhoneInactiveBrush}"
                         BorderThickness="1"
                         Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
                         />
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" 
+                                Visibility="{Binding Main.AllItemsViewModel.ItemsView.Count, Converter={StaticResource toVisibilityInvertor}}">
                     <TextBlock TextWrapping="Wrap" 
                            Margin="12,12,0,0"
                            Style="{StaticResource PhoneTextNormalStyle}"
@@ -216,10 +222,10 @@
                     Style="{StaticResource PhoneTextSubtleStyle}"
                     Visibility="{Binding SelectedIndex, ElementName=picker,
                     Converter={StaticResource nToVisibilityConverter},ConverterParameter=0}"/>
-                    <TextBlock Margin="24,0,12,0" Text="Getränke, Früchte und Gemüse, Kühlregal, ..."
+                    <!--<TextBlock Margin="24,0,12,0" Text="Getränke, Früchte und Gemüse, Kühlregal, ..."
                     Style="{StaticResource PhoneTextSubtleStyle}"
                     Visibility="{Binding SelectedIndex, ElementName=picker,
-                    Converter={StaticResource nToVisibilityConverter},ConverterParameter=0}"/>
+                    Converter={StaticResource nToVisibilityConverter},ConverterParameter=0}"/>-->
                     <TextBlock Margin="24,0,12,0" Text="Kilo, Liter, Becher, Beutel, Packung, Stück, ..."
                     Style="{StaticResource PhoneTextSubtleStyle}"
                     Visibility="{Binding SelectedIndex, ElementName=picker,
@@ -228,10 +234,10 @@
                     Style="{StaticResource PhoneTextSubtleStyle}"
                     Visibility="{Binding SelectedIndex, ElementName=picker,
                     Converter={StaticResource nToVisibilityConverter},ConverterParameter=1}"/>
-                    <TextBlock Margin="24,0,12,0" Text="Beverages, Canned &amp; Packed Foods, Frozen Fo..."
+                    <!--<TextBlock Margin="24,0,12,0" Text="Beverages, Canned &amp; Packed Foods, Frozen Fo..."
                     Style="{StaticResource PhoneTextSubtleStyle}"
                     Visibility="{Binding SelectedIndex, ElementName=picker,
-                    Converter={StaticResource nToVisibilityConverter},ConverterParameter=1}"/>
+                    Converter={StaticResource nToVisibilityConverter},ConverterParameter=1}"/>-->
                     <TextBlock Margin="24,0,12,0" Text="lbs, oz, can, pack, bottle, pcs, ..."
                     Style="{StaticResource PhoneTextSubtleStyle}"
                     Visibility="{Binding SelectedIndex, ElementName=picker,
@@ -240,15 +246,16 @@
                     Style="{StaticResource PhoneTextSubtleStyle}"
                     Visibility="{Binding SelectedIndex, ElementName=picker,
                     Converter={StaticResource nToVisibilityConverter},ConverterParameter=2}"/>
-                    <TextBlock Margin="24,0,12,0" Text="Beverages, Canned &amp; Packed Foods, Frozen Fo..."
+                    <!--<TextBlock Margin="24,0,12,0" Text="Beverages, Canned &amp; Packed Foods, Frozen Fo..."
                     Style="{StaticResource PhoneTextSubtleStyle}"
                     Visibility="{Binding SelectedIndex, ElementName=picker,
-                    Converter={StaticResource nToVisibilityConverter},ConverterParameter=2}"/>
+                    Converter={StaticResource nToVisibilityConverter},ConverterParameter=2}"/>-->
                     <TextBlock Margin="24,0,12,0" Text="kilo, liter, can, pack, bottle, pcs, ..."
                     Style="{StaticResource PhoneTextSubtleStyle}"
                     Visibility="{Binding SelectedIndex, ElementName=picker,
                     Converter={StaticResource nToVisibilityConverter},ConverterParameter=2}"/>
                     <Button x:Name="importButton"
+                            IsEnabled="{Binding Settings.IsUserKown, Source={StaticResource Locator}, Converter={StaticResource boolNegationConverter}}"
                         Margin="12,12,0,12" Content="{Binding Localized.importButton}"
                         Click="importButton_Click"/>
                     <Border 
@@ -257,6 +264,7 @@
                         BorderThickness="1"
                         Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
                         />
+                    </StackPanel>
                     <StackPanel Orientation="Vertical">
                         <TextBlock Margin="12,12,0,0"
                                Text="{Binding Localized.scratchDescription}"

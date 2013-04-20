@@ -210,6 +210,5 @@ namespace OneShoppingList
         {
             isolatedStore.Save();
         }
-
     }
 }
