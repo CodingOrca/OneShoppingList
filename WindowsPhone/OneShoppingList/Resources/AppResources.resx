@@ -271,7 +271,7 @@
     <value>sign out</value>
   </data>
   <data name="skyDriveSyncInfo" xml:space="preserve">
-    <value>Sign in with your Microsoft account in order to save your shopping list to SkyDrive and sync it with your other devices. 
+    <value>Sign in with your Microsoft account in order to save your shopping list to SkyDrive. This way you can sync them with your other devices and can restore them in future on your new phone.
 Use the same account on all devices which you want to keep in sync.</value>
   </data>
   <data name="skyDriveSyncText" xml:space="preserve">
@@ -313,28 +313,28 @@ The data remain private, protected with your Microsoft account. The complete net
     <value>Import</value>
   </data>
   <data name="importDescription" xml:space="preserve">
-    <value>Import a set of sample data. Afterwards you can edit, delete or add items as you need.</value>
+    <value>Do you want to start with a small database of usual products like Milk, Butter, Apples and Bananas?</value>
   </data>
   <data name="importHeader" xml:space="preserve">
     <value>import some sample data</value>
   </data>
   <data name="importPicker" xml:space="preserve">
-    <value>Choose your sample data:</value>
+    <value>Make your choice:</value>
   </data>
   <data name="scratchButton" xml:space="preserve">
     <value>Create a shopping path</value>
   </data>
   <data name="scratchDescription" xml:space="preserve">
-    <value>Create a shopping path and start with an empty database.</value>
+    <value>Or do you prefer to start from scratch with an empty database?</value>
   </data>
   <data name="scratchHeader" xml:space="preserve">
     <value>start from scratch</value>
   </data>
   <data name="syncButton" xml:space="preserve">
-    <value>Set up sync</value>
+    <value>Join now</value>
   </data>
   <data name="syncDescription" xml:space="preserve">
-    <value>Log in with your Microsoft account to back up your data regularly to SkyDrive and sync it with your other devices.</value>
+    <value>Already syncing your database from another device? Join using the sync button below and you're done!</value>
   </data>
   <data name="syncHeader" xml:space="preserve">
     <value>synchronization</value>

@@ -14,6 +14,7 @@ using OneShoppingList;
 using Microsoft.Live;
 using OneShoppingList.ViewModel;
 using YourLastAboutDialog;
+using OneShoppingList.Model;
 
 namespace OneShoppingList
 {
@@ -71,6 +72,13 @@ namespace OneShoppingList
         {
             NavigationService.Navigate(new Uri("/YourLastAboutDialog;component/AboutPage.xaml", UriKind.Relative));
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            DataLocator.Current.ProductItems.Clear();
+            DataLocator.Current.Shops.Clear();
+        }
+
 
     }
 }
