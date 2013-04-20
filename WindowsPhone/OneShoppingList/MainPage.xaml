@@ -22,151 +22,202 @@
 
     <!--Data context is set to sample data above and LayoutRoot contains the root grid where all other page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
-        <controls:Pivot 
-            Name="pivot"
-            Margin="0,0,-12,0"
-            Title="{Binding Localized.applicationName}"
-            ItemsSource="{Binding Shops}"
-            SelectedItem="{Binding CurrentShop,Mode=TwoWay}"
-            SelectionChanged="pivot_SelectionChanged"
-            Visibility="{Binding Shops.Count, Converter={StaticResource toVisibilityConverter}}"
-            >
-            <controls:Pivot.HeaderTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                </DataTemplate>
-            </controls:Pivot.HeaderTemplate>
-            <controls:Pivot.ItemTemplate>
-                <DataTemplate>
-                    <toolkit:LongListSelector 
-                        mm:MetroInMotion.IsPivotAnimated="True"
-                        ItemsSource="{Binding ShoppingListViewModel.GroupsView}"
-                        GroupViewOpened="LongListSelector_GroupViewOpened"
-                        GroupViewClosing="LongListSelector_GroupViewClosing"
-                        ScrollingStarted="longListSelector_ScrollingStarted"
-                        ScrollingCompleted="longListSelector_ScrollingCompleted"
-                        Link="longListSelector_Link"
-                        Unlink="longListSelector_Unlink"
-                        >
+        <Grid
+            Visibility="{Binding Shops.Count, Converter={StaticResource toVisibilityConverter}}">
+            <controls:Pivot 
+                Name="pivot"
+                Margin="0,0,-12,0"
+                Title="{Binding Localized.applicationName}"
+                ItemsSource="{Binding Shops}"
+                SelectedItem="{Binding CurrentShop,Mode=TwoWay}"
+                SelectionChanged="pivot_SelectionChanged"
+                >
+                <controls:Pivot.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </controls:Pivot.HeaderTemplate>
+                <controls:Pivot.ItemTemplate>
+                    <DataTemplate>
+                        <toolkit:LongListSelector 
+                            mm:MetroInMotion.IsPivotAnimated="True"
+                            ItemsSource="{Binding ShoppingListViewModel.GroupsView}"
+                            GroupViewOpened="LongListSelector_GroupViewOpened"
+                            GroupViewClosing="LongListSelector_GroupViewClosing"
+                            ScrollingStarted="longListSelector_ScrollingStarted"
+                            ScrollingCompleted="longListSelector_ScrollingCompleted"
+                            Link="longListSelector_Link"
+                            Unlink="longListSelector_Unlink"
+                            >
 
-                        <toolkit:LongListSelector.GroupFooterTemplate>
-                            <DataTemplate>
-                                <Grid Height="24" Width="468"/>
-                            </DataTemplate>
-                        </toolkit:LongListSelector.GroupFooterTemplate>
+                            <toolkit:LongListSelector.GroupFooterTemplate>
+                                <DataTemplate>
+                                    <Grid Height="24" Width="468"/>
+                                </DataTemplate>
+                            </toolkit:LongListSelector.GroupFooterTemplate>
 
-                        <toolkit:LongListSelector.GroupHeaderTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="{Binding Key,Converter={StaticResource toUpperConverter}}" 
-                                    VerticalAlignment="Center"
-                                    mm:MetroInMotion.AnimationLevel="0"
-                                    Margin="12,6,0,0"
-                                    Style="{StaticResource PhoneTextLargeStyle}"
-                                    />
-                                    <Border 
-                                        Margin="0,0,0,0"
-                                        BorderBrush="{StaticResource PhoneForegroundBrush}"
-                                        BorderThickness="1"
-                                        />
-                                    </StackPanel>
-                            </DataTemplate>
-                        </toolkit:LongListSelector.GroupHeaderTemplate>
-
-                        <toolkit:LongListSelector.ItemTemplate>
-                            <DataTemplate>
-                                <Grid 
-                                    Width="468" 
-                                    Background="Transparent"
-                                    Tap="Grid_Tap"
-                                    mm:MetroInMotion.AnimationLevel="1"
-                                    >
-                                    <toolkit:ContextMenuService.ContextMenu>
-                                        <local:ShoppingItemContextMenu 
-                                            OnEdit="EditButton_Click" 
-                                            OnRemove="RemoveButton_Click"
-                                            OnAddFavorite="ShoppingItemContextMenu_OnAddFavorite"
-                                            OnRemoveFavorite="ShoppingItemContextMenu_OnRemoveFavorite"
-                                            Opened="menu_Opened"/>
-                                    </toolkit:ContextMenuService.ContextMenu>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="72"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="44"/>
-                                        <RowDefinition Height="32"/>
-                                    </Grid.RowDefinitions>
-
-
-                                    <Border 
-                                        Margin="0,0,0,0"
-                                        BorderBrush="{StaticResource PhoneChromeBrush}"
-                                        BorderThickness="1"
-                                        Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
-                                        />
-
-                                    <TextBlock 
-                                        HorizontalAlignment="Left"
-                                        Grid.Column="0" Grid.Row="1"
-                                        Text="{Binding Caption}"
-                                        TextWrapping="NoWrap"
-                                        Margin="12,0,60,0"
-                                        Style="{StaticResource PhoneTextLargeStyle}"/>
-
-                                    <TextBlock 
-                                        HorizontalAlignment="Left"
-                                        Grid.Row="2" Grid.Column="0"
-                                        Text="{Binding PreferredShop}"
-                                        TextWrapping="NoWrap"
-                                        Name="PreferredShop"
-                                        Margin="12,0,0,0"
-                                        Style="{StaticResource PhoneTextSubtleStyle}"/>
-
-                                    <TextBlock
-                                        Grid.Row="1" Grid.Column="0"
-                                        Text="{Binding DefaultQuantity}"
-                                        TextWrapping="NoWrap"
-                                        Margin="0,0,3,0"
-                                        HorizontalAlignment="Right"
+                            <toolkit:LongListSelector.GroupHeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding Key,Converter={StaticResource toUpperConverter}}" 
+                                        VerticalAlignment="Center"
+                                        mm:MetroInMotion.AnimationLevel="0"
+                                        Margin="12,6,0,0"
                                         Style="{StaticResource PhoneTextLargeStyle}"
                                         />
-                                    <TextBlock
-                                        Grid.Row="2" Grid.Column="0"
-                                        Text="{Binding UnitSize}"
-                                        TextWrapping="NoWrap"
-                                        Margin="0,0,3,0"
-                                        HorizontalAlignment="Right"
-                                        Style="{StaticResource PhoneTextSubtleStyle}"
-                                        />
+                                        <Border 
+                                            Margin="0,0,0,0"
+                                            BorderBrush="{StaticResource PhoneForegroundBrush}"
+                                            BorderThickness="1"
+                                            />
+                                        </StackPanel>
+                                </DataTemplate>
+                            </toolkit:LongListSelector.GroupHeaderTemplate>
 
-                                    <Button 
-                                        Margin="0"
-                                        Grid.Row="1"  Grid.RowSpan="2" Grid.Column="1"
-                                        Height="72"
-                                        Width="72"
-                                        Tap="Button_Tap"
-                                        Click="ToShoppingBasket_Click"
-                                        Style="{StaticResource SampleIconButton}"
-                                        Content="{StaticResource checkBrush}"
-                                        />
+                            <toolkit:LongListSelector.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid 
+                                        Width="468" 
+                                        Background="Transparent"
+                                        Tap="Grid_Tap"
+                                        mm:MetroInMotion.AnimationLevel="1"
+                                        >
+                                        <toolkit:ContextMenuService.ContextMenu>
+                                            <local:ShoppingItemContextMenu 
+                                                OnEdit="EditButton_Click" 
+                                                OnRemove="RemoveButton_Click"
+                                                OnAddFavorite="ShoppingItemContextMenu_OnAddFavorite"
+                                                OnRemoveFavorite="ShoppingItemContextMenu_OnRemoveFavorite"
+                                                Opened="menu_Opened"/>
+                                        </toolkit:ContextMenuService.ContextMenu>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="72"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="44"/>
+                                            <RowDefinition Height="32"/>
+                                        </Grid.RowDefinitions>
 
-                                </Grid>
-                            </DataTemplate>
-                        </toolkit:LongListSelector.ItemTemplate>
-                    </toolkit:LongListSelector>
-                </DataTemplate>
-            </controls:Pivot.ItemTemplate>
-        </controls:Pivot>
-        <StackPanel Margin="0,17,12,28" 
-                    HorizontalAlignment="Right" 
-                    VerticalAlignment="Top" 
-                    Orientation="Horizontal"
-                    Visibility="{Binding Shops.Count, Converter={StaticResource toVisibilityConverter}}">
-            <TextBlock Text="{Binding UnsortedShoppingList.Count}" />
-            <TextBlock Text="{Binding Localized.itemsName}" />
-        </StackPanel>
+
+                                        <Border 
+                                            Margin="0,0,0,0"
+                                            BorderBrush="{StaticResource PhoneChromeBrush}"
+                                            BorderThickness="1"
+                                            Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                                            />
+
+                                        <TextBlock 
+                                            HorizontalAlignment="Left"
+                                            Grid.Column="0" Grid.Row="1"
+                                            Text="{Binding Caption}"
+                                            TextWrapping="NoWrap"
+                                            Margin="12,0,60,0"
+                                            Style="{StaticResource PhoneTextLargeStyle}"/>
+
+                                        <TextBlock 
+                                            HorizontalAlignment="Left"
+                                            Grid.Row="2" Grid.Column="0"
+                                            Text="{Binding PreferredShop}"
+                                            TextWrapping="NoWrap"
+                                            Name="PreferredShop"
+                                            Margin="12,0,0,0"
+                                            Style="{StaticResource PhoneTextSubtleStyle}"/>
+
+                                        <TextBlock
+                                            Grid.Row="1" Grid.Column="0"
+                                            Text="{Binding DefaultQuantity}"
+                                            TextWrapping="NoWrap"
+                                            Margin="0,0,3,0"
+                                            HorizontalAlignment="Right"
+                                            Style="{StaticResource PhoneTextLargeStyle}"
+                                            />
+                                        <TextBlock
+                                            Grid.Row="2" Grid.Column="0"
+                                            Text="{Binding UnitSize}"
+                                            TextWrapping="NoWrap"
+                                            Margin="0,0,3,0"
+                                            HorizontalAlignment="Right"
+                                            Style="{StaticResource PhoneTextSubtleStyle}"
+                                            />
+
+                                        <Button 
+                                            Margin="0"
+                                            Grid.Row="1"  Grid.RowSpan="2" Grid.Column="1"
+                                            Height="72"
+                                            Width="72"
+                                            Tap="Button_Tap"
+                                            Click="ToShoppingBasket_Click"
+                                            Style="{StaticResource SampleIconButton}"
+                                            Content="{StaticResource checkBrush}"
+                                            />
+                                    </Grid>
+                                </DataTemplate>
+                            </toolkit:LongListSelector.ItemTemplate>
+                        </toolkit:LongListSelector>
+                    </DataTemplate>
+                </controls:Pivot.ItemTemplate>
+            </controls:Pivot>
+            <StackPanel Margin="0,17,12,28" 
+                        HorizontalAlignment="Right" 
+                        VerticalAlignment="Top" 
+                        Orientation="Horizontal">
+                <TextBlock Text="{Binding UnsortedShoppingList.Count}" />
+                <TextBlock Text="{Binding Localized.itemsName}" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical" 
+                Margin="12,152,12,0"
+                Visibility="{Binding UnsortedShoppingList.Count, Converter={StaticResource toVisibilityInvertor}}"
+                >
+                <TextBlock 
+                    Text="{Binding Localized.yourListEmpty}"
+                    Style="{StaticResource PhoneTextLargeStyle}"
+                    VerticalAlignment="Top"/>
+                <StackPanel Orientation="Horizontal"
+                            Margin="12,12,0,0">
+                    <Button
+                        x:Name="addButton"
+                        Height="72"
+                        Width="72"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource SampleIconButton}"
+                        Content="{StaticResource addBrush}"
+                        Click="addButton_Click"
+                    />
+                    <TextBlock
+                        Text="{Binding Localized.addItemManually}"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource PhoneTextLargeStyle}"
+                        />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            Margin="12,12,0,0">
+                    <Button
+                        x:Name="favButton"
+                        Height="72"
+                        Width="72"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource SampleIconButton}"
+                        Content="{StaticResource favoritesBrush}"
+                        Click="favButton_Click"
+                    />
+                    <TextBlock
+                        Text="{Binding Localized.checkInList}"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource PhoneTextLargeStyle}"
+                        />
+                </StackPanel>
+            </StackPanel>
+            <Button Content="About"
+                    x:Name="aboutButton"
+                    Click="aboutButton_Click"
+                    Margin="128,0,128,24"
+                    VerticalAlignment="Bottom"
+                    Visibility="{Binding UnsortedShoppingList.Count, Converter={StaticResource toVisibilityInvertor}}"/>
+        </Grid>
 
         <Grid x:Name="RootOverlay" 
               Background="Transparent"
@@ -185,18 +236,17 @@
             </StackPanel>
 
             <!--ContentPanel - place additional content here-->
-            <ScrollViewer x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0"
-                              DataContext="{Binding Main,Source={StaticResource Locator}}"
-                          >
-                <StackPanel Orientation="Vertical" DataContext="{StaticResource Locator}">
+            <ScrollViewer x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+                <StackPanel Orientation="Vertical"
+                            DataContext="{Binding Settings, Source={StaticResource Locator}}">
                     <StackPanel Orientation="Vertical"
-                            Visibility="{Binding Settings.IsUserKnown, Converter={StaticResource toVisibilityInvertor}}">
-                        <TextBlock Margin="12,0,0,0"
-                               Text="{Binding Main.Localized.syncDescription}"
+                            Visibility="{Binding IsUserKnown, Converter={StaticResource toVisibilityInvertor}}">
+                            <TextBlock Margin="12,0,0,0"
+                               Text="{Binding Localized.syncDescription}"
                                TextWrapping="Wrap"
                                Style="{StaticResource PhoneTextNormalStyle}"/>
                         <Button x:Name="syncButton"
-                            Margin="12,12,0,12" Content="{Binding Main.Localized.syncButton}"
+                            Margin="12,12,0,12" Content="{Binding Localized.syncButton}"
                             Click="syncButton_Click"/>
                         <Border 
                         Margin="12,0,12,0"
@@ -206,7 +256,8 @@
                         />
                     </StackPanel>
                     <StackPanel Orientation="Vertical" 
-                                Visibility="{Binding Main.AllItemsViewModel.ItemsView.Count, Converter={StaticResource toVisibilityInvertor}}">
+                                DataContext="{Binding Main, Source={StaticResource Locator}}"
+                                Visibility="{Binding AllItemsViewModel.ItemsView.Count, Converter={StaticResource toVisibilityInvertor}}">
                     <TextBlock TextWrapping="Wrap" 
                            Margin="12,12,0,0"
                            Style="{StaticResource PhoneTextNormalStyle}"
@@ -255,8 +306,8 @@
                     Visibility="{Binding SelectedIndex, ElementName=picker,
                     Converter={StaticResource nToVisibilityConverter},ConverterParameter=2}"/>
                     <Button x:Name="importButton"
-                            IsEnabled="{Binding Settings.IsUserKown, Source={StaticResource Locator}, Converter={StaticResource boolNegationConverter}}"
                         Margin="12,12,0,12" Content="{Binding Localized.importButton}"
+                        IsEnabled="{Binding SyncHandler.IsRunning, Converter={StaticResource boolNegationConverter}}"
                         Click="importButton_Click"/>
                     <Border 
                         Margin="12,0,0,12"
@@ -265,14 +316,22 @@
                         Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
                         />
                     </StackPanel>
-                    <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Vertical"
+                                DataContext="{Binding Main, Source={StaticResource Locator}}">
                         <TextBlock Margin="12,12,0,0"
-                               Text="{Binding Localized.scratchDescription}"
-                               TextWrapping="Wrap"
+                                   Text="{Binding Localized.scratchDescription}"
+                                   Visibility="{Binding AllItemsViewModel.ItemsView.Count, Converter={StaticResource toVisibilityInvertor}}"                               
+                                   TextWrapping="Wrap"
+                               Style="{StaticResource PhoneTextNormalStyle}"/>
+                        <TextBlock Margin="12,12,0,0"
+                                   Text="{Binding Localized.scratchDescription1}"
+                                   Visibility="{Binding AllItemsViewModel.ItemsView.Count, Converter={StaticResource toVisibilityConverter}}"                               
+                                   TextWrapping="Wrap"
                                Style="{StaticResource PhoneTextNormalStyle}"/>
                         <Button x:Name="addPathButton"
-                            Margin="12,12,0,24" Content="{Binding Localized.scratchButton}"
-                            Click="addPathButton_Click"/>
+                                IsEnabled="{Binding SyncHandler.IsRunning, Converter={StaticResource boolNegationConverter}}"                                
+                                Margin="12,12,0,24" Content="{Binding Localized.scratchButton}"
+                                Click="addPathButton_Click"/>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
@@ -294,7 +353,7 @@
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True" x:Name="appBar">
             <shell:ApplicationBarIconButton x:Name="appbar_sendEmail" IconUri="/Images/appbar.feature.email.rest.png" Text="email" Click="appbar_sendEmail_Click" />
-            <shell:ApplicationBarIconButton x:Name="appbar_add" IconUri="/Images/appbar.add.rest.png" Text="add" Click="addButton_Click" />
+            <shell:ApplicationBarIconButton x:Name="appbar_add" IconUri="/Images/appbar.add.rest.png" Text="add" Click="appAddButton_Click" />
             <shell:ApplicationBarIconButton x:Name="appbar_favorites" IconUri="/Images/appbar.favs.rest.png" Text="favorites" Click="appbarFavorits_Click" />
             <shell:ApplicationBarIconButton x:Name="appbar_sync" IconUri="/Images/appbar.sync.rest.png" Text="sync" Click="appbar_sync_Click"/>
             <shell:ApplicationBar.MenuItems>

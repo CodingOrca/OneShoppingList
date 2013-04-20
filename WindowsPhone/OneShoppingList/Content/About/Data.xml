@@ -6,7 +6,7 @@
   <!-- The AdditionalNotes attribute has no equivalent in the WMAppManifest.xml; you can only define its content here -->
   <!-- Explicitly set any of the attributes to an empty string to remove it (including its label) from the dialog -->
   <App Author="Artur Pusztai"
-       Publisher="Artur Pusztai"       
+       Publisher=""       
        AdditionalNotes="Thanks to Lumi, Ada and David for their ideas, help and patience. Thanks to Sten, Tommi and their partners for testing and for their ideas."/>
   <Items>
     <!-- Create a MainItem entry to configure the front page -->
@@ -83,6 +83,16 @@
 
       1.0.0.0
       First version, not public
+    </Item>
+    <Item Title="3rd party code" Type="text">
+      YLAG
+      Your Last About Dialog
+      http://ylad.codeplex.com/
+
+      MVVMLight
+      Model View ViewModel Light Toolkit
+      http://www.galasoft.ch/mvvm/
+      
     </Item>
   </Items>
 </About>

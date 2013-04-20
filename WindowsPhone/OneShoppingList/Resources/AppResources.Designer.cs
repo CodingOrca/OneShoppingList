@@ -70,7 +70,7 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to microsoft account (live ID).
+        ///   Looks up a localized string similar to Microsoft account (live ID).
         /// </summary>
         public static string accountName {
             get {
@@ -93,6 +93,15 @@ namespace OneShoppingList.Resources {
         public static string addButtonText {
             get {
                 return ResourceManager.GetString("addButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add items manually.
+        /// </summary>
+        public static string addItemManually {
+            get {
+                return ResourceManager.GetString("addItemManually", resourceCulture);
             }
         }
         
@@ -183,6 +192,15 @@ namespace OneShoppingList.Resources {
         public static string categoryMergeDialog {
             get {
                 return ResourceManager.GetString("categoryMergeDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check items in lists.
+        /// </summary>
+        public static string checkInList {
+            get {
+                return ResourceManager.GetString("checkInList", resourceCulture);
             }
         }
         
@@ -529,11 +547,20 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Or do you prefer to start with an empty database?.
+        ///   Looks up a localized string similar to Or start with an empty database..
         /// </summary>
         public static string scratchDescription {
             get {
                 return ResourceManager.GetString("scratchDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create your first shopping path..
+        /// </summary>
+        public static string scratchDescription1 {
+            get {
+                return ResourceManager.GetString("scratchDescription1", resourceCulture);
             }
         }
         
@@ -628,9 +655,9 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We save your data to this folder on your SkyDrive:
-        ///\AppData\OneFamily\ShoppingList
-        ///The data remain private, protected with your Microsoft account. The complete network communication is secure..
+        ///   Looks up a localized string similar to The complete network communication is secure. Your data remain private, protected with your Microsoft account. We save them to your SkyDrive here: 
+        ///home &gt; AppData &gt; OneFamily &gt; ShoppingList
+        ///.
         /// </summary>
         public static string skyDriveLocationHint {
             get {
@@ -639,7 +666,7 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sign in with your Microsoft account in order to save your shopping list to SkyDrive. This way you can sync them with your other devices and can restore them in future on your new phone.
+        ///   Looks up a localized string similar to Sign in with your Microsoft account in order to save your shopping list to SkyDrive, sync them with your other devices or restore them in future on your new phone.
         ///Use the same account on all devices which you want to keep in sync..
         /// </summary>
         public static string skyDriveSyncInfo {
@@ -649,7 +676,7 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to automatic sync on app start and stop.
+        ///   Looks up a localized string similar to Automatic sync on app start and stop.
         /// </summary>
         public static string skyDriveSyncText {
             get {
@@ -726,6 +753,15 @@ namespace OneShoppingList.Resources {
         public static string welcome {
             get {
                 return ResourceManager.GetString("welcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your shopping list is empty..
+        /// </summary>
+        public static string yourListEmpty {
+            get {
+                return ResourceManager.GetString("yourListEmpty", resourceCulture);
             }
         }
     }

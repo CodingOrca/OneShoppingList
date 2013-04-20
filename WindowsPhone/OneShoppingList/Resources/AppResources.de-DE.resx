@@ -193,7 +193,7 @@
     <value>Favoriten</value>
   </data>
   <data name="latestTitle" xml:space="preserve">
-    <value>letzte</value>
+    <value>Letzte</value>
   </data>
   <data name="mainPageTitle" xml:space="preserve">
     <value>ONE SHOPPING LIST</value>
@@ -271,7 +271,7 @@
     <value>Abmelden</value>
   </data>
   <data name="skyDriveSyncInfo" xml:space="preserve">
-    <value>Melde Dich mit deinem Microsoft Konto an, um deine Daten auf SkyDrive zu speichern.Su kannst du sie mit deinen anderen Geräten zu teilen oder wieder herstellen wenn du z.B. dein Telefon wechselst.
+    <value>Melde Dich mit deinem Microsoft Konto an, um deine Daten auf SkyDrive zu speichern, sie  mit deinen anderen Geräten zu teilen oder sie auf einem anderen telefon wieder herzustellen.
 Benutze das selbe Konto auf all den Geräten die du miteinander sychronisieren möchtest.</value>
   </data>
   <data name="skyDriveSyncText" xml:space="preserve">
@@ -281,9 +281,8 @@ Benutze das selbe Konto auf all den Geräten die du miteinander sychronisieren m
     <value>Sortiert für: </value>
   </data>
   <data name="skyDriveLocationHint" xml:space="preserve">
-    <value>Wir speichern deine Daten in diesem Verzeichniss auf deinem SkyDrive:
-\AppData\OneFamily\ShoppingList
-Deine Daten bleiben privat und sind mit deinem Microsoft Konto geschützt. Die ganze Kommunikation ist verschlüsselt.</value>
+    <value>Die ganze Kommunikation ist verschlüsselt. Deine Daten bleiben privat und sind mit deinem Microsoft Konto geschützt. Wir speichern sie auf deinem SkyDrive hier:
+home &gt; AppData &gt; OneFamily &gt; ShoppingList</value>
   </data>
   <data name="syncButtonText" xml:space="preserve">
     <value>sync</value>
@@ -313,33 +312,45 @@ Deine Daten bleiben privat und sind mit deinem Microsoft Konto geschützt. Die g
     <value>Importieren</value>
   </data>
   <data name="importDescription" xml:space="preserve">
-    <value>Möchtest du mit einer kleinen Datenbank starten? Sie enthält übliche Produkte wie Äpfel, Bananen, Milch, und Butter.</value>
+    <value>Möchtest du mit einer kleinen Datenbank starten?</value>
   </data>
   <data name="importHeader" xml:space="preserve">
     <value>import some sample data</value>
   </data>
   <data name="importPicker" xml:space="preserve">
-    <value>Choose your sample data:</value>
+    <value>Sie enthält übliche Produkte: Äpfel, Bananen, Milch, Butter ...</value>
   </data>
   <data name="scratchButton" xml:space="preserve">
-    <value>Erstelle einen Einkaufspfad</value>
+    <value>Einkaufspfad erstellen</value>
   </data>
   <data name="scratchDescription" xml:space="preserve">
-    <value>Oder möchtest du lieber mit einer leeren Datenbank anfangen?</value>
+    <value>Oder starte mit einer leeren Datenbank.</value>
   </data>
   <data name="scratchHeader" xml:space="preserve">
     <value>start from scratch</value>
   </data>
   <data name="syncButton" xml:space="preserve">
-    <value>Beitreten</value>
+    <value>sync einrichten und beitreten</value>
   </data>
   <data name="syncDescription" xml:space="preserve">
-    <value>Synchronisierst du bereits deine Datenbank von einem anderen Gerät?</value>
+    <value>Synchronisierst du bereits deine Datenbank?</value>
   </data>
   <data name="syncHeader" xml:space="preserve">
     <value>synchronization</value>
   </data>
   <data name="welcome" xml:space="preserve">
     <value>WELCOME</value>
+  </data>
+  <data name="addItemManually" xml:space="preserve">
+    <value>Artikel eintippen</value>
+  </data>
+  <data name="checkInList" xml:space="preserve">
+    <value>Artikel in Listen markieren</value>
+  </data>
+  <data name="scratchDescription1" xml:space="preserve">
+    <value>Erstelle deinen ersten Einkaufspfad.</value>
+  </data>
+  <data name="yourListEmpty" xml:space="preserve">
+    <value>Deine Einkaufsliste ist leer.</value>
   </data>
 </root>

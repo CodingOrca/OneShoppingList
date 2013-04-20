@@ -66,7 +66,6 @@
       1.0.0.3
       Bug Fixes:
       - Fehlerhafte Synchronisation der gelöschten Produkte.
-
       Neue Features:
       - Automatisches Synchronisation nun auch beim Schließen der App.
       - Senden der Einkaufsliste als Email eingeführt
@@ -83,6 +82,24 @@
 
       1.0.0.0
       Die erste Version.
+    </Item>
+    <Item Title="3rd party code" Type="text">
+      MVVMLight
+      Model View ViewModel Light Toolkit
+      http://www.galasoft.ch/mvvm/
+
+      YLAG
+      Your Last About dialog
+      http://ylad.codeplex.com/
+
+      WPToolkit
+      The Windows Phone Toolkit
+      http://phone.codeplex.com/
+
+      Colin Eberhardt's Blog
+      Colin Eberhardt's Technology Adventures
+      http://www.scottlogic.co.uk/blog/colin/
+      Surce of inspiration and some code snippets
     </Item>
   </Items>
 </About>

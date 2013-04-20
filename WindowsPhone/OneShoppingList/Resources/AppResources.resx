@@ -121,7 +121,7 @@
     <value>help and about</value>
   </data>
   <data name="accountName" xml:space="preserve">
-    <value>microsoft account (live ID)</value>
+    <value>Microsoft account (live ID)</value>
   </data>
   <data name="add" xml:space="preserve">
     <value>add</value>
@@ -271,11 +271,11 @@
     <value>sign out</value>
   </data>
   <data name="skyDriveSyncInfo" xml:space="preserve">
-    <value>Sign in with your Microsoft account in order to save your shopping list to SkyDrive. This way you can sync them with your other devices and can restore them in future on your new phone.
+    <value>Sign in with your Microsoft account in order to save your shopping list to SkyDrive, sync them with your other devices or restore them in future on your new phone.
 Use the same account on all devices which you want to keep in sync.</value>
   </data>
   <data name="skyDriveSyncText" xml:space="preserve">
-    <value>automatic sync on app start and stop</value>
+    <value>Automatic sync on app start and stop</value>
   </data>
   <data name="sortedFor" xml:space="preserve">
     <value>Sorted for: </value>
@@ -302,9 +302,9 @@ Use the same account on all devices which you want to keep in sync.</value>
     <value> items</value>
   </data>
   <data name="skyDriveLocationHint" xml:space="preserve">
-    <value>We save your data to this folder on your SkyDrive:
-\AppData\OneFamily\ShoppingList
-The data remain private, protected with your Microsoft account. The complete network communication is secure.</value>
+    <value>The complete network communication is secure. Your data remain private, protected with your Microsoft account. We save them to your SkyDrive here: 
+home &gt; AppData &gt; OneFamily &gt; ShoppingList
+</value>
   </data>
   <data name="howToStart" xml:space="preserve">
     <value>HOW WOULD YOU LIKE TO START?</value>
@@ -325,7 +325,7 @@ The data remain private, protected with your Microsoft account. The complete net
     <value>Create a shopping path</value>
   </data>
   <data name="scratchDescription" xml:space="preserve">
-    <value>Or do you prefer to start with an empty database?</value>
+    <value>Or start with an empty database.</value>
   </data>
   <data name="scratchHeader" xml:space="preserve">
     <value>start from scratch</value>
@@ -341,5 +341,17 @@ The data remain private, protected with your Microsoft account. The complete net
   </data>
   <data name="welcome" xml:space="preserve">
     <value>WELCOME</value>
+  </data>
+  <data name="addItemManually" xml:space="preserve">
+    <value>Add items manually</value>
+  </data>
+  <data name="checkInList" xml:space="preserve">
+    <value>Check items in lists</value>
+  </data>
+  <data name="scratchDescription1" xml:space="preserve">
+    <value>Create your first shopping path.</value>
+  </data>
+  <data name="yourListEmpty" xml:space="preserve">
+    <value>Your shopping list is empty.</value>
   </data>
 </root>
