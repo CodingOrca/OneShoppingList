@@ -93,7 +93,7 @@ namespace OneShoppingList
         private bool IsOnShoppingList(object o)
         {
             ShoppingItem s = o as ShoppingItem;
-            return s.IsOnShoppingList;
+            return s.IsOnShoppingList && !s.IsDeleted;
         }
 
         private bool IsProductItemFavorit(object o)
@@ -435,7 +435,7 @@ namespace OneShoppingList
         {
             DataLocator.Current.SaveLocalData();
             ShellTile.ActiveTiles.First().Update(new StandardTileData() {
-                Count = DataLocator.Current.ProductItems.Count(pi=>pi.IsOnShoppingList && !pi.IsDeleted)
+                Count = this.UnsortedShoppingList.Count
             });
         }
 

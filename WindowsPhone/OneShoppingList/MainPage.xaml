@@ -163,13 +163,7 @@
             <TextBlock Text="{Binding UnsortedShoppingList.Count}" />
             <TextBlock Text="{Binding Localized.itemsName}" />
         </StackPanel>
-        <Button
-                HorizontalAlignment="Right"
-            Margin="0,0,100,0"
-                VerticalAlignment="Top"
-                Content="Reset"
-                Click="Button_Click_1"
-        />
+
         <Grid x:Name="RootOverlay" 
               Background="Transparent"
               Visibility="{Binding Shops.Count, Converter={StaticResource toVisibilityInvertor}}"
@@ -187,30 +181,28 @@
             </StackPanel>
 
             <!--ContentPanel - place additional content here-->
-            <ScrollViewer x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <ScrollViewer x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0"
+                              DataContext="{Binding Main,Source={StaticResource Locator}}"
+                          >
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="{Binding Localized.welcome}"
-                           Style="{StaticResource PhoneTextLargeStyle}"/>
-                    <TextBlock Text="{Binding Localized.howToStart}"
-                               Style="{StaticResource PhoneTextNormalStyle}"
-                               Margin="12,0,0,12"/>
                     <StackPanel Orientation="Vertical" DataContext="{StaticResource Locator}"
                             Visibility="{Binding Settings.IsUserKnown, Converter={StaticResource toVisibilityInvertor}}">
-                        <TextBlock Text="{Binding Main.Localized.syncHeader}"
-                               Style="{StaticResource PhoneTextLargeStyle}"/>
-                        <TextBlock Margin="12,0,0,0"
+                        <TextBlock Margin="12,0,0,12"
                                Text="{Binding Main.Localized.syncDescription}"
                                TextWrapping="Wrap"
                                Style="{StaticResource PhoneTextNormalStyle}"/>
-                        <Button x:Name="syncButton"
+                        <!--<Button x:Name="syncButton"
                             Margin="12,12,0,24" Content="{Binding Main.Localized.syncButton}"
-                            Click="syncButton_Click"/>
+                            Click="syncButton_Click"/>-->
                     </StackPanel>
-                    <TextBlock 
-                           Text="{Binding Localized.importHeader}"
-                           Style="{StaticResource PhoneTextLargeStyle}"/>
+                    <Border 
+                        Margin="12,0,12,0"
+                        BorderBrush="{StaticResource PhoneInactiveBrush}"
+                        BorderThickness="1"
+                        Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                        />
                     <TextBlock TextWrapping="Wrap" 
-                           Margin="12,0,0,0"
+                           Margin="12,12,0,0"
                            Style="{StaticResource PhoneTextNormalStyle}"
                            Text="{Binding Localized.importDescription}" />
                     <toolkit:ListPicker Name="picker" 
@@ -257,12 +249,16 @@
                     Visibility="{Binding SelectedIndex, ElementName=picker,
                     Converter={StaticResource nToVisibilityConverter},ConverterParameter=2}"/>
                     <Button x:Name="importButton"
-                        Margin="12,12,0,24" Content="{Binding Localized.importButton}"
+                        Margin="12,12,0,12" Content="{Binding Localized.importButton}"
                         Click="importButton_Click"/>
+                    <Border 
+                        Margin="12,0,0,12"
+                        BorderBrush="{StaticResource PhoneInactiveBrush}"
+                        BorderThickness="1"
+                        Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                        />
                     <StackPanel Orientation="Vertical">
-                        <TextBlock Text="{Binding Localized.scratchHeader}"
-                               Style="{StaticResource PhoneTextLargeStyle}"/>
-                        <TextBlock Margin="24,0,0,0"
+                        <TextBlock Margin="12,12,0,0"
                                Text="{Binding Localized.scratchDescription}"
                                TextWrapping="Wrap"
                                Style="{StaticResource PhoneTextNormalStyle}"/>

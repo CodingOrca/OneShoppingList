@@ -569,12 +569,6 @@ namespace OneShoppingList
             DataLocator.Current.LoadDefaultData(itemsfilename, shopsfilename);
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            DataLocator.Current.ProductItems.Clear();
-            DataLocator.Current.Shops.Clear();
-        }
-
         private void syncButton_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Uri("/View/SettingsPage.xaml?autoreturn=true", UriKind.Relative));

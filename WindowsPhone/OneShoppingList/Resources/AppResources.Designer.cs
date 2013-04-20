@@ -322,7 +322,7 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import a set of sample data. Afterwards you can edit, delete or add items as you need..
+        ///   Looks up a localized string similar to Do you want to start with a small database of usual products like Milk, Butter, Apples and Bananas?.
         /// </summary>
         public static string importDescription {
             get {
@@ -340,7 +340,7 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose your sample data:.
+        ///   Looks up a localized string similar to Make your choice:.
         /// </summary>
         public static string importPicker {
             get {
@@ -529,7 +529,7 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a shopping path and start with an empty database..
+        ///   Looks up a localized string similar to Or do you prefer to start from scratch with an empty database?.
         /// </summary>
         public static string scratchDescription {
             get {
@@ -639,7 +639,7 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sign in with your Microsoft account in order to save your shopping list to SkyDrive and sync it with your other devices. 
+        ///   Looks up a localized string similar to Sign in with your Microsoft account in order to save your shopping list to SkyDrive. This way you can sync them with your other devices and can restore them in future on your new phone.
         ///Use the same account on all devices which you want to keep in sync..
         /// </summary>
         public static string skyDriveSyncInfo {
@@ -667,7 +667,7 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set up sync.
+        ///   Looks up a localized string similar to Join now.
         /// </summary>
         public static string syncButton {
             get {
@@ -685,7 +685,7 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log in with your Microsoft account to back up your data regularly to SkyDrive and sync it with your other devices..
+        ///   Looks up a localized string similar to Already syncing your database from another device? Join using the sync button below and you&apos;re done!.
         /// </summary>
         public static string syncDescription {
             get {
