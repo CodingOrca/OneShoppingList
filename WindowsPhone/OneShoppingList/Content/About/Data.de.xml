@@ -36,29 +36,29 @@
     <!-- Supported types are "text" and "xaml", where text is nicely formatted automatically, and XAML is handled by the built-in XamlReader -->
     <Item Title="Hilfe"
           Type="text">
-      ONE SHOPPING LIST
-      Einkaufliste mit Einkaufspfade und Synchronisation mehrerer Geräte über SkyDrive.
-      Von nun an, musst du nur noch eine Einkaufsliste zu pflegen. Sie wird sortiert entsprechend dem Laden in dem du gerade einkaufst, so dass die Reihenfolge der Einträge in deiner Liste deinem Einkaufspfad entspricht.
+ONE SHOPPING LIST
+Einkaufliste mit Einkaufspfade und Synchronisation mehrerer Geräte über SkyDrive.
+Von nun an, musst du nur noch eine Einkaufsliste pflegen. Sie wird sortiert entsprechend dem Laden in dem du gerade einkaufst, so dass die Reihenfolge der Einträge in deiner Liste deinem Einkaufspfad entspricht.
 
-      DEINE EINKAUFSPFADE
-      Verwalte deine Einkaufsläden: Wähle die geführten Produktkategorien aus, und die Reihenfolge in der du sie auf deinem Weg durch den Laden erreichst.
+DEINE EINKAUFSPFADE
+Verwalte deine Einkaufsläden: Wähle die geführten Produktkategorien aus, und die Reihenfolge in der du sie auf deinem Weg durch den Laden erreichst.
 
-      SkyDrive SYNC
-      Du kannst deine Einkaufsliste mit deinen Familienmitgliedern teilen.
-      Bei der Synchronisation kombiniert die App alle Änderungen der teilnehmenden Geräte.
-      Logge dich mit deinem Microsoft Konto ein, um SkyDrive Sync zu aktivieren.
-      Benutze dasselbe Konto auf allen Geräten, die du miteinander synchronisieren möchtest.
+SkyDrive SYNC
+Du kannst deine Einkaufsliste mit deinen Familienmitgliedern teilen.
+Bei der Synchronisation kombiniert die App alle Änderungen der teilnehmenden Geräte.
+Logge dich mit deinem Microsoft Konto ein, um SkyDrive Sync zu aktivieren.
+Benutze dasselbe Konto auf allen Geräten, die du miteinander synchronisieren möchtest.
 
-      AUTOVERVOLLSTÄNDIGUNG
-      Eine Möglichkeit, Produkte in deine Einkaufliste einzutragen, ist ein paar Buchstaben des Produktes einzutippen und aus der angebotenen Liste mit passenden Produkten eins anzutippen.
-      Benutze diese Funktion, wann immer dir gerade einfällt, was Du auf die Einkaufsliste haben möchtest.
+AUTOVERVOLLSTÄNDIGUNG
+Eine Möglichkeit, Produkte in deine Einkaufliste einzutragen, ist ein paar Buchstaben des Produktes einzutippen und aus der angebotenen Liste mit passenden Produkten eins anzutippen.
+Benutze diese Funktion, wann immer dir gerade einfällt, was Du auf die Einkaufsliste haben möchtest.
 
-      FAVORITEN
-      Die andere Möglichkeit ist, durch deine Favoriten zu scrollen und mit einem Antippen einige davon in die Einkaufliste einzutragen.
-      Benutze diese Funktion vor dem Großen Einkauf am Wochenende, um noch einmal nachzuschauen, ob Du alle wichtigen Lebensmittel noch vorrätig hast.
+FAVORITEN
+Die andere Möglichkeit ist, durch deine Favoriten zu scrollen und mit einem Antippen einige davon in die Einkaufliste einzutragen.
+Benutze diese Funktion vor dem Großen Einkauf am Wochenende, um noch einmal nachzuschauen, ob Du alle wichtigen Lebensmittel noch vorrätig hast.
 
-      EINKAUFSLISTE ALS EMAIL
-      Wenn dein Partner einkaufen geht aber kein Windows Phone hat, sende ihm/ihr die sortierte Einkaufsliste per Email.
+EINKAUFSLISTE ALS EMAIL
+Wenn dein Partner einkaufen geht aber kein Windows Phone hat, sende ihm/ihr die sortierte Einkaufsliste per Email.
     </Item>
 
     <Item Title="Verlauf"
