@@ -666,7 +666,7 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sign in with your Microsoft account in order to save your shopping list to SkyDrive, sync them with your other devices or restore them in future on your new phone.
+        ///   Looks up a localized string similar to Sign in with your Microsoft account in order to save your data to SkyDrive, sync them with your other devices or restore them in future on your new phone.
         ///Use the same account on all devices which you want to keep in sync..
         /// </summary>
         public static string skyDriveSyncInfo {
@@ -726,6 +726,24 @@ namespace OneShoppingList.Resources {
         public static string syncHeader {
             get {
                 return ResourceManager.GetString("syncHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to sync.
+        /// </summary>
+        public static string syncSettingsHeader {
+            get {
+                return ResourceManager.GetString("syncSettingsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to tools.
+        /// </summary>
+        public static string toolsSettingsHeader {
+            get {
+                return ResourceManager.GetString("toolsSettingsHeader", resourceCulture);
             }
         }
         

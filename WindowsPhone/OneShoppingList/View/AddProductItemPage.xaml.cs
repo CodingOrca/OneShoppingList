@@ -75,10 +75,12 @@ namespace OneShoppingList.View
             {
                 NavigationService.GoBack();
             }
-
-            productNameBox.Focus();
-
-            appbar_save.IsEnabled = true;
+            else
+            {
+                viewModel.ProductName = "";
+                productNameBox.Focus();
+            }
+            appbar_save.IsEnabled = false;
 
         }
 
