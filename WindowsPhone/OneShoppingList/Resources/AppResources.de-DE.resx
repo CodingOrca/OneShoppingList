@@ -330,10 +330,10 @@ home &gt; AppData &gt; OneFamily &gt; ShoppingList</value>
     <value>start from scratch</value>
   </data>
   <data name="syncButton" xml:space="preserve">
-    <value>sync einrichten und beitreten</value>
+    <value>sync einrichten und fertig</value>
   </data>
   <data name="syncDescription" xml:space="preserve">
-    <value>Synchronisierst du bereits deine Datenbank?</value>
+    <value>Hast du deine Datenbank schon auf SkyDrive?</value>
   </data>
   <data name="syncHeader" xml:space="preserve">
     <value>synchronization</value>
