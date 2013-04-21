@@ -53,5 +53,5 @@
 {"Key":"00000000-0000-0000-0000-00000000003a","TimeStamp":"\/Date(1366559147964+0200)\/","isDeleted":false,"caption":"Ham","category":"Refrigerated Foods","default_quantity":1,"preferred_shop":"Aldi","unit_size":"200g","is_favorite":true,"is_on_shopping_list":false},
 {"Key":"00000000-0000-0000-0000-00000000003c","TimeStamp":"\/Date(1366543926154+0200)\/","isDeleted":false,"caption":"Sour Cream","category":"Refrigerated Foods","default_quantity":1,"preferred_shop":"Aldi","unit_size":"can","is_favorite":true,"is_on_shopping_list":false},
 {"Key":"00000000-0000-0000-0000-00000000003d","TimeStamp":"\/Date(1366543926154+0200)\/","isDeleted":false,"caption":"Yogurt, plain","category":"Refrigerated Foods","default_quantity":1,"preferred_shop":"Aldi","unit_size":"can","is_favorite":true,"is_on_shopping_list":false},
-{"Key":"00000000-0000-0000-0000-00000000003e","TimeStamp":"\/Date(1366544130777+0200)\/","isDeleted":false,"caption":"Margarine","category":"Refrigerated Foods","default_quantity":1,"preferred_shop":"Aldi","unit_size":"pack","is_favorite":false,"is_on_shopping_list":false},
+{"Key":"00000000-0000-0000-0000-00000000003e","TimeStamp":"\/Date(1366544130777+0200)\/","isDeleted":false,"caption":"Margarine","category":"Refrigerated Foods","default_quantity":1,"preferred_shop":"Aldi","unit_size":"pack","is_favorite":false,"is_on_shopping_list":false}
 ]
