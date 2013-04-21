@@ -562,6 +562,10 @@ namespace OneShoppingList
                     shopsfilename = "Content/DE-DefaultShopList.json";
                     break;
                 case 1:
+                    itemsfilename = "Content/US-DefaultItemList.json";
+                    shopsfilename = "Content/US-DefaultShopList.json";
+                    break;
+                case 2:
                     itemsfilename = "Content/EN-DefaultItemList.json";
                     shopsfilename = "Content/EN-DefaultShopList.json";
                     break;

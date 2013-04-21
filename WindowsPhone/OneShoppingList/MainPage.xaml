@@ -214,7 +214,7 @@
             <Button Content="About"
                     x:Name="aboutButton"
                     Click="aboutButton_Click"
-                    Margin="128,0,128,24"
+                    Margin="24,0,12,64"
                     VerticalAlignment="Bottom"
                     Visibility="{Binding UnsortedShoppingList.Count, Converter={StaticResource toVisibilityInvertor}}"/>
         </Grid>

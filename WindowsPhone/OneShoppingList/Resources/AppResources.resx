@@ -343,10 +343,10 @@ home &gt; AppData &gt; OneFamily &gt; ShoppingList
     <value>WELCOME</value>
   </data>
   <data name="addItemManually" xml:space="preserve">
-    <value>Add items manually</value>
+    <value>Add items by keyboard</value>
   </data>
   <data name="checkInList" xml:space="preserve">
-    <value>Check items in lists</value>
+    <value>Checkmark items in lists</value>
   </data>
   <data name="scratchDescription1" xml:space="preserve">
     <value>Create your first shopping path.</value>

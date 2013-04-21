@@ -97,7 +97,7 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add items manually.
+        ///   Looks up a localized string similar to Add items by keyboard.
         /// </summary>
         public static string addItemManually {
             get {
@@ -196,7 +196,7 @@ namespace OneShoppingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Check items in lists.
+        ///   Looks up a localized string similar to Checkmark items in lists.
         /// </summary>
         public static string checkInList {
             get {
