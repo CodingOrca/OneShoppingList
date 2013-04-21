@@ -271,7 +271,7 @@
     <value>sign out</value>
   </data>
   <data name="skyDriveSyncInfo" xml:space="preserve">
-    <value>Sign in with your Microsoft account in order to save your shopping list to SkyDrive, sync them with your other devices or restore them in future on your new phone.
+    <value>Sign in with your Microsoft account in order to save your data to SkyDrive, sync them with your other devices or restore them in future on your new phone.
 Use the same account on all devices which you want to keep in sync.</value>
   </data>
   <data name="skyDriveSyncText" xml:space="preserve">
@@ -353,5 +353,11 @@ home &gt; AppData &gt; OneFamily &gt; ShoppingList
   </data>
   <data name="yourListEmpty" xml:space="preserve">
     <value>Your shopping list is empty.</value>
+  </data>
+  <data name="syncSettingsHeader" xml:space="preserve">
+    <value>sync</value>
+  </data>
+  <data name="toolsSettingsHeader" xml:space="preserve">
+    <value>tools</value>
   </data>
 </root>

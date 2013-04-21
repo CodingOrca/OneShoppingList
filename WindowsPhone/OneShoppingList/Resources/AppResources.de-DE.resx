@@ -271,8 +271,8 @@
     <value>Abmelden</value>
   </data>
   <data name="skyDriveSyncInfo" xml:space="preserve">
-    <value>Melde Dich mit deinem Microsoft Konto an, um deine Daten auf SkyDrive zu speichern, sie  mit deinen anderen Geräten zu teilen oder sie auf einem anderen telefon wieder herzustellen.
-Benutze das selbe Konto auf all den Geräten die du miteinander sychronisieren möchtest.</value>
+    <value>Melde Dich mit deinem Microsoft Konto an, um deine Daten auf SkyDrive zu speichern, sie  mit deinen anderen Geräten zu teilen oder sie auf einem anderen Telefon wiederherzustellen.
+Benutze das selbe Konto auf alen Geräten die du miteinander sychronisieren möchtest.</value>
   </data>
   <data name="skyDriveSyncText" xml:space="preserve">
     <value>Automatisch synchronisieren beim Starten und Beenden der App</value>
@@ -352,5 +352,11 @@ home &gt; AppData &gt; OneFamily &gt; ShoppingList</value>
   </data>
   <data name="yourListEmpty" xml:space="preserve">
     <value>Deine Einkaufsliste ist leer.</value>
+  </data>
+  <data name="syncSettingsHeader" xml:space="preserve">
+    <value>Synchronisieren</value>
+  </data>
+  <data name="toolsSettingsHeader" xml:space="preserve">
+    <value>Werkzeuge</value>
   </data>
 </root>
