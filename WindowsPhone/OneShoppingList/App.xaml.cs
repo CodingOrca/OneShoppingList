@@ -51,10 +51,10 @@ namespace OneShoppingList
             if (System.Diagnostics.Debugger.IsAttached)
             {
                 // Display the current frame rate counters.
-                Application.Current.Host.Settings.EnableFrameRateCounter = true;
+                //Application.Current.Host.Settings.EnableFrameRateCounter = true;
 
                 // Display the metro grid helper.    
-                MetroGridHelper.IsVisible = true;
+                // MetroGridHelper.IsVisible = true;
 
                 // Show the areas of the app that are being redrawn in each frame.
                 //Application.Current.Host.Settings.EnableRedrawRegions = true;
@@ -138,7 +138,7 @@ namespace OneShoppingList
 
             // Create the frame but don't set it as RootVisual yet; this allows the splash
             // screen to remain active until the application is ready to render.
-            RootFrame = new TransitionFrame() { Background = new SolidColorBrush(Colors.Transparent) };
+            RootFrame = new PhoneApplicationFrame() { Background = new SolidColorBrush(Colors.Transparent) };
             // RootFrame = new PhoneApplicationFrame() { Background = new SolidColorBrush(Colors.Transparent) };
 
             RootFrame.Navigated += CompleteInitializePhoneApplication;
