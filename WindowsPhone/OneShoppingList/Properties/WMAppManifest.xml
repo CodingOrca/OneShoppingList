@@ -2,7 +2,7 @@
 
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2009/deployment" AppPlatformVersion="7.1">
   <App xmlns="" ProductID="{19fa038e-6a9e-4e60-9772-b4ccb8b79dec}" 
-       Title="One Shopping List" RuntimeType="Silverlight" Version="1.0.0.3" 
+       Title="One Shopping List" RuntimeType="Silverlight" Version="1.1.0.0" 
        Genre="apps.normal"  Author="Artur Pusztai" 
        Description="Shopping List with shopping paths and multi-device sync through SkyDrive" 
        Publisher="Artur Pusztai">

@@ -6,7 +6,7 @@
   <!-- The AdditionalNotes attribute has no equivalent in the WMAppManifest.xml; you can only define its content here -->
   <!-- Explicitly set any of the attributes to an empty string to remove it (including its label) from the dialog -->
   <App Author="Artur Pusztai"
-       Description="Einkaufliste mit Einkaufspfade und synchronisation mehreren Geräte über SkyDrive"
+       Description="Einkaufliste mit Einkaufspfade und synchronisation mehrerer Geräte über SkyDrive"
        Publisher=""       
        AdditionalNotes="Danke an Lumi, Ada und David für ihre Ideen, Hilfe und Geduld. Danke an Sten, Tommi und deren Partnerinnen fürs testen, Ideen und Anregungen." />
   <Items>
@@ -36,33 +36,42 @@
     <!-- Supported types are "text" and "xaml", where text is nicely formatted automatically, and XAML is handled by the built-in XamlReader -->
     <Item Title="Hilfe"
           Type="text">
-      One Shopping List
-      Du hast eine einzige Einkaufsliste.
-      Sie wird entsprechend dem Laden sortiert, in dem du gerade einkaufst, so dass die Reihenfolge der Einträge in deiner Liste deinem Einkaufspfad entspricht.
+      ONE SHOPPING LIST
+      Einkaufliste mit Einkaufspfade und Synchronisation mehrerer Geräte über SkyDrive.
+      Von nun an, musst du nur noch eine Einkaufsliste zu pflegen. Sie wird sortiert entsprechend dem Laden in dem du gerade einkaufst, so dass die Reihenfolge der Einträge in deiner Liste deinem Einkaufspfad entspricht.
 
-      Deine Einkaufspfade
+      DEINE EINKAUFSPFADE
       Verwalte deine Einkaufsläden: Wähle die geführten Produktkategorien aus, und die Reihenfolge in der du sie auf deinem Weg durch den Laden erreichst.
 
-      SkyDrive Sync
+      SkyDrive SYNC
       Du kannst deine Einkaufsliste mit deinen Familienmitgliedern teilen.
       Bei der Synchronisation kombiniert die App alle Änderungen der teilnehmenden Geräte.
       Logge dich mit deinem Microsoft Konto ein, um SkyDrive Sync zu aktivieren.
       Benutze dasselbe Konto auf allen Geräten, die du miteinander synchronisieren möchtest.
 
-      Autovervollständigung
+      AUTOVERVOLLSTÄNDIGUNG
       Eine Möglichkeit, Produkte in deine Einkaufliste einzutragen, ist ein paar Buchstaben des Produktes einzutippen und aus der angebotenen Liste mit passenden Produkten eins anzutippen.
       Benutze diese Funktion, wann immer dir gerade einfällt, was Du auf die Einkaufsliste haben möchtest.
 
-      Favoriten
+      FAVORITEN
       Die andere Möglichkeit ist, durch deine Favoriten zu scrollen und mit einem Antippen einige davon in die Einkaufliste einzutragen.
       Benutze diese Funktion vor dem Großen Einkauf am Wochenende, um noch einmal nachzuschauen, ob Du alle wichtigen Lebensmittel noch vorrätig hast.
 
-      Einkaufsliste als Email
+      EINKAUFSLISTE ALS EMAIL
       Wenn dein Partner einkaufen geht aber kein Windows Phone hat, sende ihm/ihr die sortierte Einkaufsliste per Email.
     </Item>
 
     <Item Title="Verlauf"
            Type="text">
+      1.1.0.0
+      Wenn alles gut geht, wir das die erste Version die im Windows Phone Store für alle Benutzer sichtbar ist. Sie beinhaltet:
+      BUG FIXES:
+      - Ein Fehler in der Verbreitung der Löschoperationen  führte unter bestimmten Umständen zu einem Absturz der App.
+      NEUE FEATURES:
+      - Eine Einrichtungsseite, um dem Benutzer die Inbetriebnahme der App nach der Installation zu erleichtern.
+      - Einkaufskorb wurde komplett entfernt; stattdessen wurde eine Liste der Letzten angefassten Artikel in der Favoritenseite implementiert.
+      - Umgestaltung einiger Knöpfe und Menu Einträge.
+
       1.0.0.3
       Bug Fixes:
       - Fehlerhafte Synchronisation der gelöschten Produkte.
@@ -83,7 +92,7 @@
       1.0.0.0
       Die erste Version.
     </Item>
-    <Item Title="3rd party code" Type="text">
+    <Item Title="Drittanbieter Software" Type="text">
       MVVMLight
       Model View ViewModel Light Toolkit
       http://www.galasoft.ch/mvvm/
