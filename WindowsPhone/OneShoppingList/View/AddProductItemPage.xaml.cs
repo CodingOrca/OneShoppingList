@@ -46,30 +46,11 @@ namespace OneShoppingList.View
 
         private void Save_Click(object sender, EventArgs e)
         {
+            appbar_save.IsEnabled = false;
             BindingExpression be = quantityBox.GetBindingExpression(TextBox.TextProperty);
             be.UpdateSource();
 
             viewModel.Save();
-
-            progressIndicator.IsIndeterminate = true;
-            progressIndicator.IsVisible = true;
-
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(500);
-            timer.Tick += new EventHandler(timer_Tick);
-            timer.Start();
-            appbar_save.IsEnabled = false;
-        }
-
-        void timer_Tick(object sender, EventArgs e)
-        {
-            DispatcherTimer timer = sender as DispatcherTimer;
-            timer.Stop();
-
-            progressIndicator.IsIndeterminate = false;
-            progressIndicator.IsVisible = false;
-
-            viewModel.Clear();
 
             if (NavigationContext.QueryString.ContainsKey("Item")) // Edit Mode for one target, nothing to do on this page anymore
             {
@@ -79,9 +60,26 @@ namespace OneShoppingList.View
             {
                 viewModel.ProductName = "";
                 productNameBox.Focus();
-            }
-            appbar_save.IsEnabled = false;
 
+                progressIndicator.IsIndeterminate = true;
+                progressIndicator.IsVisible = true;
+
+                DispatcherTimer timer = new DispatcherTimer();
+                timer.Interval = TimeSpan.FromMilliseconds(500);
+                timer.Tick += new EventHandler(timer_Tick);
+                timer.Start();
+
+                appbar_save.IsEnabled = false;
+            }
+        }
+
+        void timer_Tick(object sender, EventArgs e)
+        {
+            DispatcherTimer timer = sender as DispatcherTimer;
+            timer.Stop();
+
+            progressIndicator.IsIndeterminate = false;
+            progressIndicator.IsVisible = false;
         }
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
