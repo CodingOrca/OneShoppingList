@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using OneShoppingList.ViewModel;
+using System.Windows.Data;
+using System.Windows.Controls;
 
 namespace OneShoppingList
 {
@@ -21,11 +23,18 @@ namespace OneShoppingList
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             ViewModelLocator.MainStatic.LoadData();
+            searchBox.Focus();
         }
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
 
+        }
+
+        private void searchBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            BindingExpression be = searchBox.GetBindingExpression(TextBox.TextProperty);
+            be.UpdateSource();
         }
     }
 }

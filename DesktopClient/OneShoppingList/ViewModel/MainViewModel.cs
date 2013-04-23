@@ -6,6 +6,9 @@ using System.IO;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows.Threading;
+using System.Linq;
+using System.Windows.Data;
+using System.ComponentModel;
 
 namespace OneShoppingList.ViewModel
 {
@@ -49,6 +52,36 @@ namespace OneShoppingList.ViewModel
 
                 shoppingItems = value;
                 RaisePropertyChanged(ShoppingItemsPropertyName);
+            }
+        }
+
+        private string searchString = "";
+        public string SearchString
+        {
+            get
+            {
+                return searchString;
+            }
+            set
+            {
+                if (searchString != value)
+                {
+                    searchString = value;
+                    RaisePropertyChanged("searchString");
+                    RaisePropertyChanged("ShoppingList");
+                }
+            }
+        }
+
+        public ICollectionView ShoppingList
+        {
+            get
+            {
+                var result = (from item in this.ShoppingItems where item.caption.Contains(searchString) select item).ToList();
+                this.CurrentShoppingItem = result[0];
+                var cv = CollectionViewSource.GetDefaultView(result);
+                cv.GroupDescriptions.Add(new PropertyGroupDescription("category"));
+                return cv;
             }
         }
 
@@ -134,6 +167,7 @@ namespace OneShoppingList.ViewModel
                     }
                 }
             }
+            RaisePropertyChanged("ShoppingList");
         }
 
         private void NotifyError(string errorstring)
