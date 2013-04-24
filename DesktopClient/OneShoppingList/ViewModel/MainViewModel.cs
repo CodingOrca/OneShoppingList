@@ -30,28 +30,28 @@ namespace OneShoppingList.ViewModel
         public event ErrorNotificationHandler ErrorNotification;
 
         /// <summary>
-        /// The <see cref="ShoppingItems" /> property's name.
+        /// The <see cref="ProductItems" /> property's name.
         /// </summary>
-        public const string ShoppingItemsPropertyName = "ShoppingItems";
+        public const string ProductItemsPropertyName = "ProductItems";
 
-        private ObservableCollection<ShoppingItem> shoppingItems = new ObservableCollection<ShoppingItem>();
+        private ObservableCollection<ShoppingItem> productItems = new ObservableCollection<ShoppingItem>();
 
-        public ObservableCollection<ShoppingItem> ShoppingItems
+        public ObservableCollection<ShoppingItem> ProductItems
         {
             get
             {
-                return shoppingItems;
+                return productItems;
             }
 
             set
             {
-                if (shoppingItems == value)
+                if (productItems == value)
                 {
                     return;
                 }
 
-                shoppingItems = value;
-                RaisePropertyChanged(ShoppingItemsPropertyName);
+                productItems = value;
+                RaisePropertyChanged(ProductItemsPropertyName);
             }
         }
 
@@ -77,10 +77,10 @@ namespace OneShoppingList.ViewModel
         {
             get
             {
-                var result = (from item in this.ShoppingItems where item.caption.Contains(searchString) select item).ToList();
+                var result = (from item in this.ProductItems where item.IsOnShoppingList && !item.IsDeleted && item.caption.Contains(searchString) select item).ToList();
                 this.CurrentShoppingItem = result[0];
                 var cv = CollectionViewSource.GetDefaultView(result);
-                cv.GroupDescriptions.Add(new PropertyGroupDescription("category"));
+                cv.GroupDescriptions.Add(new PropertyGroupDescription("Category"));
                 return cv;
             }
         }
@@ -108,8 +108,12 @@ namespace OneShoppingList.ViewModel
         }
 
         FileSystemWatcher fileWatcher = null;
+        Dispatcher loadDataDispatcher = null;
+
         public void LoadData()
         {
+            loadDataDispatcher = Dispatcher.CurrentDispatcher;
+
             string homedir = Environment.GetEnvironmentVariable("USERPROFILE");
             string skydrivedir = Path.Combine(homedir, @"SkyDrive");
             string oneshoppinghome = Path.Combine(skydrivedir, @"AppData\OneFamily\ShoppingList");
@@ -154,16 +158,26 @@ namespace OneShoppingList.ViewModel
 
         private void ReloadProductsFile(string productsfile)
         {
+            if (loadDataDispatcher != null)
+            {
+                loadDataDispatcher.BeginInvoke(new InvokeDelegate(LoadProductFile), productsfile);
+            }
+        }
+
+        private delegate void InvokeDelegate(string argument);
+
+        private void LoadProductFile(string productsfile)
+        {
             using (FileStream fileStream = new FileStream(productsfile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(List<ShoppingItem>));
                 List<ShoppingItem> tmpList = jsonSerializer.ReadObject(fileStream) as List<ShoppingItem>;
                 if (tmpList != null)
                 {
-                    ShoppingItems.Clear();
+                    ProductItems.Clear();
                     foreach (ShoppingItem si in tmpList)
                     {
-                        ShoppingItems.Add(si);
+                        ProductItems.Add(si);
                     }
                 }
             }
