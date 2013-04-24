@@ -4,8 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:con="http://schemas.kent.boogaart.com/converters"
+        xmlns:wpftk="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
         mc:Ignorable="d" Title="One Shopping List"
-        DataContext="{Binding Main, Source={StaticResource Locator}}" Height="461" Width="804" ResizeMode="CanResize" ShowInTaskbar="True" WindowStartupLocation="CenterScreen" WindowState="Normal" WindowStyle="SingleBorderWindow">
+        DataContext="{Binding Main, Source={StaticResource Locator}}" 
+        Height="500" Width="350" ResizeMode="CanResize" 
+        ShowInTaskbar="True" WindowStartupLocation="CenterScreen" 
+        WindowState="Normal" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown" 
+        MinWidth="350" MinHeight="300" MaxWidth="500">
     
     <Window.Resources>
         <ResourceDictionary>
@@ -16,23 +21,60 @@
     </Window.Resources>
 
     <Grid Margin="6" x:Name="LayoutRoot">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"/>
-            <ColumnDefinition Width="250"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="SHOPPING LIST" FontWeight="Bold" Grid.Row="1"/>
+        <Button  Grid.Row="0"
+                 HorizontalAlignment="Right" VerticalAlignment="Top" 
+                 Style="{StaticResource ResourceKey=RoundButton}"
+                 Background="Transparent"
+                 BorderThickness="0"
+                 Name="closeButton" 
+                 Click="closeButton_Click">
+            <Image Source="/OneShoppingList;component/Icons/cross.png" Stretch="None" />
+        </Button>
+
+        <wpftk:AutoCompleteBox
+            x:Name="searchBox"
+            Width="250"
+            HorizontalAlignment="Left"
+            FontSize="15"
+            ItemsSource="{Binding ProductItems}"
+            FilterMode="ContainsOrdinal"
+            MinimumPrefixLength="2"
+            ValueMemberPath="Caption">
+
+            <wpftk:AutoCompleteBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="0,7">
+                        <TextBlock
+                            FontSize="15"
+                            Margin="8,0"
+                            Text="{Binding Caption}"/>
+                        <TextBlock
+                            Margin="8,-6,8,2"
+                            Text="{Binding Category}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </wpftk:AutoCompleteBox.ItemTemplate>
+
+        </wpftk:AutoCompleteBox>
+        <!--<TextBox x:Name="searchBox" Text="{Binding SearchString, Mode=TwoWay}" TextChanged="searchBox_TextChanged"  TextBlock.FontSize="15" />-->
+        <TextBlock Text="SHOPPING LIST:" Grid.Row="1" HorizontalAlignment="Left" FontWeight="Bold"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
+            <TextBlock Text="{Binding ShoppingList.Count}" FontWeight="Bold"/>
+            <TextBlock Text=" Items" FontWeight="Bold"/>
+        </StackPanel>
+
         <ListBox Margin="0,6,0,0" BorderThickness="0" 
                  HorizontalAlignment="Stretch" Background="Transparent" 
-                 Grid.Column="0" Grid.Row="2"
+                 HorizontalContentAlignment="Stretch"
+                 Grid.Row="2"
                  ItemsSource="{Binding ShoppingList}" 
-                 SelectedItem="{Binding CurrentShoppingItem}" 
+                 SelectedItem="{Binding CurrentShoppingItem,Mode=TwoWay}" 
                  SelectedIndex="0">
             <ListBox.GroupStyle>
                 <GroupStyle>
@@ -48,79 +90,44 @@
             </ListBox.GroupStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid Width="200" Margin="0,0,3,12">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="50"/>
-                        </Grid.ColumnDefinitions>
+                    <Grid Margin="0,0,12,6">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Column="0" TextBlock.FontSize="15" Text="{Binding caption}"/>
-                        <TextBlock Grid.Column="1" TextBlock.FontSize="15" HorizontalAlignment="Right" Text="{Binding default_quantity}"/>
-                        <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding category}"/>
-                        <TextBlock Grid.Column="1" Grid.Row="1"  HorizontalAlignment="Right" Text="{Binding unit_size}"/>
+                        <TextBlock Grid.Row="0" HorizontalAlignment="Left" TextBlock.FontSize="15" Text="{Binding Caption}"/>
+                        <TextBlock Grid.Row="0" HorizontalAlignment="Right" TextBlock.FontSize="15" Text="{Binding DefaultQuantity}"/>
+                        <TextBlock Grid.Row="1" HorizontalAlignment="Left" Text="{Binding PreferredShop}"/>
+                        <TextBlock Grid.Row="1" HorizontalAlignment="Right" Text="{Binding UnitSize}"/>
+                        
+                        <Button  Grid.Row="1"
+                                 HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                                 Margin="0,0,6,0"
+                                 Style="{StaticResource ResourceKey=RoundButton}"
+                                 Background="Transparent"
+                                 BorderThickness="1">
+
+                            <Image Source="/OneShoppingList;component/Icons/plus.png" Stretch="None" />
+                        
+                        </Button>
+
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <TextBox x:Name="searchBox" Grid.Column="1" Text="{Binding SearchString, Mode=TwoWay}" TextChanged="searchBox_TextChanged"  TextBlock.FontSize="15" />
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-            <TextBlock Text="{Binding ShoppingList.Count}" FontWeight="Bold"/>
-            <TextBlock Text=" MATCHES" FontWeight="Bold"/>
-        </StackPanel>
-        <TextBlock Grid.Row="1" Margin="6,0,0,0" Grid.Column="2"  Text="PRODUCT DETAILS" FontWeight="Bold"/>
-        <ListBox Margin="0,6,0,0" BorderThickness="0" 
-                 HorizontalAlignment="Stretch" Background="Transparent" 
-                 Grid.Column="1" Grid.Row="2"
-                 ItemsSource="{Binding ShoppingList}" 
-                 SelectedItem="{Binding CurrentShoppingItem}" 
-                 SelectedIndex="0">
-            <ListBox.GroupStyle>
-                <GroupStyle>
-                    <GroupStyle.HeaderTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Margin="6,0,0,0" Text="{Binding Name,  Converter={con:CaseConverter TargetCasing=Upper}}" FontSize="15"/>
-                                <Border Height="1" BorderThickness="1" BorderBrush="Black" Margin="0,0,6,6"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </GroupStyle.HeaderTemplate>
-                </GroupStyle>
-            </ListBox.GroupStyle>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid Width="200" Margin="0,0,3,12">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="50"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Column="0" TextBlock.FontSize="15" Text="{Binding caption}"/>
-                        <TextBlock Grid.Column="1" TextBlock.FontSize="15" HorizontalAlignment="Right" Text="{Binding default_quantity}"/>
-                        <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding category}"/>
-                        <TextBlock Grid.Column="1" Grid.Row="1"  HorizontalAlignment="Right" Text="{Binding unit_size}"/>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        
+        <!--<TextBlock Grid.Row="1" Margin="6,0,0,0" Grid.Column="2"  Text="PRODUCT DETAILS" FontWeight="Bold"/>
         <StackPanel Margin="6" Grid.Column="2" Grid.Row="2"  DataContext="{Binding CurrentShoppingItem}">
             <TextBlock Margin="0,0,0,0" Text="Name:"/>
-            <TextBox Text="{Binding caption}" FontSize="15"/>
+            <TextBox Text="{Binding Caption}" FontSize="15"/>
             <TextBlock Margin="0,6,0,0" Text="Category:"/>
-            <TextBox Text="{Binding category}" FontSize="15"/>
+            <TextBox Text="{Binding Category}" FontSize="15"/>
             <TextBlock Margin="0,6,0,0" Text="Preferred Store:"/>
-            <TextBox Text="{Binding preferred_shop}" FontSize="15"/>
+            <TextBox Text="{Binding PreferredShop}" FontSize="15"/>
             <TextBlock Margin="0,6,0,0" Text="Default Quantity:"/>
-            <TextBox Text="{Binding default_quantity}" FontSize="15"/>
+            <TextBox Text="{Binding DefaultQuantity}" FontSize="15"/>
             <TextBlock Margin="0,6,0,0" Text="Unit Size:"/>
-            <TextBox Text="{Binding unit_size}" FontSize="15"/>
-        </StackPanel>
+            <TextBox Text="{Binding UnitSize}" FontSize="15"/>
+        </StackPanel>-->
     </Grid>
 </Window>
