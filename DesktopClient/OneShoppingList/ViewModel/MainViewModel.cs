@@ -9,6 +9,7 @@ using System.Windows.Threading;
 using System.Linq;
 using System.Windows.Data;
 using System.ComponentModel;
+using GalaSoft.MvvmLight.Command;
 
 namespace OneShoppingList.ViewModel
 {
@@ -26,6 +27,50 @@ namespace OneShoppingList.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
+        public class ShoppingListElement : ShoppingItem
+        {
+            private bool isSelected = false;
+            public bool IsSelected
+            {
+                get
+                {
+                    return isSelected;
+                }
+                set
+                {
+                    if (value != isSelected)
+                    {
+                        isSelected = value;
+                        RaisePropertyChanged("IsSelected");
+                    }
+                }
+            }
+
+            public ShoppingListElement()
+                : base()
+            {
+            }
+
+            public override void Update(SyncItemBase source)
+            {
+                ShoppingListElement si = source as ShoppingListElement;
+                if (si != null)
+                {
+                    this.IsSelected= si.IsSelected;
+                }
+                base.Update(source);
+            }
+
+            public override SyncItemBase Clone()
+            {
+                ShoppingItem si = new ShoppingListElement();
+                si.Update(this);
+                return si;
+            }
+
+
+        }
+
         public delegate void ErrorNotificationHandler(string ErrorMessage);
         public event ErrorNotificationHandler ErrorNotification;
 
@@ -34,9 +79,9 @@ namespace OneShoppingList.ViewModel
         /// </summary>
         public const string ProductItemsPropertyName = "ProductItems";
 
-        private ObservableCollection<ShoppingItem> productItems = new ObservableCollection<ShoppingItem>();
+        private ObservableCollection<ShoppingListElement> productItems = new ObservableCollection<ShoppingListElement>();
 
-        public ObservableCollection<ShoppingItem> ProductItems
+        public ObservableCollection<ShoppingListElement> ProductItems
         {
             get
             {
@@ -78,17 +123,22 @@ namespace OneShoppingList.ViewModel
             get
             {
                 var result = (from item in this.ProductItems where item.IsOnShoppingList && !item.IsDeleted && item.caption.Contains(searchString) select item).ToList();
-                this.CurrentShoppingItem = result[0];
                 var cv = CollectionViewSource.GetDefaultView(result);
+                cv.SortDescriptions.Add(new SortDescription("Category", ListSortDirection.Ascending));
+                cv.SortDescriptions.Add(new SortDescription("Caption", ListSortDirection.Ascending));
                 cv.GroupDescriptions.Add(new PropertyGroupDescription("Category"));
+                if (this.CurrentShoppingItem != null)
+                {
+                    cv.MoveCurrentTo(CurrentShoppingItem);
+                }
                 return cv;
             }
         }
 
         public const string CurrentShoppingItemPropertyName = "CurrentShoppingItem";
-        private ShoppingItem currentShoppingItem = null;
+        private ShoppingListElement currentShoppingItem = null;
 
-        public ShoppingItem CurrentShoppingItem
+        public ShoppingListElement CurrentShoppingItem
         {
             get
             {
@@ -101,8 +151,16 @@ namespace OneShoppingList.ViewModel
                 {
                     return;
                 }
+                
+                if( currentShoppingItem != null )
+                {
+                    currentShoppingItem.IsSelected = false;
+                }
 
                 currentShoppingItem = value;
+                
+                currentShoppingItem.IsSelected = true;
+
                 RaisePropertyChanged(CurrentShoppingItemPropertyName);
             }
         }
@@ -170,15 +228,17 @@ namespace OneShoppingList.ViewModel
         {
             using (FileStream fileStream = new FileStream(productsfile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(List<ShoppingItem>));
-                List<ShoppingItem> tmpList = jsonSerializer.ReadObject(fileStream) as List<ShoppingItem>;
+                DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(List<ShoppingListElement>));
+                List<ShoppingListElement> tmpList = jsonSerializer.ReadObject(fileStream) as List<ShoppingListElement>;
                 if (tmpList != null)
                 {
-                    ProductItems.Clear();
-                    foreach (ShoppingItem si in tmpList)
-                    {
-                        ProductItems.Add(si);
-                    }
+                    bool tmpListChanged = ListSync.SyncLists(this.ProductItems, tmpList);
+                    //ProductItems.Clear();
+
+                    //foreach (ShoppingListElement si in tmpList)
+                    //{
+                    //    ProductItems.Add(si);
+                    //}
                 }
             }
             RaisePropertyChanged("ShoppingList");
@@ -205,13 +265,135 @@ namespace OneShoppingList.ViewModel
             {
                 // Code runs "for real"
             }
+            this.IncreaseQuantityCommand = new RelayCommand<object>(this.IncreaseQuantity, this.CanIncreaseQuantity);
+            this.DecreaseQuantityCommand = new RelayCommand<object>(this.DecreaseQuantity, this.CanDecreaseQuantity);
+            this.AddToShoppingListCommand = new RelayCommand<object>(this.AddToList, this.CanAddToList);
+            this.RemoveFromShoppingListCommand = new RelayCommand<object>(this.RemoveFromList, this.CanRemoveFromList);
         }
 
-        ////public override void Cleanup()
-        ////{
-        ////    // Clean up if needed
+        public RelayCommand<object> IncreaseQuantityCommand { get; set; }
 
-        ////    base.Cleanup();
-        ////}
+        private void IncreaseQuantity(object o)
+        {
+            ShoppingItem pi = o as ShoppingItem;
+            if (pi == null) return;
+            if (pi.DefaultQuantity >= 900) return;
+
+            int increment = 0;
+
+            if (pi.DefaultQuantity >= 100)
+            {
+                increment = 100;
+            }
+            else if (pi.DefaultQuantity >= 10)
+            {
+                increment = 10;
+            }
+            else
+            {
+                increment = 1;
+            }
+
+            int rest = pi.DefaultQuantity % increment;
+            if (rest == 0) pi.DefaultQuantity = pi.DefaultQuantity + increment;
+            else pi.DefaultQuantity += (increment - rest);
+
+            DecreaseQuantityCommand.RaiseCanExecuteChanged();
+            IncreaseQuantityCommand.RaiseCanExecuteChanged();
+        }
+
+        private bool CanIncreaseQuantity(object o)
+        {
+            ShoppingItem pi = o as ShoppingItem;
+            if (pi == null) return false;
+            return pi.DefaultQuantity < 900;
+        }
+
+
+        public RelayCommand<object> DecreaseQuantityCommand { get; set; }
+
+        private void DecreaseQuantity(object o)
+        {
+            ShoppingItem pi = o as ShoppingItem;
+            if (pi == null) return;
+            if (pi.DefaultQuantity <= 1) return;
+
+            int oldVal = pi.DefaultQuantity;
+            int decrement = 0;
+
+            if (oldVal > 100)
+            {
+                decrement = 100;
+            }
+            else if (oldVal > 10)
+            {
+                decrement = 10;
+            }
+            else
+            {
+                decrement = 1;
+            }
+
+            int rest = oldVal % decrement;
+
+            if (rest == 0) pi.DefaultQuantity -= decrement;
+            else pi.DefaultQuantity -= rest;
+
+            DecreaseQuantityCommand.RaiseCanExecuteChanged();
+            IncreaseQuantityCommand.RaiseCanExecuteChanged();
+        }
+
+        private bool CanDecreaseQuantity(object o)
+        {
+            ShoppingItem pi = o as ShoppingItem;
+            if (pi == null) return false;
+            return pi.DefaultQuantity > 1;
+        }
+
+        public RelayCommand<object> AddToShoppingListCommand { get; set; }
+
+        private void AddToList(object o)
+        {
+            ShoppingItem item = o as ShoppingItem;
+            if (o != null)
+            {
+                item.IsOnShoppingList = true;
+                RaisePropertyChanged("ShoppingList");
+                this.CurrentShoppingItem = item as ShoppingListElement;
+            }
+        }
+
+        private bool CanAddToList(object o)
+        {
+            ShoppingItem item = o as ShoppingItem;
+            if (o != null)
+            {
+                return !item.IsOnShoppingList;
+            }
+            return false;
+        }
+
+        public RelayCommand<object> RemoveFromShoppingListCommand { get; set; }
+
+        private void RemoveFromList(object o)
+        {
+            ShoppingItem item = o as ShoppingItem;
+            if (o != null)
+            {
+                item.IsOnShoppingList = false;
+                RaisePropertyChanged("ShoppingList");
+                
+            }
+        }
+
+        private bool CanRemoveFromList(object o)
+        {
+            ShoppingItem item = o as ShoppingItem;
+            if (o != null)
+            {
+                return item.IsOnShoppingList;
+            }
+            return false;
+        }
     }
 }
