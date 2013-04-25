@@ -5,10 +5,10 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="ButtonBorder" 
-                            CornerRadius="9" 
+                            CornerRadius="3" 
                             BorderBrush="{TemplateBinding BorderBrush}" 
                             BorderThickness="{TemplateBinding BorderThickness}" 
-                            Background="{TemplateBinding Background}" Width="22" Height="22">
+                            Background="{TemplateBinding Background}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
                         <ContentPresenter 
                             Content="{TemplateBinding Content}"
                             HorizontalAlignment="Center"
