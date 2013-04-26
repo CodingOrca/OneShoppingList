@@ -1,0 +1,74 @@
+﻿<UserControl x:Class="OneShoppingList.EditControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:wpftk="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="130" d:DesignWidth="300">
+    <Grid Margin="6">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60*"/>
+            <ColumnDefinition Width="12"/>
+            <ColumnDefinition Width="40*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Grid.Column="0">
+            <TextBlock Margin="0,0,0,0" Text="Name:"/>
+            <TextBox Text="{Binding Caption, Mode=TwoWay}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <TextBlock Margin="0,0,0,0" Text="Category:"/>
+            <wpftk:AutoCompleteBox
+                x:Name="categoryBox"
+                Text="{Binding Category, Mode=TwoWay}"
+                ItemsSource="{Binding Main.ListOfCategories, Source={StaticResource ResourceKey=Locator}}"
+                FilterMode="ContainsOrdinal"
+                MinimumPrefixLength="0"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="0">
+
+            <TextBlock Margin="0,0,0,0" Text="Details (preferred store, brand, ...)"/>
+            <wpftk:AutoCompleteBox
+                x:Name="preferredStoreBox"
+                Text="{Binding PreferredShop, Mode=TwoWay}"
+                ItemsSource="{Binding Main.ListOfPreferredShops, Source={StaticResource ResourceKey=Locator}}"
+                FilterMode="ContainsOrdinal"
+                MinimumPrefixLength="0"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="2">
+
+            <TextBlock Margin="0,0,0,0" Text="Default Quantity:"/>
+            <TextBox Text="{Binding DefaultQuantity}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="2">
+            <TextBlock Margin="0,0,0,0" Text="Unit Size:"/>
+            <wpftk:AutoCompleteBox
+                x:Name="unitSizeBox"
+                Text="{Binding UnitSize, Mode=TwoWay}"
+                ItemsSource="{Binding Main.ListOfUnitSizes, Source={StaticResource ResourceKey=Locator}}"
+                FilterMode="ContainsOrdinal"
+                MinimumPrefixLength="0"/>
+        </StackPanel>
+
+        <Button Grid.Column="2"
+            Name="Edit"
+                VerticalAlignment="Top" 
+                HorizontalAlignment="Right"
+                Margin="3,2,3,1"
+                Style="{StaticResource ResourceKey=RoundButton}"
+                Command="{Binding Main.SaveItemCommand, Source={StaticResource Locator}}"
+                CommandParameter="{Binding}"
+                Background="White"
+                Opacity="1"
+                BorderThickness="1">
+
+            <Image Source="/OneShoppingList;component/Icons/Save.png" Stretch="None" />
+
+        </Button>
+    </Grid>
+</UserControl>
