@@ -10,6 +10,8 @@ using System.Linq;
 using System.Windows.Data;
 using System.ComponentModel;
 using GalaSoft.MvvmLight.Command;
+using System.Collections;
+using System.Runtime.Serialization;
 
 namespace OneShoppingList.ViewModel
 {
@@ -27,6 +29,29 @@ namespace OneShoppingList.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
+        /// <summary>
+        /// Initializes a new instance of the MainViewModel class.
+        /// </summary>
+        public MainViewModel()
+        {
+            if (IsInDesignMode)
+            {
+                // Code runs in Blend --> create design time data.
+            }
+            else
+            {
+                // Code runs "for real"
+            }
+            this.IncreaseQuantityCommand = new RelayCommand<object>(this.IncreaseQuantity, this.CanIncreaseQuantity);
+            this.DecreaseQuantityCommand = new RelayCommand<object>(this.DecreaseQuantity, this.CanDecreaseQuantity);
+            this.AddToShoppingListCommand = new RelayCommand<object>(this.AddToList, this.CanAddToList);
+            this.RemoveFromShoppingListCommand = new RelayCommand<object>(this.RemoveFromList, this.CanRemoveFromList);
+            this.EditItemCommand = new RelayCommand<object>(this.StartEditing, this.CanStartEditing);
+            this.SaveItemCommand = new RelayCommand<object>(this.CloseEditing, this.CanCloseEditing);
+            this.SaveCommand = new RelayCommand<object>(this.SaveAll, this.CanSaveAll);
+        }
+
+        [DataContract]
         public class ShoppingListElement : ShoppingItem
         {
             private bool isSelected = false;
@@ -42,6 +67,23 @@ namespace OneShoppingList.ViewModel
                     {
                         isSelected = value;
                         RaisePropertyChanged("IsSelected");
+                    }
+                }
+            }
+
+            private bool isEditing = false;
+            public bool IsEditing
+            {
+                get
+                {
+                    return isEditing;
+                }
+                set
+                {
+                    if (value != isEditing)
+                    {
+                        isEditing = value;
+                        RaisePropertyChanged("IsEditing");
                     }
                 }
             }
@@ -69,6 +111,25 @@ namespace OneShoppingList.ViewModel
             }
 
 
+        }
+
+        private bool isDirty = false;
+        public bool IsDirty
+        {
+            get
+            {
+                return isDirty;
+            }
+            set
+            {
+                if (value == isDirty)
+                {
+                    return;
+                }
+                isDirty = value;
+                RaisePropertyChanged("IsDirty");
+                SaveCommand.RaiseCanExecuteChanged();
+            }
         }
 
         public delegate void ErrorNotificationHandler(string ErrorMessage);
@@ -100,73 +161,63 @@ namespace OneShoppingList.ViewModel
             }
         }
 
-        private string searchString = "";
-        public string SearchString
-        {
-            get
-            {
-                return searchString;
-            }
-            set
-            {
-                if (searchString != value)
-                {
-                    searchString = value;
-                    RaisePropertyChanged("searchString");
-                    RaisePropertyChanged("ShoppingList");
-                }
-            }
-        }
-
+        private ICollectionView shoppingList = null;
         public ICollectionView ShoppingList
         {
             get
             {
-                var result = (from item in this.ProductItems where item.IsOnShoppingList && !item.IsDeleted && item.caption.Contains(searchString) select item).ToList();
-                var cv = CollectionViewSource.GetDefaultView(result);
-                cv.SortDescriptions.Add(new SortDescription("Category", ListSortDirection.Ascending));
-                cv.SortDescriptions.Add(new SortDescription("Caption", ListSortDirection.Ascending));
-                cv.GroupDescriptions.Add(new PropertyGroupDescription("Category"));
-                if (this.CurrentShoppingItem != null)
+                if (shoppingList == null)
                 {
-                    cv.MoveCurrentTo(CurrentShoppingItem);
+                    shoppingList = CollectionViewSource.GetDefaultView(this.ProductItems);
+                    shoppingList.Filter = IsShoppingItem;
+                    shoppingList.SortDescriptions.Add(new SortDescription("Category", ListSortDirection.Ascending));
+                    shoppingList.SortDescriptions.Add(new SortDescription("Caption", ListSortDirection.Ascending));
+                    shoppingList.GroupDescriptions.Add(new PropertyGroupDescription("Category"));
+                    shoppingList.CurrentChanged += new EventHandler(shoppingList_CurrentChanged);
+                    if (this.currentShoppingItem != null)
+                    {
+                        shoppingList.MoveCurrentTo(currentShoppingItem);
+                    }
+                    else
+                    {
+                        bool success = shoppingList.MoveCurrentToFirst();
+                    }
                 }
-                return cv;
+                return shoppingList;
             }
         }
 
-        public const string CurrentShoppingItemPropertyName = "CurrentShoppingItem";
         private ShoppingListElement currentShoppingItem = null;
-
-        public ShoppingListElement CurrentShoppingItem
+        void shoppingList_CurrentChanged(object sender, EventArgs e)
         {
-            get
+            if (currentShoppingItem != null)
             {
-                return currentShoppingItem;
+                if (currentShoppingItem.IsEditing)
+                {
+                    SaveItemCommand.Execute(currentShoppingItem);
+                }
+                currentShoppingItem.IsSelected = false;
             }
 
-            set
-            {
-                if (currentShoppingItem == value)
-                {
-                    return;
-                }
-                
-                if( currentShoppingItem != null )
-                {
-                    currentShoppingItem.IsSelected = false;
-                }
+            currentShoppingItem = shoppingList.CurrentItem as ShoppingListElement;
 
-                currentShoppingItem = value;
-                
+            if (currentShoppingItem != null)
+            {
                 currentShoppingItem.IsSelected = true;
-
-                RaisePropertyChanged(CurrentShoppingItemPropertyName);
             }
+
+        }
+
+        bool IsShoppingItem(object o)
+        {
+            ShoppingItem item = o as ShoppingItem;
+            if (item == null) return false;
+            return item.IsOnShoppingList && !item.IsDeleted;
         }
 
         FileSystemWatcher fileWatcher = null;
         Dispatcher loadDataDispatcher = null;
+        private string productsfile = null;
 
         public void LoadData()
         {
@@ -174,8 +225,7 @@ namespace OneShoppingList.ViewModel
 
             string homedir = Environment.GetEnvironmentVariable("USERPROFILE");
             string skydrivedir = Path.Combine(homedir, @"SkyDrive");
-            string oneshoppinghome = Path.Combine(skydrivedir, @"AppData\OneFamily\ShoppingList");
-            string productsfile = Path.Combine(oneshoppinghome, @"OneShoppingList.txt");
+            string oneshoppinghome = Path.Combine(skydrivedir, @"AppData\OneFamilyTest\ShoppingList");
 
             if (!Directory.Exists(homedir))
             {
@@ -188,17 +238,16 @@ namespace OneShoppingList.ViewModel
                 NotifyError("SkyDrive not installed. Download from here: http://windows.microsoft.com/en-US/skydrive/download");
                 return;
             }
-            else
+
+            else if (!Directory.Exists(oneshoppinghome))
             {
-                if (!Directory.Exists(oneshoppinghome))
-                {
-                    Directory.CreateDirectory(oneshoppinghome);
-                }
-                if (File.Exists(productsfile))
-                {
-                    ReloadProductsFile(productsfile);
-                }
+                NotifyError("You must set up sync on your One Shopping List for Windows Phone before using this Desktop companion. Make sure you use the same microsoft account.");
+                return;
             }
+
+            productsfile = Path.Combine(oneshoppinghome, @"OneShoppingList.txt");
+
+            SyncProductFile();
 
             fileWatcher = new FileSystemWatcher(oneshoppinghome, "*.*");
             fileWatcher.Changed += fileWatcher_Changed;
@@ -208,40 +257,75 @@ namespace OneShoppingList.ViewModel
 
         void fileWatcher_Changed(object sender, FileSystemEventArgs e)
         {
-            if( e.ChangeType == WatcherChangeTypes.Changed || e.ChangeType == WatcherChangeTypes.Created)
+            if (e.Name == "OneShoppingList.txt")
             {
-                ReloadProductsFile(e.FullPath);
-            }
-        }
-
-        private void ReloadProductsFile(string productsfile)
-        {
-            if (loadDataDispatcher != null)
-            {
-                loadDataDispatcher.BeginInvoke(new InvokeDelegate(LoadProductFile), productsfile);
-            }
-        }
-
-        private delegate void InvokeDelegate(string argument);
-
-        private void LoadProductFile(string productsfile)
-        {
-            using (FileStream fileStream = new FileStream(productsfile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(List<ShoppingListElement>));
-                List<ShoppingListElement> tmpList = jsonSerializer.ReadObject(fileStream) as List<ShoppingListElement>;
-                if (tmpList != null)
+                if (e.ChangeType == WatcherChangeTypes.Changed || e.ChangeType == WatcherChangeTypes.Created)
                 {
-                    bool tmpListChanged = ListSync.SyncLists(this.ProductItems, tmpList);
-                    //ProductItems.Clear();
-
-                    //foreach (ShoppingListElement si in tmpList)
-                    //{
-                    //    ProductItems.Add(si);
-                    //}
+                    if (loadDataDispatcher != null)
+                    {
+                        loadDataDispatcher.BeginInvoke(new InvokeDelegate(SyncProductFile));
+                    }
                 }
             }
-            RaisePropertyChanged("ShoppingList");
+        }
+
+        private delegate void InvokeDelegate();
+
+        public void SyncProductFile()
+        {
+            List<ShoppingListElement> tmpList = LoadProductFile(productsfile);
+            
+            if (tmpList != null)
+            {
+                bool tmpListChanged = ListSync.SyncLists(this.ProductItems, tmpList);
+                if (tmpListChanged)
+                {
+                    fileWatcher.EnableRaisingEvents = false;
+                    SaveProductFile(productsfile, tmpList);
+                    fileWatcher.EnableRaisingEvents = true;
+                }
+            }
+
+            if (shoppingList.CurrentItem == null)
+            {
+                shoppingList.MoveCurrentToFirst();
+            }
+            ShoppingList.Refresh();
+        }
+
+        private List<ShoppingListElement> LoadProductFile(string productsfile)
+        {
+            List<ShoppingListElement> tmpList = null;
+            try
+            {
+                using (FileStream fileStream = new FileStream(productsfile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(List<ShoppingListElement>));
+                    tmpList = jsonSerializer.ReadObject(fileStream) as List<ShoppingListElement>;
+                }
+                IsDirty = false;
+            }
+            catch (Exception)
+            {
+                NotifyError("Could not load the file from SkyDrive Directory, will try again later");
+            }
+            return tmpList;
+        }
+
+        private void SaveProductFile(string productsfile, List<ShoppingListElement> tmpList)
+        {
+            try
+            {
+                using (FileStream fileStream = new FileStream(productsfile, FileMode.Truncate, FileAccess.Write, FileShare.None))
+                {
+                    DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(List<ShoppingListElement>));
+                    jsonSerializer.WriteObject(fileStream, tmpList);
+                }
+            }
+            catch (Exception)
+            {
+                NotifyError("Could not save the data to SkyDrive, will try again later");
+            }
         }
 
         private void NotifyError(string errorstring)
@@ -252,25 +336,30 @@ namespace OneShoppingList.ViewModel
             }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the MainViewModel class.
-        /// </summary>
-        public MainViewModel()
+        public IEnumerable<string> ListOfCategories
         {
-            if (IsInDesignMode)
+            get
             {
-                // Code runs in Blend --> create design time data.
+                return (from item in this.ProductItems select item.Category).Distinct();
             }
-            else
-            {
-                // Code runs "for real"
-            }
-            this.IncreaseQuantityCommand = new RelayCommand<object>(this.IncreaseQuantity, this.CanIncreaseQuantity);
-            this.DecreaseQuantityCommand = new RelayCommand<object>(this.DecreaseQuantity, this.CanDecreaseQuantity);
-            this.AddToShoppingListCommand = new RelayCommand<object>(this.AddToList, this.CanAddToList);
-            this.RemoveFromShoppingListCommand = new RelayCommand<object>(this.RemoveFromList, this.CanRemoveFromList);
         }
 
+        public IEnumerable<string> ListOfUnitSizes
+        {
+            get
+            {
+                return (from item in this.ProductItems select item.UnitSize).Distinct();
+            }
+        }
+
+        public IEnumerable<string> ListOfPreferredShops
+        {
+            get
+            {
+                return (from item in this.ProductItems select item.PreferredShop).Distinct();
+            }
+        }
+        
         public RelayCommand<object> IncreaseQuantityCommand { get; set; }
 
         private void IncreaseQuantity(object o)
@@ -297,6 +386,8 @@ namespace OneShoppingList.ViewModel
             int rest = pi.DefaultQuantity % increment;
             if (rest == 0) pi.DefaultQuantity = pi.DefaultQuantity + increment;
             else pi.DefaultQuantity += (increment - rest);
+
+            IsDirty = true;
 
             DecreaseQuantityCommand.RaiseCanExecuteChanged();
             IncreaseQuantityCommand.RaiseCanExecuteChanged();
@@ -339,6 +430,8 @@ namespace OneShoppingList.ViewModel
             if (rest == 0) pi.DefaultQuantity -= decrement;
             else pi.DefaultQuantity -= rest;
 
+            IsDirty = true;
+
             DecreaseQuantityCommand.RaiseCanExecuteChanged();
             IncreaseQuantityCommand.RaiseCanExecuteChanged();
         }
@@ -358,8 +451,9 @@ namespace OneShoppingList.ViewModel
             if (o != null)
             {
                 item.IsOnShoppingList = true;
-                RaisePropertyChanged("ShoppingList");
-                this.CurrentShoppingItem = item as ShoppingListElement;
+                ShoppingList.Refresh();
+                ShoppingList.MoveCurrentTo(item);
+                IsDirty = true;
             }
         }
 
@@ -380,9 +474,15 @@ namespace OneShoppingList.ViewModel
             ShoppingItem item = o as ShoppingItem;
             if (o != null)
             {
+                ShoppingList.MoveCurrentToNext();
+                if (ShoppingList.IsCurrentAfterLast)
+                {
+                    ShoppingList.MoveCurrentTo(item);
+                    ShoppingList.MoveCurrentToPrevious();
+                }
                 item.IsOnShoppingList = false;
-                RaisePropertyChanged("ShoppingList");
-                
+                ShoppingList.Refresh();
+                IsDirty = true;
             }
         }
 
@@ -394,6 +494,71 @@ namespace OneShoppingList.ViewModel
                 return item.IsOnShoppingList;
             }
             return false;
+        }
+
+        public RelayCommand<object> EditItemCommand { get; set; }
+
+        private void StartEditing(object o)
+        {
+            ShoppingListElement item = o as ShoppingListElement;
+            if (o != null)
+            {
+                item.IsEditing = true;
+            }
+        }
+
+        private bool CanStartEditing(object o)
+        {
+            ShoppingListElement item = o as ShoppingListElement;
+            if (o != null)
+            {
+                return item.IsSelected;
+            }
+            return false;
+        }
+
+        public RelayCommand<object> SaveItemCommand { get; set; }
+
+        private void CloseEditing(object o)
+        {
+            ShoppingListElement item = o as ShoppingListElement;
+            if (o != null)
+            {
+                item.IsEditing = false;
+                ShoppingList.Refresh();
+                IsDirty = true;
+            }
+        }
+
+        private bool CanCloseEditing(object o)
+        {
+            ShoppingListElement item = o as ShoppingListElement;
+            if (o != null)
+            {
+                return item.IsEditing;
+            }
+            return false;
+        }
+
+        public RelayCommand<object> SaveCommand { get; set; }
+
+        private void SaveAll(object o)
+        {
+            this.SyncProductFile();
+        }
+
+        private bool CanSaveAll(object o)
+        {
+            return IsDirty;
+        }
+
+        public override void Cleanup()
+        {
+            if( IsDirty )
+            {
+                this.SyncProductFile();
+                }
+            base.Cleanup();
         }
     }
 }

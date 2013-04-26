@@ -129,5 +129,14 @@ namespace OneShoppingList
                 searchBox.Text = "";
             }
         }
+
+        private void Edit_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void navigateButton_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://www.windowsphone.com/de-de/store/app/one-shopping-list/d2dbb41e-dd09-4621-b9f1-f6f5d5f7ab1b");
+        }
     }
 }
