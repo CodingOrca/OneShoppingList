@@ -23,5 +23,27 @@ namespace OneShoppingList
         {
             InitializeComponent();
         }
+
+        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.Visibility == Visibility.Visible)
+            {
+                categoryBox.Focus();
+            }
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (this.Visibility == Visibility.Visible)
+            {
+                TextBox searchTextBox = categoryBox.Template.FindName("Text", categoryBox) as TextBox;
+                if (searchTextBox != null)
+                {
+                    searchTextBox.Focus();
+                }
+            }
+
+        }
+
     }
 }

@@ -440,7 +440,7 @@ namespace OneShoppingList.ViewModel
         {
             ShoppingItem pi = o as ShoppingItem;
             if (pi == null) return false;
-            return pi.DefaultQuantity > 1;
+            return pi.DefaultQuantity >= 1;
         }
 
         public RelayCommand<object> AddToShoppingListCommand { get; set; }
