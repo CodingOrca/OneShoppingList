@@ -79,7 +79,7 @@
             <wpftk:AutoCompleteBox
                 x:Name="searchBox"
                 FontSize="15"
-                ItemsSource="{Binding ProductItems}"
+                ItemsSource="{Binding VisibleProducts}"
                 FilterMode="ContainsOrdinal"
                 MinimumPrefixLength="2"
                 SelectionChanged="searchBox_SelectionChanged"
