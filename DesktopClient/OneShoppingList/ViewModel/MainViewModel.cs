@@ -49,6 +49,7 @@ namespace OneShoppingList.ViewModel
             this.EditItemCommand = new RelayCommand<object>(this.StartEditing, this.CanStartEditing);
             this.SaveItemCommand = new RelayCommand<object>(this.CloseEditing, this.CanCloseEditing);
             this.SaveCommand = new RelayCommand<object>(this.SaveAll, this.CanSaveAll);
+            this.DeleteItemCommand = new RelayCommand<object>(this.DeleteItem, this.CanDeleteItem);
         }
 
         [DataContract]
@@ -161,6 +162,14 @@ namespace OneShoppingList.ViewModel
             }
         }
 
+        public IEnumerable VisibleProducts
+        {
+            get
+            {
+                return from item in this.ProductItems where !item.IsDeleted select item;
+            }
+        }
+
         private ICollectionView shoppingList = null;
         public ICollectionView ShoppingList
         {
@@ -225,7 +234,7 @@ namespace OneShoppingList.ViewModel
 
             string homedir = Environment.GetEnvironmentVariable("USERPROFILE");
             string skydrivedir = Path.Combine(homedir, @"SkyDrive");
-            string oneshoppinghome = Path.Combine(skydrivedir, @"AppData\OneFamilyTest\ShoppingList");
+            string oneshoppinghome = Path.Combine(skydrivedir, @"AppData\OneFamily\ShoppingList");
 
             if (!Directory.Exists(homedir))
             {
@@ -291,6 +300,7 @@ namespace OneShoppingList.ViewModel
                 shoppingList.MoveCurrentToFirst();
             }
             ShoppingList.Refresh();
+            RaisePropertyChanged("VisibleProducts");
         }
 
         private List<ShoppingListElement> LoadProductFile(string productsfile)
@@ -454,6 +464,7 @@ namespace OneShoppingList.ViewModel
                 ShoppingList.Refresh();
                 ShoppingList.MoveCurrentTo(item);
                 IsDirty = true;
+                RaisePropertyChanged("VisibleProducts");
             }
         }
 
@@ -552,12 +563,31 @@ namespace OneShoppingList.ViewModel
             return IsDirty;
         }
 
+        public RelayCommand<object> DeleteItemCommand { get; set; }
+
+        private void DeleteItem(object o)
+        {
+            ShoppingItem item = o as ShoppingItem;
+            if (item != null)
+            {
+                item.IsDeleted = true;
+                this.IsDirty = true;
+                RaisePropertyChanged("VisibleProducts");
+            }
+
+        }
+
+        private bool CanDeleteItem(object o)
+        {
+            return null != o as ShoppingItem;
+        }
+
         public override void Cleanup()
         {
             if( IsDirty )
             {
                 this.SyncProductFile();
-                }
+            }
             base.Cleanup();
         }
     }
