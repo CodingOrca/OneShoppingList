@@ -59,6 +59,7 @@ namespace OneShoppingList
                     item.UnitSize = "pcs";
                     ViewModelLocator.MainStatic.ProductItems.Add(item);
                     ViewModelLocator.MainStatic.AddToShoppingListCommand.Execute(item);
+                    item.IsEditing = true;
                 }
                 searchBox.SelectedItem = null;
                 searchBox.Text = "";
