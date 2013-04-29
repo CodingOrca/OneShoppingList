@@ -133,6 +133,23 @@ namespace OneShoppingList.ViewModel
             }
         }
 
+        private string applicationState = "Not connected";
+        public string ApplicationState
+        {
+            get
+            {
+                return applicationState;
+            }
+            set
+            {
+                if (value != applicationState)
+                {
+                    applicationState = value;
+                    RaisePropertyChanged("ApplicationState");
+                }
+            }
+        }
+
         public delegate void ErrorNotificationHandler(string ErrorMessage);
         public event ErrorNotificationHandler ErrorNotification;
 
@@ -234,23 +251,27 @@ namespace OneShoppingList.ViewModel
 
             string homedir = Environment.GetEnvironmentVariable("USERPROFILE");
             string skydrivedir = Path.Combine(homedir, @"SkyDrive");
-            string oneshoppinghome = Path.Combine(skydrivedir, @"AppData\OneFamily\ShoppingList");
+            string oneshoppinghome = Path.Combine(skydrivedir, @"AppData\OneFamilyTest\ShoppingList");
 
             if (!Directory.Exists(homedir))
             {
                 // this should never happen
-                NotifyError(homedir);
+                NotifyError(String.Format("Could not find your USERPROFILE: {0}", homedir));
+                this.ApplicationState = "Bad USERPROFILE: " + homedir;
                 return;
             }
             else if (!Directory.Exists(skydrivedir))
             {
                 NotifyError("SkyDrive not installed. Download from here: http://windows.microsoft.com/en-US/skydrive/download");
+                this.ApplicationState = "ERROR: SkyDrive not installed";
                 return;
             }
 
             else if (!Directory.Exists(oneshoppinghome))
             {
-                NotifyError("You must set up sync on your One Shopping List for Windows Phone before using this Desktop companion. Make sure you use the same microsoft account.");
+                NotifyError("You must set up sync on your One Shopping List for Windows Phone before using this Desktop companion.\n"
+                + "Make sure you use the same microsoft account.");
+                ApplicationState = "ERROR: set up sync on your Phone first";
                 return;
             }
 
@@ -314,10 +335,11 @@ namespace OneShoppingList.ViewModel
                     tmpList = jsonSerializer.ReadObject(fileStream) as List<ShoppingListElement>;
                 }
                 IsDirty = false;
+                this.ApplicationState = "Connected";
             }
             catch (Exception)
             {
-                NotifyError("Could not load the file from SkyDrive Directory, will try again later");
+                this.ApplicationState = "ERROR: Could not read your data from SkyDrive";
             }
             return tmpList;
         }
@@ -331,10 +353,11 @@ namespace OneShoppingList.ViewModel
                     DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(List<ShoppingListElement>));
                     jsonSerializer.WriteObject(fileStream, tmpList);
                 }
+                this.ApplicationState = "Connected";
             }
             catch (Exception)
             {
-                NotifyError("Could not save the data to SkyDrive, will try again later");
+                this.ApplicationState = "Could not write back your data to SkyDrive";
             }
         }
 
@@ -342,7 +365,7 @@ namespace OneShoppingList.ViewModel
         {
             if (ErrorNotification != null)
             {
-                ErrorNotification(String.Format("User profile location take from environment variable USERPROFILE not found: {0}", errorstring));
+                ErrorNotification(errorstring);
             }
         }
 
@@ -567,14 +590,27 @@ namespace OneShoppingList.ViewModel
 
         private void DeleteItem(object o)
         {
-            ShoppingItem item = o as ShoppingItem;
-            if (item != null)
+            ShoppingListElement item = o as ShoppingListElement;
+            if( item == null ) return;
+
+            if (item.IsEditing)
+            {
+                (item as ShoppingListElement).IsEditing = false;
+                ShoppingList.MoveCurrentToNext();
+                if (ShoppingList.IsCurrentAfterLast)
+                {
+                    ShoppingList.MoveCurrentTo(item);
+                    ShoppingList.MoveCurrentToPrevious();
+                }
+                item.IsDeleted = true;
+                this.ShoppingList.Refresh();
+            }
+            else
             {
                 item.IsDeleted = true;
-                this.IsDirty = true;
-                RaisePropertyChanged("VisibleProducts");
             }
-
+            this.IsDirty = true;
+            RaisePropertyChanged("VisibleProducts");
         }
 
         private bool CanDeleteItem(object o)
