@@ -6,6 +6,7 @@ using System;
 using System.Windows.Threading;
 using System.Windows.Input;
 using System.Windows.Controls.Primitives;
+using System.Text;
 
 namespace OneShoppingList
 {
@@ -14,7 +15,6 @@ namespace OneShoppingList
     /// </summary>
     public partial class MainWindow : Window
     {
-
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
         /// </summary>
@@ -23,6 +23,15 @@ namespace OneShoppingList
             InitializeComponent();
             Closing += (s, e) => ViewModelLocator.Cleanup();
             this.Loaded += new RoutedEventHandler(MainWindow_Loaded);
+            ViewModelLocator.MainStatic.ErrorNotification += new MainViewModel.ErrorNotificationHandler(MainStatic_ErrorNotification);
+        }
+
+        void MainStatic_ErrorNotification(string ErrorMessage)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("ERROR");
+            sb.Append(ErrorMessage);
+            MessageBox.Show(sb.ToString(), "ONE SHOPPING LIST", MessageBoxButton.OK);
         }
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -51,18 +60,26 @@ namespace OneShoppingList
                         listBox.SelectedItem = searchBox.SelectedItem;
                     }
                 }
-                else if( !String.IsNullOrEmpty(searchBox.Text) )
+                else
                 {
-                    MainViewModel.ShoppingListElement item = new MainViewModel.ShoppingListElement();
-                    item.Caption = searchBox.Text;
-                    item.Category = "Others";
-                    item.UnitSize = "pcs";
-                    ViewModelLocator.MainStatic.ProductItems.Add(item);
-                    ViewModelLocator.MainStatic.AddToShoppingListCommand.Execute(item);
-                    item.IsEditing = true;
+                    AddNewProductItem();
                 }
                 searchBox.SelectedItem = null;
                 searchBox.Text = "";
+            }
+        }
+
+        private void AddNewProductItem()
+        {
+            if (searchBox.Text.Trim().Length >= 2)
+            {
+                MainViewModel.ShoppingListElement item = new MainViewModel.ShoppingListElement();
+                item.Caption = searchBox.Text;
+                item.Category = "Others";
+                item.UnitSize = "pcs";
+                ViewModelLocator.MainStatic.ProductItems.Add(item);
+                ViewModelLocator.MainStatic.AddToShoppingListCommand.Execute(item);
+                item.IsEditing = true;
             }
         }
 
@@ -138,6 +155,33 @@ namespace OneShoppingList
         private void navigateButton_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start("http://www.windowsphone.com/de-de/store/app/one-shopping-list/d2dbb41e-dd09-4621-b9f1-f6f5d5f7ab1b");
+        }
+
+        private void clearButton_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox searchTextBox = searchBox.Template.FindName("Text", searchBox) as TextBox;
+            if (searchTextBox != null)
+            {
+                searchTextBox.Clear();
+                searchTextBox.Focus();
+            }
+        }
+
+        private void addProductButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddNewProductItem();
+        }
+
+        private void searchBox_TextChanged(object sender, RoutedEventArgs e)
+        {
+            if (searchBox.Text.Length >= 2)
+            {
+                addProductButton.IsEnabled = true;
+            }
+            else
+            {
+                addProductButton.IsEnabled = false;
+            }
         }
     }
 }
