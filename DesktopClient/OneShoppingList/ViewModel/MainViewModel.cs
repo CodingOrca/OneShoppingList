@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization.Json;
 using System.IO;
 using System;
+using System.Diagnostics;
 using System.Collections.ObjectModel;
 using System.Windows.Threading;
 using System.Linq;
@@ -42,6 +43,9 @@ namespace OneShoppingList.ViewModel
             {
                 // Code runs "for real"
             }
+
+            Productsfile = Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), @"SkyDrive\AppData\OneFamily\ShoppingList\OneShoppingList.txt");
+
             this.IncreaseQuantityCommand = new RelayCommand<object>(this.IncreaseQuantity, this.CanIncreaseQuantity);
             this.DecreaseQuantityCommand = new RelayCommand<object>(this.DecreaseQuantity, this.CanDecreaseQuantity);
             this.AddToShoppingListCommand = new RelayCommand<object>(this.AddToList, this.CanAddToList);
@@ -112,6 +116,14 @@ namespace OneShoppingList.ViewModel
             }
 
 
+        }
+
+        public bool IsConnected
+        {
+            get
+            {
+                return IsSkyDriveRunning && DoesProductFileExists;
+            }
         }
 
         private bool isDirty = false;
@@ -243,46 +255,23 @@ namespace OneShoppingList.ViewModel
 
         FileSystemWatcher fileWatcher = null;
         Dispatcher loadDataDispatcher = null;
-        private string productsfile = null;
+
+        public string Productsfile { get; private set; }
 
         public void LoadData()
         {
             loadDataDispatcher = Dispatcher.CurrentDispatcher;
 
-            string homedir = Environment.GetEnvironmentVariable("USERPROFILE");
-            string skydrivedir = Path.Combine(homedir, @"SkyDrive");
-            string oneshoppinghome = Path.Combine(skydrivedir, @"AppData\OneFamilyTest\ShoppingList");
-
-            if (!Directory.Exists(homedir))
-            {
-                // this should never happen
-                NotifyError(String.Format("Could not find your USERPROFILE: {0}", homedir));
-                this.ApplicationState = "Bad USERPROFILE: " + homedir;
-                return;
-            }
-            else if (!Directory.Exists(skydrivedir))
-            {
-                NotifyError("SkyDrive not installed. Download from here: http://windows.microsoft.com/en-US/skydrive/download");
-                this.ApplicationState = "ERROR: SkyDrive not installed";
-                return;
-            }
-
-            else if (!Directory.Exists(oneshoppinghome))
-            {
-                NotifyError("You must set up sync on your One Shopping List for Windows Phone before using this Desktop companion.\n"
-                + "Make sure you use the same microsoft account.");
-                ApplicationState = "ERROR: set up sync on your Phone first";
-                return;
-            }
-
-            productsfile = Path.Combine(oneshoppinghome, @"OneShoppingList.txt");
-
             SyncProductFile();
 
-            fileWatcher = new FileSystemWatcher(oneshoppinghome, "*.*");
-            fileWatcher.Changed += fileWatcher_Changed;
-            fileWatcher.Created += fileWatcher_Changed;
-            fileWatcher.EnableRaisingEvents = true;
+            string dirpath = Path.GetDirectoryName(Productsfile);
+            if (Directory.Exists(dirpath))
+            {
+                fileWatcher = new FileSystemWatcher(dirpath, "*.*");
+                fileWatcher.Changed += fileWatcher_Changed;
+                fileWatcher.Created += fileWatcher_Changed;
+                fileWatcher.EnableRaisingEvents = true;
+            }
         }
 
         void fileWatcher_Changed(object sender, FileSystemEventArgs e)
@@ -303,7 +292,13 @@ namespace OneShoppingList.ViewModel
 
         public void SyncProductFile()
         {
-            List<ShoppingListElement> tmpList = LoadProductFile(productsfile);
+            if (!File.Exists(Productsfile))
+            {
+                this.ApplicationState = "Not connected";
+                return;
+            }
+
+            List<ShoppingListElement> tmpList = LoadProductFile(Productsfile);
             
             if (tmpList != null)
             {
@@ -311,7 +306,7 @@ namespace OneShoppingList.ViewModel
                 if (tmpListChanged)
                 {
                     fileWatcher.EnableRaisingEvents = false;
-                    SaveProductFile(productsfile, tmpList);
+                    SaveProductFile(Productsfile, tmpList);
                     fileWatcher.EnableRaisingEvents = true;
                 }
             }
@@ -335,7 +330,7 @@ namespace OneShoppingList.ViewModel
                     tmpList = jsonSerializer.ReadObject(fileStream) as List<ShoppingListElement>;
                 }
                 IsDirty = false;
-                this.ApplicationState = "Connected";
+                this.ApplicationState = IsSkyDriveRunning ? "Connected" : "Not connected";
             }
             catch (Exception)
             {
@@ -353,11 +348,11 @@ namespace OneShoppingList.ViewModel
                     DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(List<ShoppingListElement>));
                     jsonSerializer.WriteObject(fileStream, tmpList);
                 }
-                this.ApplicationState = "Connected";
+                this.ApplicationState = IsSkyDriveRunning ? "Connected" : "Not connected";
             }
             catch (Exception)
             {
-                this.ApplicationState = "Could not write back your data to SkyDrive";
+                this.ApplicationState = "Could not write your data to SkyDrive";
             }
         }
 
@@ -625,6 +620,30 @@ namespace OneShoppingList.ViewModel
                 this.SyncProductFile();
             }
             base.Cleanup();
+        }
+
+        public bool IsSkyDriveRunning
+        {
+            get
+            {
+                Process[] processes = Process.GetProcesses();
+                foreach (Process p in processes)
+                {
+                    if (p.ProcessName.StartsWith("SkyDrive"))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
+
+        public bool DoesProductFileExists {
+            get
+            {
+                return File.Exists(Productsfile);
+            }
         }
     }
 }
