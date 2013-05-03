@@ -25,16 +25,19 @@
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
+    <UpdateMode>Background</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>https://OneShoppingList.codeplex.com/releases/clickonce/</InstallUrl>
+    <SupportUrl>http://oneshoppinglist.wordpress.com</SupportUrl>
+    <ProductName>One Shopping List</ProductName>
+    <PublisherName>Artur Pusztai</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationRevision>6</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -59,7 +62,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>DEFA26C840A2D807481FA51EB5FEED4C24CF7D54</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>E3E90CCB538F9E7FD542362DFE74CE179F73FE73</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>OneShoppingList_TemporaryKey.pfx</ManifestKeyFile>
