@@ -260,6 +260,7 @@ namespace OneShoppingList.ViewModel
 
         public void LoadData()
         {
+            fileWatcher = new FileSystemWatcher();
             loadDataDispatcher = Dispatcher.CurrentDispatcher;
 
             SyncProductFile();
@@ -267,7 +268,8 @@ namespace OneShoppingList.ViewModel
             string dirpath = Path.GetDirectoryName(Productsfile);
             if (Directory.Exists(dirpath))
             {
-                fileWatcher = new FileSystemWatcher(dirpath, "*.*");
+                fileWatcher.Path = dirpath;
+                fileWatcher.Filter = "*.*";
                 fileWatcher.Changed += fileWatcher_Changed;
                 fileWatcher.Created += fileWatcher_Changed;
                 fileWatcher.EnableRaisingEvents = true;
