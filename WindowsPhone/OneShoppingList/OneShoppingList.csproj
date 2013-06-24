@@ -108,6 +108,7 @@
     <Compile Include="DebugHelpers\MetroGridHelper.cs" />
     <Compile Include="MetroInMotion.cs" />
     <Compile Include="Model\DataLocator.cs" />
+    <Compile Include="Model\Secrets.cs" />
     <Compile Include="Model\SyncItemBase.cs" />
     <Compile Include="Model\ProductItem.cs" />
     <Compile Include="Model\ShopCategoryAssignement.cs" />

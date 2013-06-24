@@ -54,6 +54,14 @@ namespace OneShoppingList
             }
         }
 
+        public string ClientId
+        {
+            get
+            {
+                return Secrets.ClientID;
+            }
+        }
+
         public int LastShoppingStore
         {
             get
