@@ -1,0 +1,110 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="OneShoppingList.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d" d:DesignHeight="696" d:DesignWidth="480"
+    d:DataContext="{d:DesignData /SampleData/SettingsViewModelSampleData.xaml}"
+    shell:SystemTray.IsVisible="True"
+    DataContext="{Binding Main, Source={StaticResource Locator}}"
+    xmlns:my="clr-namespace:Microsoft.Live.Controls;assembly=Microsoft.Live.Controls">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <controls:Pivot 
+            Title="{Binding Localized.settingsPageName}">
+
+            <controls:PivotItem
+                Header="{Binding Localized.syncSettingsHeader}">
+
+                <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <ScrollViewer Grid.Row="4">
+                        <StackPanel>
+                            <TextBlock Margin="12,0,0,12" 
+                                       Text="{Binding Localized.skyDriveSyncInfo}"
+                                       TextWrapping="Wrap"
+                                       Visibility="{Binding IsUserKnown,Converter={StaticResource toVisibilityInvertor}}"
+                                       Style="{StaticResource PhoneTextNormalStyle}"/>
+                            <TextBlock Margin="12,0,0,0" 
+                                       Text="{Binding Localized.skyDriveLocationHint}"
+                                       TextWrapping="Wrap"
+                                       Style="{StaticResource PhoneTextNormalStyle}"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                    <StackPanel Grid.Row="1" Orientation="Vertical">
+                        <TextBlock Margin="12,0,0,0" Text="{Binding Localized.accountName}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <TextBlock Margin="12,0,0,12" Text="{Binding UserName}" Style="{StaticResource PhoneTextLargeStyle}"/>
+                    </StackPanel>
+                    <my:SignInButton Grid.Row="2" Content="Button"
+                                         HorizontalAlignment="Stretch"
+                                     Name="signInButton"
+                                     Branding="Skydrive"
+                                     ClientId="{Binding ClientId}"
+                                     VerticalAlignment="Bottom"
+                                     SignInText="{Binding Localized.signIn}"
+                                     SignOutText="{Binding Localized.signOut}"
+                                     TextType="Custom"
+                                     toolkit:TiltEffect.IsTiltEnabled="True"
+                                     Scopes="wl.skydrive_update wl.offline_access" 
+                                     SessionChanged="signInButton_SessionChanged" />
+
+                    <StackPanel Grid.Row="3" Margin="0,12,0,0">
+                        <TextBlock 
+                            Margin="12,0,0,-12" 
+                            TextWrapping="Wrap"
+                            Text="{Binding Localized.skyDriveSyncText}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <toolkit:ToggleSwitch Margin="0,0,0,-24" IsChecked="{Binding SyncEnabled,Mode=TwoWay}" IsEnabled="{Binding IsUserKnown}">
+                            <TextBlock Margin="0" Text="{Binding SyncEnabled,Converter={StaticResource boolToStringConverter}}" Style="{StaticResource PhoneTextLargeStyle}"/>
+                        </toolkit:ToggleSwitch>
+                    </StackPanel>
+                </Grid>
+            </controls:PivotItem>
+            <!--<controls:PivotItem 
+                Header="{Binding Localized.toolsSettingsHeader}">
+                <Button
+                    Margin="12,0,12,0"
+                    VerticalAlignment="Top"
+                    Content="Reset"
+                    Click="Button_Click_1"
+                />
+            </controls:PivotItem>-->
+        </controls:Pivot>
+    </Grid>
+
+    <shell:SystemTray.ProgressIndicator>
+
+        <shell:ProgressIndicator
+            x:Name="progressIndicator" 
+            Text="{Binding SyncHandler.CurrentOperation}"
+            IsVisible="{Binding SyncHandler.IsRunning}"
+            IsIndeterminate="{Binding SyncHandler.IsRunning}"/>
+
+    </shell:SystemTray.ProgressIndicator>
+
+    <!--Sample code showing usage of ApplicationBar-->
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar x:Name="appbar" IsVisible="True" IsMenuEnabled="False">
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar.questionmark.rest.png" Text="about" Click="ApplicationBarIconButton_Click_1" />
+            <shell:ApplicationBarIconButton x:Name="syncButton" IconUri="/Images/appbar.sync.rest.png" Text="sync" Click="ApplicationBarIconButton_Click" />
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+
+</phone:PhoneApplicationPage>
