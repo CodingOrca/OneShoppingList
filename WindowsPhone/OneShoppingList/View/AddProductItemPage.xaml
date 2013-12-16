@@ -64,12 +64,13 @@
                 Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                 ItemsSource="{Binding ProductItems}" 
                 ValueMemberPath="Caption"
+                InputScope="Text"
                 SelectedItem="{Binding SelectedProductItem,Mode=TwoWay}" 
                 DropDownOpening="AutoCompleteBox_DropDownOpening" 
                 TextChanged="AutoCompleteBox_TextChanged"
                 GotFocus="AutoCompleteBox_GotFocus" 
                 LostFocus="AutoCompleteBox_LostFocus">
-                
+
                 <toolkit:AutoCompleteBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="0,7">

@@ -45,6 +45,7 @@ namespace OneShoppingList.View
                 ApplicationTitle.Text = String.Format(AppResources.renameStorePageTitle, oldShopName);
                 textBox.Text = oldShopName;
             }
+            GoogleAnalytics.EasyTracker.GetTracker().SendView("RenameShopPage");
         }
 
         private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
@@ -58,5 +59,6 @@ namespace OneShoppingList.View
             viewModel.RenameShop(oldName: oldShopName, newName: textBox.Text);
             NavigationService.GoBack();
         }
+
     }
 }

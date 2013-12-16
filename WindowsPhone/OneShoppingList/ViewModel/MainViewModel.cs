@@ -202,6 +202,8 @@ namespace OneShoppingList
 
         private void ToggleInBasket(object o)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("UserAction", "ButtonPressed", "ToggleInShoppingBasket", 0);
+
             ShoppingItem pi = o as ShoppingItem;
             if (pi == null) return;
             if (pi.IsOnShoppingList)
@@ -218,6 +220,8 @@ namespace OneShoppingList
 
         private void IncreaseQuantity(object o)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("UserAction", "ButtonPressed", "IncreaseQuantity", 0);
+
             ShoppingItem pi = o as ShoppingItem;
             if (pi == null) return;
             if (pi.DefaultQuantity >= 900) return;
@@ -257,6 +261,8 @@ namespace OneShoppingList
 
         private void DecreaseQuantity(object o)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("UserAction", "ButtonPressed", "DecreaseQuantity", 0);
+
             ShoppingItem pi = o as ShoppingItem;
             if (pi == null) return;
             if (pi.DefaultQuantity <= 1) return;
@@ -303,6 +309,8 @@ namespace OneShoppingList
 
         private void RemoveFromShoppingList(object o)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("UserAction", "ButtonPressed", "RemoveFromShoppingList", 0);
+
             ShoppingItem pi = o as ShoppingItem;
             if (pi == null) return;
             if (pi.IsOnShoppingList) pi.IsOnShoppingList = false;
@@ -320,6 +328,8 @@ namespace OneShoppingList
 
         private void DeleteProductItem(object o)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("UserAction", "ButtonPressed", "DeleteProductItem", 0);
+
             ShoppingItem pi = o as ShoppingItem;
             if (pi != null)
             {
@@ -340,6 +350,7 @@ namespace OneShoppingList
 
         private void AddToFavorites(object o)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("UserAction", "ButtonPressed", "AddToFavorites", 0);
             ShoppingItem pi = o as ShoppingItem;
             if (pi == null) return;
             pi.IsFavorite = true;
@@ -358,6 +369,8 @@ namespace OneShoppingList
 
         private void RemoveFavorite(object o)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("UserAction", "ButtonPressed", "RemoveFavorite", 0);
+
             ShoppingItem pi = o as ShoppingItem;
             if (pi == null) return;
             pi.IsFavorite = false;
@@ -376,6 +389,8 @@ namespace OneShoppingList
 
         private void AddShop(object o)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("UserAction", "ButtonPressed", "AddShop", 0);
+
             Shop shop = null;
             if (this.CurrentShop != null)
             {
@@ -399,6 +414,8 @@ namespace OneShoppingList
 
         private void DeleteShop(object o)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("UserAction", "ButtonPressed", "DeleteShop", 0);
+
             Shop shop = o as Shop;
             if (shop == null || !this.Shops.Contains(shop) ) return;
             shop.IsDeleted = true;
@@ -414,6 +431,8 @@ namespace OneShoppingList
 
         private void Sync()
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("UserAction", "ButtonPressed", "Sync", 0);
+
             this.SyncHandler.SyncAsync();
         }
 

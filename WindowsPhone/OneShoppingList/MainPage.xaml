@@ -12,7 +12,6 @@
     xmlns:mm="clr-namespace:MetroInMotionUtils"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696" 
-    d:DataContext="{d:DesignData /SampleData/MainViewModelSampleData.xaml}"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -359,7 +358,7 @@
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem x:Name="appbar_clearList" Text="einkaufsliste leeren" Click="appbar_clearList_Click"/>
                 <shell:ApplicationBarMenuItem x:Name="appbar_shopsConfig" Text="läden bearbeiten" Click="ShopsConfiguration_Click" />
-                <shell:ApplicationBarMenuItem x:Name="appbar_settings" Text="einstellungen" Click="Settings_Click" />
+                <shell:ApplicationBarMenuItem x:Name="appbar_more" Text="weiteres" Click="more_Click" />
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>

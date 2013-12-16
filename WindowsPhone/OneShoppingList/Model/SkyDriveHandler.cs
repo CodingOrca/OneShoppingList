@@ -156,7 +156,7 @@ namespace OneShoppingList
         public void ConnectAsync(Action<LiveOperationCompletedEventArgs> onCompleted)
         {
             if (IsRunning) return;
-            auth = new LiveAuthClient(clientId: Secrets.ClientID, redirectUri: "");
+            auth = new LiveAuthClient(clientId: Secrets.ClientID);
             auth.InitializeCompleted += OnLoginCompleted;
 
             IsRunning = true;
@@ -359,7 +359,7 @@ namespace OneShoppingList
         public void UploadAsync(string filename, Stream stream, Action<LiveOperationCompletedEventArgs> onCompleted)
         {
             client.UploadAsync(path: String.Format("/{0}", ApplicationFolderID), fileName: filename, 
-            overwriteExisting: true, inputStream: stream, userState: onCompleted);
+                option:OverwriteOption.Overwrite, inputStream: stream, userState: onCompleted);
         }
 
         private void client_UploadCompleted(object sender, LiveOperationCompletedEventArgs e)

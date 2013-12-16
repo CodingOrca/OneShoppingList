@@ -63,8 +63,10 @@ Wenn dein Partner einkaufen geht aber kein Windows Phone hat, sende ihm/ihr die 
 
     <Item Title="Verlauf"
            Type="text">
+      1.4.0.0
+      Diese Version behebt ausschliesslich den Fehler, der ab etwa mitte Juli SkyDrive sync verhindert.
       1.1.0.0
-      Wenn alles gut geht, wir das die erste Version die im Windows Phone Store für alle Benutzer sichtbar ist. Sie beinhaltet:
+      Wenn alles gut geht, wird das die erste Version die im Windows Phone Store für alle Benutzer sichtbar ist. Sie beinhaltet:
       BUG FIXES:
       - Ein Fehler in der Verbreitung der Löschoperationen  führte unter bestimmten Umständen zu einem Absturz der App.
       NEUE FEATURES:

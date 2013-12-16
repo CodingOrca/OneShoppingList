@@ -18,12 +18,12 @@ using OneShoppingList.Resources;
 
 namespace OneShoppingList.View
 {
-    public partial class EditPage : PhoneApplicationPage
+    public partial class FavoritesPage : PhoneApplicationPage
     {
         MainViewModel viewModel;
         ViewModelLocator locator;
 
-        public EditPage()
+        public FavoritesPage()
         {
             InitializeComponent();
             Framework.WPHacks.WireOrientationHack(this); 
@@ -308,5 +308,9 @@ namespace OneShoppingList.View
             NavigationService.GoBack();
         }
 
+       protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+       {
+           GoogleAnalytics.EasyTracker.GetTracker().SendView("FavoritesPage");
+       }
     }
 }

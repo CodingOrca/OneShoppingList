@@ -46,7 +46,8 @@ namespace OneShoppingList.View
                 ApplicationTitle.Text = String.Format(AppResources.renameCategoryPageTitle, oldCategoryName);
                 textBox.Text = oldCategoryName;
             }
-            ;
+
+            GoogleAnalytics.EasyTracker.GetTracker().SendView("RenameCategoryPage");
 
         }
         private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)

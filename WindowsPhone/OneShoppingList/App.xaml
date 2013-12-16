@@ -1,205 +1,218 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Application xmlns:local="clr-namespace:OneShoppingList" xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone" xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone" xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="OneShoppingList.App" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:vm="clr-namespace:OneShoppingList.ViewModel" mc:Ignorable="d">
-    <!--Application Resources-->
-    <Application.Resources>
-        <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True"/>
-        <local:BoolToStringConverter p7:Key="boolToStringConverter" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <local:BoolNegationConverter p7:Key="boolNegationConverter" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <local:ToVisibilityInvertor p7:Key="toVisibilityInvertor" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <local:ToVisibilityConverter p7:Key="toVisibilityConverter" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <local:NToVisibilityConverter p7:Key="nToVisibilityConverter" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <local:ShopToBrushConverter p7:Key="shopToBrushConverter" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <local:ShopToOpacityConverter p7:Key="shopToOpacityConverter" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <local:ToUpperConverter p7:Key="toUpperConverter" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <local:BoolToActiveBrushConverter p7:Key="boolToActiveBrushConverter" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <local:BoolToDisabledBrushConverter p7:Key="boolToDisabledBrushConverter" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <local:LargerThenConverter p7:Key="largerThenConverter" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <local:LessThenConverter p7:Key="lessThenConverter" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <local:StringFormatConverter p7:Key="stringFormatConverter" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <ImageBrush p7:Key="addBrush" ImageSource="/Images/appbar.add.rest.png" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <ImageBrush p7:Key="minusBrush" ImageSource="/Images/appbar.minus.rest.png" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <ImageBrush p7:Key="checkBrush" ImageSource="/Images/appbar.check.rest.png" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <ImageBrush p7:Key="cancelBrush" ImageSource="/Images/appbar.cancel.rest.png" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <ImageBrush p7:Key="addtoFavBrush" ImageSource="/Images/appbar.favs.addto.rest.png" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <ImageBrush p7:Key="removeFavBrush" ImageSource="/Images/appbar.favs.remove.rest.png" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <ImageBrush p7:Key="editBrush" ImageSource="/Images/appbar.edit.rest.png" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <ImageBrush p7:Key="deleteBrush" ImageSource="/Images/appbar.delete.rest.png" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <ImageBrush p7:Key="settingsBrush" ImageSource="/Images/appbar.feature.settings.rest.png" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <ImageBrush p7:Key="favoritesBrush" ImageSource="/Images/appbar.favs.rest.png" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <ImageBrush p7:Key="basketBrush" ImageSource="/Images/EinkaufskorbKlein.png" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <ImageBrush p7:Key="undoBrush" ImageSource="/Images/appbar.undo.rest.png" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
-        <Style p7:Key="SampleIconButton" TargetType="Button" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="{StaticResource PhoneForegroundBrush}" />
-            <Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}" />
-            <Setter Property="BorderThickness" Value="{StaticResource PhoneBorderThickness}" />
-            <Setter Property="FontFamily" Value="{StaticResource PhoneFontFamilySemiBold}" />
-            <Setter Property="FontSize" Value="{StaticResource PhoneFontSizeMediumLarge}" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid Background="Transparent">
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup p7:Name="CommonStates">
-                                    <VisualState p7:Name="Normal" />
-                                    <VisualState p7:Name="MouseOver" />
-                                    <VisualState p7:Name="Pressed">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ContentArea">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneBackgroundBrush}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="BackgroundBrush">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneForegroundBrush}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="BackgroundBrush">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneForegroundBrush}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState p7:Name="Disabled">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="BackgroundBrush">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="0.5" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                            <Border p7:Name="BackgroundBrush" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="36" Margin="{StaticResource PhoneTouchTargetOverhang}">
-                                <Grid p7:Name="ContentArea" OpacityMask="{TemplateBinding Content}" Background="{TemplateBinding Foreground}" />
-                            </Border>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style p7:Key="PopupIconButton" TargetType="Button" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="{StaticResource PhoneBackgroundBrush}" />
-            <Setter Property="Foreground" Value="{StaticResource PhoneBackgroundBrush}" />
-            <Setter Property="BorderThickness" Value="{StaticResource PhoneBorderThickness}" />
-            <Setter Property="FontFamily" Value="{StaticResource PhoneFontFamilySemiBold}" />
-            <Setter Property="FontSize" Value="{StaticResource PhoneFontSizeMediumLarge}" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid Background="Transparent">
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup p7:Name="CommonStates">
-                                    <VisualState p7:Name="Normal" />
-                                    <VisualState p7:Name="MouseOver" />
-                                    <VisualState p7:Name="Pressed">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ContentArea">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneForegroundBrush}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="BackgroundBrush">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneBackgroundBrush}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="BackgroundBrush">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneBackgroundBrush}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState p7:Name="Disabled">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="BackgroundBrush">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="0.5" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                            <Border p7:Name="BackgroundBrush" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="36" Margin="{StaticResource PhoneTouchTargetOverhang}">
-                                <Grid p7:Name="ContentArea" OpacityMask="{TemplateBinding Content}" Background="{TemplateBinding Foreground}" />
-                            </Border>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style p7:Key="TiltButtonStyle" TargetType="Button" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="{x:Null}" />
-            <Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="FontFamily" Value="{StaticResource PhoneFontFamilySemiLight}" />
-            <Setter Property="FontSize" Value="42" />
-            <Setter Property="Padding" Value="0,0,0,0" />
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid Background="Transparent">
-                            <Border p7:Name="ButtonBackground" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="0" Margin="0,0,0,0">
-                                <ContentControl p7:Name="ContentContainer" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-                            </Border>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <DataTemplate p7:Key="basketTemplate" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml">
-            <CheckBox Tag="{Binding}" IsChecked="{Binding IsInShoppingBasket,Mode=TwoWay}" Command="{Binding Main.SelectCommand, Source={StaticResource Locator}}" CommandParameter="{Binding Tag, RelativeSource={RelativeSource Self}}" Margin="12,-12,0,-24">
-                <TextBlock Text="{Binding Caption}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" />
-            </CheckBox>
-        </DataTemplate>
-        <DataTemplate p7:Key="editTemplate" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml">
-            <CheckBox Tag="{Binding}" IsChecked="{Binding IsInShoppingBasket,Mode=TwoWay}" Command="{Binding Main.SelectCommand, Source={StaticResource Locator}}" CommandParameter="{Binding Tag, RelativeSource={RelativeSource Self}}" Margin="12,-12,0,-24">
-                <TextBlock Text="{Binding Caption}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" />
-            </CheckBox>
-        </DataTemplate>
-        <Style p7:Key="ListBoxItemStyle1" TargetType="ListBoxItem" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="HorizontalContentAlignment" Value="Left" />
-            <Setter Property="VerticalContentAlignment" Value="Top" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListBoxItem">
-                        <Border p7:Name="LayoutRoot" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}" VerticalAlignment="{TemplateBinding VerticalAlignment}">
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup p7:Name="CommonStates">
-                                    <VisualState p7:Name="Normal" />
-                                    <VisualState p7:Name="MouseOver" />
-                                    <VisualState p7:Name="Disabled">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="LayoutRoot">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource TransparentBrush}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <DoubleAnimation Duration="0" To=".5" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="ContentContainer" />
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                                <VisualStateGroup p7:Name="SelectionStates">
-                                    <VisualState p7:Name="Unselected" />
-                                    <VisualState p7:Name="Selected">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="border" Storyboard.TargetProperty="Background" Duration="0">
-                                                <DiscreteObjectKeyFrame KeyTime="0">
-                                                    <DiscreteObjectKeyFrame.Value>
-                                                        <SolidColorBrush Color="{StaticResource PhoneAccentColor}" />
-                                                    </DiscreteObjectKeyFrame.Value>
-                                                </DiscreteObjectKeyFrame>
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                            <StackPanel p7:Name="border" Orientation="Horizontal">
-                                <!--<CheckBox x:Name="checkBox" IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent},  Path=IsSelected, Mode=TwoWay}" DataContext="{TemplateBinding IsSelected}" Visibility="{Binding Converter={StaticResource toVisibilityConverter}}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"/>-->
-                                <ContentControl p7:Name="ContentContainer" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-                            </StackPanel>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Application.Resources>
-    <Application.ApplicationLifetimeObjects>
-        <!--Required object that handles lifetime events for the application-->
-        <shell:PhoneApplicationService Launching="Application_Launching" Closing="Application_Closing" Activated="Application_Activated" Deactivated="Application_Deactivated" />
-    </Application.ApplicationLifetimeObjects>
+﻿<Application 
+    x:Class="OneShoppingList.App"
+    xmlns:local="clr-namespace:OneShoppingList" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone" 
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone" 
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit" 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:OneShoppingList.ViewModel"
+    mc:Ignorable="d" >
+  <!--Application Resources-->
+  <Application.Resources>
+    <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
+    <local:BoolToStringConverter x:Key="boolToStringConverter" />
+    <local:BoolNegationConverter x:Key="boolNegationConverter"  />
+    <local:ToVisibilityInvertor x:Key="toVisibilityInvertor" />
+    <local:ToVisibilityConverter x:Key="toVisibilityConverter" />
+    <local:NToVisibilityConverter x:Key="nToVisibilityConverter" />
+    <local:ShopToBrushConverter x:Key="shopToBrushConverter" />
+    <local:ShopToOpacityConverter x:Key="shopToOpacityConverter" />
+    <local:ToUpperConverter x:Key="toUpperConverter" />
+    <local:BoolToActiveBrushConverter x:Key="boolToActiveBrushConverter" />
+    <local:BoolToDisabledBrushConverter x:Key="boolToDisabledBrushConverter" />
+    <local:LargerThenConverter x:Key="largerThenConverter" />
+    <local:LessThenConverter x:Key="lessThenConverter" />
+    <local:StringFormatConverter x:Key="stringFormatConverter" />
+    <ImageBrush x:Key="addBrush" ImageSource="/Images/appbar.add.rest.png" />
+    <ImageBrush x:Key="minusBrush" ImageSource="/Images/appbar.minus.rest.png" />
+    <ImageBrush x:Key="checkBrush" ImageSource="/Images/appbar.check.rest.png" />
+    <ImageBrush x:Key="cancelBrush" ImageSource="/Images/appbar.cancel.rest.png" />
+    <ImageBrush x:Key="addtoFavBrush" ImageSource="/Images/appbar.favs.addto.rest.png" />
+    <ImageBrush x:Key="removeFavBrush" ImageSource="/Images/appbar.favs.remove.rest.png" />
+    <ImageBrush x:Key="editBrush" ImageSource="/Images/appbar.edit.rest.png" />
+    <ImageBrush x:Key="deleteBrush" ImageSource="/Images/appbar.delete.rest.png" />
+    <ImageBrush x:Key="settingsBrush" ImageSource="/Images/appbar.feature.settings.rest.png" />
+    <ImageBrush x:Key="favoritesBrush" ImageSource="/Images/appbar.favs.rest.png" />
+    <ImageBrush x:Key="basketBrush" ImageSource="/Images/EinkaufskorbKlein.png" />
+    <ImageBrush x:Key="undoBrush" ImageSource="/Images/appbar.undo.rest.png" />
+    <ImageBrush x:Key="questionBrush" ImageSource="/Images/appbar.questionmark.rest.png" />
+    <ImageBrush x:Key="emailBrush" ImageSource="/Images/appbar.feature.email.rest.png" />
+    <ImageBrush x:Key="windowsiconBrush" ImageSource="/Images/windowsicon.png" />
+    <ImageBrush x:Key="homeBrush" ImageSource="/Images/Home_Icon.png" />
+    <Style x:Key="SampleIconButton" TargetType="Button">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderBrush" Value="{StaticResource PhoneForegroundBrush}" />
+      <Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}" />
+      <Setter Property="BorderThickness" Value="{StaticResource PhoneBorderThickness}" />
+      <Setter Property="FontFamily" Value="{StaticResource PhoneFontFamilySemiBold}" />
+      <Setter Property="FontSize" Value="{StaticResource PhoneFontSizeMediumLarge}" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Grid Background="Transparent">
+              <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                  <VisualState x:Name="Normal" />
+                  <VisualState x:Name="MouseOver" />
+                  <VisualState x:Name="Pressed">
+                    <Storyboard>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ContentArea">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneBackgroundBrush}" />
+                      </ObjectAnimationUsingKeyFrames>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="BackgroundBrush">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneForegroundBrush}" />
+                      </ObjectAnimationUsingKeyFrames>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="BackgroundBrush">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneForegroundBrush}" />
+                      </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                  </VisualState>
+                  <VisualState x:Name="Disabled">
+                    <Storyboard>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="BackgroundBrush">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="0.5" />
+                      </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                  </VisualState>
+                </VisualStateGroup>
+              </VisualStateManager.VisualStateGroups>
+              <Border x:Name="BackgroundBrush" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="36" Margin="{StaticResource PhoneTouchTargetOverhang}">
+                <Grid x:Name="ContentArea" OpacityMask="{TemplateBinding Content}" Background="{TemplateBinding Foreground}" />
+              </Border>
+            </Grid>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="PopupIconButton" TargetType="Button">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderBrush" Value="{StaticResource PhoneBackgroundBrush}" />
+      <Setter Property="Foreground" Value="{StaticResource PhoneBackgroundBrush}" />
+      <Setter Property="BorderThickness" Value="{StaticResource PhoneBorderThickness}" />
+      <Setter Property="FontFamily" Value="{StaticResource PhoneFontFamilySemiBold}" />
+      <Setter Property="FontSize" Value="{StaticResource PhoneFontSizeMediumLarge}" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Grid Background="Transparent">
+              <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                  <VisualState x:Name="Normal" />
+                  <VisualState x:Name="MouseOver" />
+                  <VisualState x:Name="Pressed">
+                    <Storyboard>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ContentArea">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneForegroundBrush}" />
+                      </ObjectAnimationUsingKeyFrames>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="BackgroundBrush">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneBackgroundBrush}" />
+                      </ObjectAnimationUsingKeyFrames>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="BackgroundBrush">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneBackgroundBrush}" />
+                      </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                  </VisualState>
+                  <VisualState x:Name="Disabled">
+                    <Storyboard>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="BackgroundBrush">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="0.5" />
+                      </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                  </VisualState>
+                </VisualStateGroup>
+              </VisualStateManager.VisualStateGroups>
+              <Border x:Name="BackgroundBrush" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="36" Margin="{StaticResource PhoneTouchTargetOverhang}">
+                <Grid x:Name="ContentArea" OpacityMask="{TemplateBinding Content}" Background="{TemplateBinding Foreground}" />
+              </Border>
+            </Grid>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="TiltButtonStyle" TargetType="Button">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="FontFamily" Value="{StaticResource PhoneFontFamilySemiLight}" />
+      <Setter Property="FontSize" Value="42" />
+      <Setter Property="Padding" Value="0,0,0,0" />
+      <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Grid Background="Transparent" toolkit:TiltEffect.IsTiltEnabled="True">
+              <Border x:Name="ButtonBackground" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="0" Margin="0,0,0,0">
+                <ContentControl x:Name="ContentContainer" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+              </Border>
+            </Grid>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <DataTemplate x:Key="basketTemplate">
+      <CheckBox Tag="{Binding}" IsChecked="{Binding IsInShoppingBasket,Mode=TwoWay}" Command="{Binding Main.SelectCommand, Source={StaticResource Locator}}" CommandParameter="{Binding Tag, RelativeSource={RelativeSource Self}}" Margin="12,-12,0,-24">
+        <TextBlock Text="{Binding Caption}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" />
+      </CheckBox>
+    </DataTemplate>
+    <DataTemplate x:Key="editTemplate">
+      <CheckBox Tag="{Binding}" IsChecked="{Binding IsInShoppingBasket,Mode=TwoWay}" Command="{Binding Main.SelectCommand, Source={StaticResource Locator}}" CommandParameter="{Binding Tag, RelativeSource={RelativeSource Self}}" Margin="12,-12,0,-24">
+        <TextBlock Text="{Binding Caption}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" />
+      </CheckBox>
+    </DataTemplate>
+    <Style x:Key="ListBoxItemStyle1" TargetType="ListBoxItem">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="BorderBrush" Value="Transparent" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="HorizontalContentAlignment" Value="Left" />
+      <Setter Property="VerticalContentAlignment" Value="Top" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="ListBoxItem">
+            <Border x:Name="LayoutRoot" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}" VerticalAlignment="{TemplateBinding VerticalAlignment}">
+              <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                  <VisualState x:Name="Normal" />
+                  <VisualState x:Name="MouseOver" />
+                  <VisualState x:Name="Disabled">
+                    <Storyboard>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="LayoutRoot">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource TransparentBrush}" />
+                      </ObjectAnimationUsingKeyFrames>
+                      <DoubleAnimation Duration="0" To=".5" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="ContentContainer" />
+                    </Storyboard>
+                  </VisualState>
+                </VisualStateGroup>
+                <VisualStateGroup x:Name="SelectionStates">
+                  <VisualState x:Name="Unselected" />
+                  <VisualState x:Name="Selected">
+                    <Storyboard>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetName="border" Storyboard.TargetProperty="Background" Duration="0">
+                        <DiscreteObjectKeyFrame KeyTime="0">
+                          <DiscreteObjectKeyFrame.Value>
+                            <SolidColorBrush Color="{StaticResource PhoneAccentColor}" />
+                          </DiscreteObjectKeyFrame.Value>
+                        </DiscreteObjectKeyFrame>
+                      </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                  </VisualState>
+                </VisualStateGroup>
+              </VisualStateManager.VisualStateGroups>
+              <StackPanel x:Name="border" Orientation="Horizontal">
+                <!--<CheckBox x:Name="checkBox" IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent},  Path=IsSelected, Mode=TwoWay}" DataContext="{TemplateBinding IsSelected}" Visibility="{Binding Converter={StaticResource toVisibilityConverter}}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"/>-->
+                <ContentControl x:Name="ContentContainer" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+              </StackPanel>
+            </Border>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </Application.Resources>
+  <Application.ApplicationLifetimeObjects>
+    <!--Required object that handles lifetime events for the application-->
+    <shell:PhoneApplicationService Launching="Application_Launching" Closing="Application_Closing" Activated="Application_Activated" Deactivated="Application_Deactivated" />
+  </Application.ApplicationLifetimeObjects>
 </Application>

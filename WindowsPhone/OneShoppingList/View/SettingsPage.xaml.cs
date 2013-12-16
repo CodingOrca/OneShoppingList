@@ -54,6 +54,14 @@ namespace OneShoppingList
             }
             else
             {
+                if (e.Error != null)
+                {
+                    MessageBox.Show("Error: " + e.Error.Message, "Exception:", MessageBoxButton.OK);
+                    if (e.Error.InnerException != null)
+                    {
+                        MessageBox.Show(e.Error.InnerException.Message, "Inner Exception:", MessageBoxButton.OK);
+                    }
+                }
                 isLoggingOut = true;
                 viewModel.LoggedOut();
             }
@@ -96,6 +104,9 @@ namespace OneShoppingList
             syncButton.IsEnabled = locator.Main.SyncCommand.CanExecute(null) && viewModel.IsUserKnown;
         }
 
-
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            GoogleAnalytics.EasyTracker.GetTracker().SendView("SettingsPage");
+        }
     }
 }
