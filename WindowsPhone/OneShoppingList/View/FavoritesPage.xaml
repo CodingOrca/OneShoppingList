@@ -1,5 +1,5 @@
 ﻿<phone:PhoneApplicationPage 
-    x:Class="OneShoppingList.View.EditPage"
+    x:Class="OneShoppingList.View.FavoritesPage"
     xmlns:local="clr-namespace:OneShoppingList"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

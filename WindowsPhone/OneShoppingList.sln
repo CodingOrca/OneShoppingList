@@ -1,9 +1,16 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneShoppingList", "OneShoppingList\OneShoppingList.csproj", "{BFA95757-DABA-428D-8577-BE21728CBBA5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneShoppingList_uTest", "OneShoppingList_uTest\OneShoppingList_uTest.csproj", "{7C308C7F-43AD-4635-86E8-E893D72953A8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{8E236749-608B-493F-8C62-962C7C1E5EB4}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -20,21 +27,33 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|ARM = Debug|ARM
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|ARM = Release|ARM
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{BFA95757-DABA-428D-8577-BE21728CBBA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BFA95757-DABA-428D-8577-BE21728CBBA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFA95757-DABA-428D-8577-BE21728CBBA5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{BFA95757-DABA-428D-8577-BE21728CBBA5}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{BFA95757-DABA-428D-8577-BE21728CBBA5}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{BFA95757-DABA-428D-8577-BE21728CBBA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFA95757-DABA-428D-8577-BE21728CBBA5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BFA95757-DABA-428D-8577-BE21728CBBA5}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{BFA95757-DABA-428D-8577-BE21728CBBA5}.Release|ARM.ActiveCfg = Release|Any CPU
+		{BFA95757-DABA-428D-8577-BE21728CBBA5}.Release|x86.ActiveCfg = Release|Any CPU
 		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Release|ARM.ActiveCfg = Release|Any CPU
+		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

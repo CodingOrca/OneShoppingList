@@ -13,7 +13,6 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="696" d:DesignWidth="480"
-    d:DataContext="{d:DesignData /SampleData/SettingsViewModelSampleData.xaml}"
     shell:SystemTray.IsVisible="True"
     DataContext="{Binding Main, Source={StaticResource Locator}}"
     xmlns:my="clr-namespace:Microsoft.Live.Controls;assembly=Microsoft.Live.Controls">
@@ -54,7 +53,7 @@
                         <TextBlock Margin="12,0,0,12" Text="{Binding UserName}" Style="{StaticResource PhoneTextLargeStyle}"/>
                     </StackPanel>
                     <my:SignInButton Grid.Row="2" Content="Button"
-                                         HorizontalAlignment="Stretch"
+                                     HorizontalAlignment="Stretch"
                                      Name="signInButton"
                                      Branding="Skydrive"
                                      ClientId="{Binding ClientId}"

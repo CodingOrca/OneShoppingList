@@ -84,6 +84,8 @@ namespace OneShoppingList.View
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendView("AddProductItemPage");
+
             base.OnNavigatedTo(e);
             appbar_save.IsEnabled = false;
 

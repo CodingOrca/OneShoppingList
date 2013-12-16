@@ -61,6 +61,9 @@ If your partner does not own a windows phone, send him/her an email with the sor
 
     <Item Title="history"
            Type="text">
+      1.4.0.0
+      This version only fixes the SkyDrive sync, which stopped working by mid of july.
+      
       1.1.0.0
       If everything goes well, this will be the first version visible in the windows phone store to all users. It contains:
       BUG FIXES:

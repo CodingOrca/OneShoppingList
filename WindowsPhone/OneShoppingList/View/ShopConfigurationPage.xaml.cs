@@ -51,6 +51,7 @@ namespace OneShoppingList.View
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+            GoogleAnalytics.EasyTracker.GetTracker().SendView("ShopConfigurationPage");
         }
 
         private void ShopSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -161,5 +162,6 @@ namespace OneShoppingList.View
             }
 
         }
+
     }
 }

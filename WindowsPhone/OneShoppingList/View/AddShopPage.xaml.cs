@@ -41,5 +41,10 @@ namespace OneShoppingList.View
             viewModel.AddShopCommand.Execute(textBox.Text);
             NavigationService.GoBack();
         }
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            GoogleAnalytics.EasyTracker.GetTracker().SendView("AddShopPage");
+        }
     }
 }

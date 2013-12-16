@@ -32,6 +32,7 @@ namespace OneShoppingList
         public MainPage()
         {
             InitializeComponent();
+            PhoneApplicationService.Current.ApplicationIdleDetectionMode = IdleDetectionMode.Disabled;
             Framework.WPHacks.WireOrientationHack(this);
 
             appBar = this.ApplicationBar as ApplicationBar;
@@ -43,7 +44,7 @@ namespace OneShoppingList
 
             appbar_clearList = this.ApplicationBar.MenuItems[0] as ApplicationBarMenuItem;
             appbar_shopsConfig = this.ApplicationBar.MenuItems[1] as ApplicationBarMenuItem;
-            appbar_settings = this.ApplicationBar.MenuItems[2] as ApplicationBarMenuItem;
+            appbar_more = this.ApplicationBar.MenuItems[2] as ApplicationBarMenuItem;
 
             locator = App.Current.Resources["Locator"] as ViewModelLocator;
 
@@ -128,20 +129,13 @@ namespace OneShoppingList
             appbar_sync.Text = AppResources.syncButtonText;
             appbar_clearList.Text = AppResources.clearListMenu;
             appbar_shopsConfig.Text = AppResources.shopsConfigMenu;
-            appbar_settings.Text = AppResources.settingsMenu;
+            appbar_more.Text = AppResources.moreMenuItem;
             appbar_sendEmail.Text = AppResources.sendEmailMenu;
 
             this.DataCollectionChanged(null, null);
 
-            //if (locator.Settings.IsFirstStart)
-            //{
-            //    locator.Settings.IsFirstStart = false;
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Data", "Loaded", "ProductItems", DataLocator.Current.ProductItems.Count);
 
-            //    if (!locator.Settings.IsUserKnown)
-            //    {
-            //        NavigationService.Navigate(new Uri("/View/SettingsPage.xaml", UriKind.Relative));
-            //    }
-            //}
 
         }
 
@@ -173,6 +167,16 @@ namespace OneShoppingList
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
+            GoogleAnalytics.Tracker tracker = GoogleAnalytics.EasyTracker.GetTracker();
+            if (ViewModelLocator.Instance.Settings.IsUserKnown)
+            {
+                tracker.SetCustomDimension(1, "SkyDrive");
+            }
+            else
+            {
+                tracker.SetCustomDimension(1, "None");
+            }
+            tracker.SendView("MainPage");
             // TODO:
             // this.RestoreState();
         }
@@ -185,7 +189,7 @@ namespace OneShoppingList
         private void Settings_Click(object sender, EventArgs e)
         {
             //SetDownTransition();
-            NavigationService.Navigate(new Uri("/View/SettingsPage.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/View/MorePage.xaml", UriKind.Relative));
         }
 
         private void Einkaufskorb_Click(object sender, EventArgs e)
@@ -246,7 +250,7 @@ namespace OneShoppingList
         private void appbarFavorits_Click(object sender, EventArgs e)
         {
             //SetHorizontalTransition();
-            NavigationService.Navigate(new Uri("/View/EditPage.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/View/FavoritesPage.xaml", UriKind.Relative));
         }
 
         private void appAddButton_Click(object sender, EventArgs e)
@@ -512,7 +516,7 @@ namespace OneShoppingList
         {
             if (!locator.Settings.IsUserKnown)
             {
-                Settings_Click(sender, e);
+                NavigationService.Navigate(new Uri("/View/SettingsPage.xaml", UriKind.Relative));
             }
             else if (viewModel.SyncCommand.CanExecute(null))
             {
@@ -544,11 +548,13 @@ namespace OneShoppingList
             task.Body = sb.ToString();
             task.Subject = AppResources.emailSubject;
             task.Show();
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("UserAction", "ButtonPressed", "Mail", 0);
+
         }
 
-        private void appbar_about_Click(object sender, EventArgs e)
+        private void more_Click(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/YourLastAboutDialog;component/AboutPage.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/View/MorePage.xaml", UriKind.Relative));
         }
 
         private void importButton_Click(object sender, RoutedEventArgs e)
@@ -585,7 +591,7 @@ namespace OneShoppingList
 
         private void favButton_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/View/EditPage.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/View/FavoritesPage.xaml", UriKind.Relative));
         }
 
         private void addButton_Click(object sender, RoutedEventArgs e)

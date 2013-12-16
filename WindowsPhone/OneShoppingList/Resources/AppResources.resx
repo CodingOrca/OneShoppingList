@@ -360,4 +360,22 @@ home &gt; AppData &gt; OneFamily &gt; ShoppingList
   <data name="toolsSettingsHeader" xml:space="preserve">
     <value>tools</value>
   </data>
+  <data name="moreMenuItem" xml:space="preserve">
+    <value>more...</value>
+  </data>
+  <data name="morePageTitle" xml:space="preserve">
+    <value>more...</value>
+  </data>
+  <data name="helpAndAbout" xml:space="preserve">
+    <value>help &amp; about</value>
+  </data>
+  <data name="otherApps" xml:space="preserve">
+    <value>my other apps</value>
+  </data>
+  <data name="rate" xml:space="preserve">
+    <value>rate</value>
+  </data>
+  <data name="support" xml:space="preserve">
+    <value>homepage &amp; support</value>
+  </data>
 </root>
