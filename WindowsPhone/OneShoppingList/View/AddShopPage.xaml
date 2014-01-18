@@ -55,6 +55,7 @@
                 <TextBox 
                     Name="textBox"
                     VerticalAlignment="Top"
+                    InputScope="Text"
                     TextChanged="TextBox_TextChanged"
                     />
             </StackPanel>
