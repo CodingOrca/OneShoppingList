@@ -199,6 +199,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Content Include="..\Release\AppResLib.dll">
+      <Link>AppResLib.dll</Link>
+    </Content>
     <Content Include="analytics.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -265,6 +268,12 @@
     <Content Include="Content\EN-DefaultShopList.json" />
     <Content Include="Content\US-DefaultItemList.json" />
     <Content Include="Content\US-DefaultShopList.json" />
+    <Content Include="..\Release\AppResLib.dll.0407.mui">
+      <Link>AppResLib.dll.0407.mui</Link>
+    </Content>
+    <Content Include="..\Release\AppResLib.dll.0409.mui">
+      <Link>AppResLib.dll.0409.mui</Link>
+    </Content>
     <None Include="analytics.xsd">
       <SubType>Designer</SubType>
     </None>
