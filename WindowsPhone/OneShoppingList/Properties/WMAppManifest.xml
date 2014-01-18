@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2009/deployment" AppPlatformVersion="7.1">
-  <App xmlns="" ProductID="{19fa038e-6a9e-4e60-9772-b4ccb8b79dec}" Title="One Shopping List" RuntimeType="Silverlight" Version="1.5.0.0" Genre="apps.normal" Author="Artur Pusztai" Description="Shopping List with shopping paths and multi-device sync through SkyDrive" Publisher="Artur Pusztai">
+  <App xmlns="" ProductID="{19fa038e-6a9e-4e60-9772-b4ccb8b79dec}" Title="@AppResLib.dll,-100" RuntimeType="Silverlight" Version="1.5.0.0" Genre="apps.normal" Author="Artur Pusztai" Description="Shopping List with shopping paths and multi-device sync through SkyDrive" Publisher="Artur Pusztai">
     <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_GAMERSERVICES" />
@@ -26,7 +26,7 @@
         <TemplateType5>
           <BackgroundImageURI IsRelative="true" IsResource="false">Background.png</BackgroundImageURI>
           <Count>0</Count>
-          <Title>One Shopping List</Title>
+          <Title>@AppResLib.dll,-200</Title>
         </TemplateType5>
       </PrimaryToken>
     </Tokens>

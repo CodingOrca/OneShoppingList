@@ -2,6 +2,11 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneShoppingList", "OneShoppingList\OneShoppingList.csproj", "{BFA95757-DABA-428D-8577-BE21728CBBA5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BC187031-B4F4-44B4-9E22-34600C0A8B11} = {BC187031-B4F4-44B4-9E22-34600C0A8B11}
+		{589B4740-5CB8-40EE-90DD-188FA09A3F10} = {589B4740-5CB8-40EE-90DD-188FA09A3F10}
+		{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0} = {0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneShoppingList_uTest", "OneShoppingList_uTest\OneShoppingList_uTest.csproj", "{7C308C7F-43AD-4635-86E8-E893D72953A8}"
 EndProject
@@ -12,9 +17,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{8E2367
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AppResLib", "AppResLib\AppResLib.vcxproj", "{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AppResList.de-DE", "AppResList-de-DE\AppResList-de-DE.vcxproj", "{589B4740-5CB8-40EE-90DD-188FA09A3F10}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppTitleResourceDlls", "AppTitleResourceDlls", "{2C8EC301-02AB-4699-9428-910541F3B508}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AppResLib.en-US", "AppResLib.en-US\AppResLib.en-US.vcxproj", "{BC187031-B4F4-44B4-9E22-34600C0A8B11}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
+		SccNumberOfProjects = 6
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs12
 		SccLocalPath0 = .
@@ -24,6 +37,18 @@ Global
 		SccProjectUniqueName2 = OneShoppingList_uTest\\OneShoppingList_uTest.csproj
 		SccProjectName2 = OneShoppingList_uTest
 		SccLocalPath2 = OneShoppingList_uTest
+		SccProjectUniqueName3 = AppResLib\\AppResLib.vcxproj
+		SccProjectTopLevelParentUniqueName3 = OneShoppingList.sln
+		SccProjectName3 = AppResLib
+		SccLocalPath3 = AppResLib
+		SccProjectUniqueName4 = AppResList-de-DE\\AppResList-de-DE.vcxproj
+		SccProjectTopLevelParentUniqueName4 = OneShoppingList.sln
+		SccProjectName4 = AppResList-de-DE
+		SccLocalPath4 = AppResList-de-DE
+		SccProjectUniqueName5 = AppResLib.en-US\\AppResLib.en-US.vcxproj
+		SccProjectTopLevelParentUniqueName5 = OneShoppingList.sln
+		SccProjectName5 = AppResLib.en-US
+		SccLocalPath5 = AppResLib.en-US
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,8 +99,61 @@ Global
 		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
 		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Release|Win32.ActiveCfg = Release|Any CPU
 		{7C308C7F-43AD-4635-86E8-E893D72953A8}.Release|x86.ActiveCfg = Release|Any CPU
+		{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0}.Debug|ARM.ActiveCfg = Debug|Win32
+		{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0}.Debug|Win32.Build.0 = Debug|Win32
+		{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0}.Debug|x86.ActiveCfg = Debug|Win32
+		{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0}.Debug|x86.Build.0 = Debug|Win32
+		{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0}.Release|Any CPU.ActiveCfg = Release|Win32
+		{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0}.Release|ARM.ActiveCfg = Release|Win32
+		{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0}.Release|Win32.ActiveCfg = Release|Win32
+		{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0}.Release|Win32.Build.0 = Release|Win32
+		{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0}.Release|x86.ActiveCfg = Release|Win32
+		{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0}.Release|x86.Build.0 = Release|Win32
+		{589B4740-5CB8-40EE-90DD-188FA09A3F10}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{589B4740-5CB8-40EE-90DD-188FA09A3F10}.Debug|ARM.ActiveCfg = Debug|Win32
+		{589B4740-5CB8-40EE-90DD-188FA09A3F10}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{589B4740-5CB8-40EE-90DD-188FA09A3F10}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{589B4740-5CB8-40EE-90DD-188FA09A3F10}.Debug|Win32.ActiveCfg = Debug|Win32
+		{589B4740-5CB8-40EE-90DD-188FA09A3F10}.Debug|Win32.Build.0 = Debug|Win32
+		{589B4740-5CB8-40EE-90DD-188FA09A3F10}.Debug|x86.ActiveCfg = Debug|Win32
+		{589B4740-5CB8-40EE-90DD-188FA09A3F10}.Debug|x86.Build.0 = Debug|Win32
+		{589B4740-5CB8-40EE-90DD-188FA09A3F10}.Release|Any CPU.ActiveCfg = Release|Win32
+		{589B4740-5CB8-40EE-90DD-188FA09A3F10}.Release|ARM.ActiveCfg = Release|Win32
+		{589B4740-5CB8-40EE-90DD-188FA09A3F10}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{589B4740-5CB8-40EE-90DD-188FA09A3F10}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{589B4740-5CB8-40EE-90DD-188FA09A3F10}.Release|Win32.ActiveCfg = Release|Win32
+		{589B4740-5CB8-40EE-90DD-188FA09A3F10}.Release|Win32.Build.0 = Release|Win32
+		{589B4740-5CB8-40EE-90DD-188FA09A3F10}.Release|x86.ActiveCfg = Release|Win32
+		{589B4740-5CB8-40EE-90DD-188FA09A3F10}.Release|x86.Build.0 = Release|Win32
+		{BC187031-B4F4-44B4-9E22-34600C0A8B11}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{BC187031-B4F4-44B4-9E22-34600C0A8B11}.Debug|ARM.ActiveCfg = Debug|Win32
+		{BC187031-B4F4-44B4-9E22-34600C0A8B11}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{BC187031-B4F4-44B4-9E22-34600C0A8B11}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{BC187031-B4F4-44B4-9E22-34600C0A8B11}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BC187031-B4F4-44B4-9E22-34600C0A8B11}.Debug|Win32.Build.0 = Debug|Win32
+		{BC187031-B4F4-44B4-9E22-34600C0A8B11}.Debug|x86.ActiveCfg = Debug|Win32
+		{BC187031-B4F4-44B4-9E22-34600C0A8B11}.Debug|x86.Build.0 = Debug|Win32
+		{BC187031-B4F4-44B4-9E22-34600C0A8B11}.Release|Any CPU.ActiveCfg = Release|Win32
+		{BC187031-B4F4-44B4-9E22-34600C0A8B11}.Release|ARM.ActiveCfg = Release|Win32
+		{BC187031-B4F4-44B4-9E22-34600C0A8B11}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{BC187031-B4F4-44B4-9E22-34600C0A8B11}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{BC187031-B4F4-44B4-9E22-34600C0A8B11}.Release|Win32.ActiveCfg = Release|Win32
+		{BC187031-B4F4-44B4-9E22-34600C0A8B11}.Release|Win32.Build.0 = Release|Win32
+		{BC187031-B4F4-44B4-9E22-34600C0A8B11}.Release|x86.ActiveCfg = Release|Win32
+		{BC187031-B4F4-44B4-9E22-34600C0A8B11}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0120C1D6-4BB8-46EA-B3B9-0F5E41748AE0} = {2C8EC301-02AB-4699-9428-910541F3B508}
+		{589B4740-5CB8-40EE-90DD-188FA09A3F10} = {2C8EC301-02AB-4699-9428-910541F3B508}
+		{BC187031-B4F4-44B4-9E22-34600C0A8B11} = {2C8EC301-02AB-4699-9428-910541F3B508}
 	EndGlobalSection
 EndGlobal
