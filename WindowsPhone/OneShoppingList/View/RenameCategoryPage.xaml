@@ -44,6 +44,7 @@
                     Style="{StaticResource PhoneTextNormalStyle}"/>
                 <TextBox 
                     Name="textBox"
+                    InputScope="Text"
                     VerticalAlignment="Top"
                     TextChanged="TextBox_TextChanged"
                     />

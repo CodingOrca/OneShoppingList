@@ -130,7 +130,7 @@
     <value>hinzuf.</value>
   </data>
   <data name="addProductTitle" xml:space="preserve">
-    <value>Neues Produkt hinzufügen</value>
+    <value>Neues Produkt erstellen</value>
   </data>
   <data name="addShopPageTitle" xml:space="preserve">
     <value>Neuen Einkaufspfad erstellen</value>
@@ -376,5 +376,17 @@ home &gt; AppData &gt; OneFamily &gt; ShoppingList</value>
   </data>
   <data name="support" xml:space="preserve">
     <value>Homepage &amp; Support</value>
+  </data>
+  <data name="addItemTitle" xml:space="preserve">
+    <value>Artikel hinzufügen</value>
+  </data>
+  <data name="editProduct" xml:space="preserve">
+    <value>{0} bearbeiten</value>
+  </data>
+  <data name="itemAdded" xml:space="preserve">
+    <value>{0} wurde hinzugefügt</value>
+  </data>
+  <data name="editButtonText" xml:space="preserve">
+    <value>bearbeiten</value>
   </data>
 </root>

@@ -105,7 +105,7 @@ namespace OneShoppingList.View
                     this.unitSizesBox.Text = viewModel.UnitSize;
                     this.quantityBox.Text = viewModel.Quantity.ToString();
 
-                    titlePanel.Text = viewModel.ProductName.ToUpper();
+                    titlePanel.Text = String.Format(AppResources.editProduct, viewModel.ProductName.ToUpper() );
                     appbar_delete.IsEnabled = true;
                 }
             }
