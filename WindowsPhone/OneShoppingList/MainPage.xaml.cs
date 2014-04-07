@@ -227,6 +227,11 @@ namespace OneShoppingList
 
         private void longListSelector_ScrollingStarted(object sender, EventArgs e)
         {
+            if (currentContextMenu != null && currentContextMenu.IsOpen)
+            {
+                currentContextMenu.IsOpen = false;
+            }
+
             LongListSelector lls = sender as LongListSelector;
             if (lls.SelectedItem != null)
             {
@@ -306,164 +311,55 @@ namespace OneShoppingList
             cm.IsOpen = true;
         }
 
-        private void LongListSelector_GroupViewOpened(object sender, GroupViewOpenedEventArgs e)
-        {
-            //Hold a reference to the active long lls selector.
-            LongListSelector longListSelector = sender as LongListSelector;
-
-            //Construct and begin a swivel animation to pop in the group view.
-            IEasingFunction quadraticEase = new QuadraticEase { EasingMode = EasingMode.EaseOut };
-            Storyboard _swivelShow = new Storyboard();
-            ItemsControl groupItems = e.ItemsControl;
-
-            foreach (var item in groupItems.Items)
-            {
-                UIElement container = groupItems.ItemContainerGenerator.ContainerFromItem(item) as UIElement;
-                if (container != null)
-                {
-                    Button content = VisualTreeHelper.GetChild(container, 0) as Button;
-                    if (content != null)
-                    {
-                        DoubleAnimationUsingKeyFrames showAnimation = new DoubleAnimationUsingKeyFrames();
-
-                        EasingDoubleKeyFrame showKeyFrame1 = new EasingDoubleKeyFrame();
-                        showKeyFrame1.KeyTime = TimeSpan.FromMilliseconds(0);
-                        showKeyFrame1.Value = -90;
-                        showKeyFrame1.EasingFunction = quadraticEase;
-
-                        EasingDoubleKeyFrame showKeyFrame2 = new EasingDoubleKeyFrame();
-                        showKeyFrame2.KeyTime = TimeSpan.FromMilliseconds(300);
-                        showKeyFrame2.Value = 0;
-                        showKeyFrame2.EasingFunction = quadraticEase;
-
-                        showAnimation.KeyFrames.Add(showKeyFrame1);
-                        showAnimation.KeyFrames.Add(showKeyFrame2);
-
-                        Storyboard.SetTargetProperty(showAnimation, new PropertyPath(PlaneProjection.RotationXProperty));
-                        Storyboard.SetTarget(showAnimation, content.Projection);
-
-                        _swivelShow.Children.Add(showAnimation);
-                    }
-                }
-            }
-
-            _swivelShow.Begin();
-        }
-
-        private void LongListSelector_GroupViewClosing(object sender, GroupViewClosingEventArgs e)
-        {
-            LongListSelector longListSelector = sender as LongListSelector;
-            //Cancelling automatic closing and scrolling to do it manually.
-            e.Cancel = true;
-
-            //Dispatch the swivel animation for performance on the UI thread.
-            Dispatcher.BeginInvoke(() =>
-            {
-                //Construct and begin a swivel animation to pop out the group view.
-                IEasingFunction quadraticEase = new QuadraticEase { EasingMode = EasingMode.EaseOut };
-                Storyboard _swivelHide = new Storyboard();
-                ItemsControl groupItems = e.ItemsControl;
-
-                foreach (var item in groupItems.Items)
-                {
-                    UIElement container = groupItems.ItemContainerGenerator.ContainerFromItem(item) as UIElement;
-                    if (container != null)
-                    {
-                        Button content = VisualTreeHelper.GetChild(container, 0) as Button;
-                        if (content != null)
-                        {
-                            DoubleAnimationUsingKeyFrames showAnimation = new DoubleAnimationUsingKeyFrames();
-
-                            EasingDoubleKeyFrame showKeyFrame1 = new EasingDoubleKeyFrame();
-                            showKeyFrame1.KeyTime = TimeSpan.FromMilliseconds(0);
-                            showKeyFrame1.Value = 0;
-                            showKeyFrame1.EasingFunction = quadraticEase;
-
-                            EasingDoubleKeyFrame showKeyFrame2 = new EasingDoubleKeyFrame();
-                            showKeyFrame2.KeyTime = TimeSpan.FromMilliseconds(125);
-                            showKeyFrame2.Value = 90;
-                            showKeyFrame2.EasingFunction = quadraticEase;
-
-                            showAnimation.KeyFrames.Add(showKeyFrame1);
-                            showAnimation.KeyFrames.Add(showKeyFrame2);
-
-                            Storyboard.SetTargetProperty(showAnimation, new PropertyPath(PlaneProjection.RotationXProperty));
-                            Storyboard.SetTarget(showAnimation, content.Projection);
-
-                            _swivelHide.Children.Add(showAnimation);
-                        }
-                    }
-                }
-
-                _swivelHide.Completed += (s1, e1) =>
-                    {
-                        if (e.SelectedGroup != null)
-                        {
-                            longListSelector.ScrollToGroup(e.SelectedGroup);
-                        }
-                        //Close group view.
-                        if (longListSelector != null)
-                        {
-                            longListSelector.CloseGroupView();
-                        }
-                    };
-                _swivelHide.Begin();
-
-            });
-        }
-
-        private void PhoneApplicationPage_BackKeyPress(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Uri("/View/ShopSelectionPage.xaml", UriKind.Relative));
         }
 
         Dictionary<int, List<FrameworkElement>> linkedItems = new Dictionary<int, List<FrameworkElement>>();
+
         private void longListSelector_Link(object sender, LinkUnlinkEventArgs e)
         {
-            LongListSelector lls = sender as LongListSelector;
+            //LongListSelector lls = sender as LongListSelector;
 
-            ShoppingItem item = e.ContentPresenter.Content as ShoppingItem;
+            //ShoppingItem item = e.ContentPresenter.Content as ShoppingItem;
 
-            if (item == null)
-            {
-                return;
-            }
+            //if (item == null)
+            //{
+            //    return;
+            //}
 
-            Shop shop = lls.DataContext as Shop;
+            //Shop shop = lls.DataContext as Shop;
 
-            if (item != null)
-            {
-                this.Dispatcher.BeginInvoke(() =>
-                {
-                    Grid grid = VisualTreeHelper.GetChild(e.ContentPresenter, 0) as Grid;
-                    if (grid != null)
-                    {
-                        PivotItem pivotItem = e.ContentPresenter.Ancestors<PivotItem>().SingleOrDefault() as PivotItem;
-                        if (pivotItem != null)
-                        {
-                            string currentShop = (pivotItem.DataContext as Shop).Name;
+            //if (item != null)
+            //{
+            //    this.Dispatcher.BeginInvoke(() =>
+            //    {
+            //        Grid grid = VisualTreeHelper.GetChild(e.ContentPresenter, 0) as Grid;
+            //        if (grid != null)
+            //        {
+            //            PivotItem pivotItem = e.ContentPresenter.Ancestors<PivotItem>().SingleOrDefault() as PivotItem;
+            //            if (pivotItem != null)
+            //            {
+            //                string currentShop = (pivotItem.DataContext as Shop).Name;
 
-                            TextBlock preferredShop = grid.Descendants<TextBlock>().Where(d => (d as TextBlock).Name == "PreferredShop").FirstOrDefault() as TextBlock;
-                            if (preferredShop != null)
-                            {
-                                if (preferredShop.Text == currentShop)
-                                {
-                                    preferredShop.Foreground = App.Current.Resources["PhoneAccentBrush"] as Brush;
-                                }
-                                else
-                                {
-                                    preferredShop.Foreground = App.Current.Resources["PhoneSubtleBrush"] as Brush;
-                                }
-                            }
-                        }
-                    }
-                }
-                );
-            }
+            //                TextBlock preferredShop = grid.Descendants<TextBlock>().Where(d => (d as TextBlock).Name == "PreferredShop").FirstOrDefault() as TextBlock;
+            //                if (preferredShop != null)
+            //                {
+            //                    if (preferredShop.Text == currentShop)
+            //                    {
+            //                        preferredShop.Foreground = App.Current.Resources["PhoneAccentBrush"] as Brush;
+            //                    }
+            //                    else
+            //                    {
+            //                        preferredShop.Foreground = App.Current.Resources["PhoneSubtleBrush"] as Brush;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //    );
+            //}
         }
 
         private void longListSelector_Unlink(object sender, LinkUnlinkEventArgs e)

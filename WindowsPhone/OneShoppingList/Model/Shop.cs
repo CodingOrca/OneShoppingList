@@ -44,6 +44,11 @@ namespace OneShoppingList.Model
             ShoppingItem pi = o as ShoppingItem;
             if (!pi.IsOnShoppingList) return false;
             if (pi.IsDeleted) return false;
+            if (!ViewModel.ViewModelLocator.Instance.Settings.ShowAllItemsInAllLists && 
+                !this.OrderedCategories.Contains(pi.Category))
+            {
+                return false;
+            }
             return true;
         }
 
@@ -58,7 +63,7 @@ namespace OneShoppingList.Model
                     Deployment.Current.Dispatcher.BeginInvoke(() =>
                         {
                             shoppingListViewModel.GroupProvider = new PropertyGroupDescription { PropertyName = "Category" };
-                            ShoppingListViewModel.GroupsSortProvider = this.CategoryComparer;
+                            shoppingListViewModel.GroupsSortProvider = this.CategoryComparer;
                             shoppingListViewModel.Filter = IsProductItemVisible;
                             shoppingListViewModel.Source = DataLocator.Current.ProductItems;
                         }
@@ -133,6 +138,57 @@ namespace OneShoppingList.Model
             }
         }
 
+        private RelayCommand showAllItemsCommand;
+        public RelayCommand ShowAllItemsCommand
+        {
+            get
+            {
+                if (this.showAllItemsCommand == null)
+                {
+                    showAllItemsCommand = new RelayCommand(
+                        //Execute:
+                        () => 
+                        {
+                            ViewModel.ViewModelLocator.Instance.Settings.ShowAllItemsInAllLists = !ViewModel.ViewModelLocator.Instance.Settings.ShowAllItemsInAllLists;
+                            this.ShoppingListViewModel.RecreateViewModels();
+                            this.HideUnassignedItemsCommand.RaiseCanExecuteChanged();
+                        }, 
+                        // CanExecute:
+                        () => 
+                        {
+                            return true;// !ViewModel.ViewModelLocator.Instance.Settings.ShowAllItemsInAllLists;
+                        });
+                }
+                return showAllItemsCommand;
+            }
+        }
+
+        private RelayCommand hideUnassignedItemsCommand;
+        public RelayCommand HideUnassignedItemsCommand
+        {
+            get
+            {
+                if (this.hideUnassignedItemsCommand == null)
+                {
+                    hideUnassignedItemsCommand = new RelayCommand(
+                        //Execute:
+                        () =>
+                        {
+                            ViewModel.ViewModelLocator.Instance.Settings.ShowAllItemsInAllLists = true;
+                            this.ShoppingListViewModel.RecreateViewModels();
+                            this.ShowAllItemsCommand.RaiseCanExecuteChanged();
+                        },
+                        // CanExecute:
+                        () =>
+                        {
+                            return ViewModel.ViewModelLocator.Instance.Settings.ShowAllItemsInAllLists;
+                        });
+                }
+                return showAllItemsCommand;
+            }
+        }
+        
+
         private RelayCommand moveUpCommand; 
         public RelayCommand MoveUpCommand
         {
@@ -144,7 +200,6 @@ namespace OneShoppingList.Model
                 }
                 return moveUpCommand;
             }
-
         }
 
         private bool CanMoveUp()
