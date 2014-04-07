@@ -76,6 +76,20 @@ namespace OneShoppingList
             }
         }
 
+        public bool ShowAllItemsInAllLists
+        {
+            get
+            {
+                return GetValueOrDefault<bool>("ShowAllItemsInAllLists", true);
+            }
+            set
+            {
+                AddOrUpdateValue("ShowAllItemsInAllLists", value);
+                Save();
+                base.RaisePropertyChanged("ShowAllItemsInAllLists");
+            }
+        }
+
         public int LastFavoritesPivotItem
         {
             get
@@ -90,6 +104,8 @@ namespace OneShoppingList
             }
         }
 
+
+        // TODO: 
         public bool ShowOnlyFavorites
         {
             get
@@ -104,6 +120,7 @@ namespace OneShoppingList
             }
         }
 
+        // TODO: 
         public bool IsFirstStart
         {
             get

@@ -134,8 +134,6 @@
                     Name="favoritesListSelector"
                     toolkit:TiltEffect.IsTiltEnabled="False"
                     ItemsSource="{Binding FavoritesViewModel.GroupsView}"
-                    GroupViewOpened="LongListSelector_GroupViewOpened"
-                    GroupViewClosing="LongListSelector_GroupViewClosing"
                     ScrollingStarted="longListSelector_ScrollingStarted"
                     Link="longListSelector_Link"
                     Unlink="longListSelector_Unlink"
@@ -165,9 +163,6 @@
                                     Text="{Binding Key,Converter={StaticResource toUpperConverter}}"
                                     Style="{StaticResource PhoneTextLargeStyle}"
                                     HorizontalAlignment="Center"/>
-                                <Button.Projection>
-                                    <PlaneProjection RotationX="-90"/>
-                                </Button.Projection>
                             </Button>
                         </DataTemplate>
                     </toolkit:LongListSelector.GroupItemTemplate>
@@ -294,8 +289,6 @@
                     Name="allItemsListSelector"
                     toolkit:TiltEffect.IsTiltEnabled="False"
                     ItemsSource="{Binding AllItemsViewModel.GroupsView}"
-                    GroupViewOpened="LongListSelector_GroupViewOpened"
-                    GroupViewClosing="LongListSelector_GroupViewClosing"
                     ScrollingStarted="longListSelector_ScrollingStarted"
                     Link="longListSelector_Link"
                     Unlink="longListSelector_Unlink"
@@ -325,9 +318,6 @@
                                     Text="{Binding Key,Converter={StaticResource toUpperConverter}}"
                                     Style="{StaticResource PhoneTextLargeStyle}"
                                     HorizontalAlignment="Center"/>
-                                <Button.Projection>
-                                    <PlaneProjection RotationX="-90"/>
-                                </Button.Projection>
                             </Button>
                         </DataTemplate>
                     </toolkit:LongListSelector.GroupItemTemplate>

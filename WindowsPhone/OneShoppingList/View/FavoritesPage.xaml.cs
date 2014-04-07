@@ -67,6 +67,11 @@ namespace OneShoppingList.View
 
         private void longListSelector_ScrollingStarted(object sender, EventArgs e)
         {
+            if (currentContextMenu != null && currentContextMenu.IsOpen)
+            {
+                currentContextMenu.IsOpen = false;
+            }
+
             LongListSelector longListSelector = sender as LongListSelector;
             if (longListSelector.SelectedItem != null)
             {

@@ -17,7 +17,7 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait"  Orientation="Portrait"
     DataContext="{Binding Main,Source={StaticResource Locator}}"
-    shell:SystemTray.IsVisible="True" BackKeyPress="PhoneApplicationPage_BackKeyPress">
+    shell:SystemTray.IsVisible="True">
 
     <!--Data context is set to sample data above and LayoutRoot contains the root grid where all other page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -41,12 +41,11 @@
                         <toolkit:LongListSelector 
                             mm:MetroInMotion.IsPivotAnimated="True"
                             ItemsSource="{Binding ShoppingListViewModel.GroupsView}"
-                            GroupViewOpened="LongListSelector_GroupViewOpened"
-                            GroupViewClosing="LongListSelector_GroupViewClosing"
                             ScrollingStarted="longListSelector_ScrollingStarted"
                             ScrollingCompleted="longListSelector_ScrollingCompleted"
                             Link="longListSelector_Link"
                             Unlink="longListSelector_Unlink"
+                            ListFooter="{Binding}"
                             >
 
                             <toolkit:LongListSelector.GroupFooterTemplate>
@@ -54,6 +53,7 @@
                                     <Grid Height="24" Width="468"/>
                                 </DataTemplate>
                             </toolkit:LongListSelector.GroupFooterTemplate>
+                            
 
                             <toolkit:LongListSelector.GroupHeaderTemplate>
                                 <DataTemplate>
@@ -154,6 +154,15 @@
                                     </Grid>
                                 </DataTemplate>
                             </toolkit:LongListSelector.ItemTemplate>
+                            
+                            <toolkit:LongListSelector.ListFooterTemplate>
+                                <DataTemplate>
+                                    <Button 
+                                        Command="{Binding ShowAllItemsCommand}">
+                                        <TextBlock Text="Toggle Show All"/>
+                                    </Button>
+                                </DataTemplate>
+                            </toolkit:LongListSelector.ListFooterTemplate>
                         </toolkit:LongListSelector>
                     </DataTemplate>
                 </controls:Pivot.ItemTemplate>
