@@ -59,7 +59,7 @@
                         Click="removeButton_Click"
                         Visibility="{Binding Parent.RemoveVisibility, ElementName=menuItem}"
                         Style="{StaticResource PopupIconButton}"
-                        Content="{StaticResource checkBrush}">
+                        Content="{StaticResource cancelBrush}">
                     </Button>
                     <!--<TextBlock 
                         x:Name="removeText"

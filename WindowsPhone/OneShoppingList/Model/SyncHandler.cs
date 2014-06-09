@@ -8,6 +8,9 @@ using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Globalization;
 using System.Windows;
+using System.Threading;
+using OneShoppingList.Resources;
+using Microsoft.Phone.Net.NetworkInformation;
 
 namespace OneShoppingList.Model
 {
@@ -167,6 +170,22 @@ namespace OneShoppingList.Model
                     return;
                 }
                 isRunning = value;
+                if (isRunning == false)
+                {
+                    this.CurrentOperation = SyncOperation.Done;
+                    if (!DeviceNetworkInformation.IsNetworkAvailable)
+                    {
+                        this.errorMessage = AppResources.NoNetworkAvailable;
+                    }
+                    if (!String.IsNullOrEmpty(this.errorMessage))
+                    {
+                        MessageBox.Show(this.errorMessage, "ERROR", MessageBoxButton.OK);
+                    }
+                    else
+                    {
+                        Thread.Sleep(500);
+                    }
+                }
                 RaisePropertyChanged(IsRunningPropertyName);
             }
         }
@@ -200,11 +219,15 @@ namespace OneShoppingList.Model
             Syncing,
             Downloading,
             Merging,
-            Uploading
+            Uploading,
+            Done
         }
+
+        private string errorMessage;
 
         public void SyncAsync()
         {
+            this.errorMessage = null;
             this.IsRunning = true;
             this.Shops = null;
             this.ProductItems = null;
@@ -219,6 +242,14 @@ namespace OneShoppingList.Model
                     }
                     else
                     {
+                        if (e != null && e.Error != null)
+                        {
+                            this.errorMessage = e.Error.ToString();
+                        }
+                        else
+                        {
+                            this.errorMessage = AppResources.connectionErrorMessage;
+                        }
                         IsRunning = false;
                     }
                 }
@@ -258,6 +289,11 @@ namespace OneShoppingList.Model
 
         private void client_DownloadCompleted(int fileIndex, LiveDownloadCompletedEventArgs e)
         {
+            if (e != null && e.Error != null)
+            {
+                this.errorMessage = e.Error.ToString();
+            }
+
             if ( e != null && !e.Cancelled && e.Error == null)
             {
                 switch (fileIndex)
@@ -429,6 +465,10 @@ namespace OneShoppingList.Model
 
         private void client_UploadCompleted(int fileIndex, LiveOperationCompletedEventArgs e)
         {
+            if (e != null && e.Error != null)
+            {
+                this.errorMessage = e.Error.ToString();
+            }
             if (e != null && !e.Cancelled && e.Error == null)
             {
             }
@@ -437,6 +477,10 @@ namespace OneShoppingList.Model
 
         private void UpdateTimestamps(LiveOperationCompletedEventArgs e)
         {
+            if (e!= null && e.Error != null)
+            {
+                this.errorMessage = e.Error.ToString();
+            }
             if (e != null && !e.Cancelled && e.Error == null)
             {
                 this.LastSyncTime = syncTransationTime;

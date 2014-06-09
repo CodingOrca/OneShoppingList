@@ -21,6 +21,7 @@ using Microsoft.Phone.Shell;
 using OneShoppingList.Resources;
 using System.Text;
 using Microsoft.Phone.Tasks;
+using ListUtils;
 
 namespace OneShoppingList
 {
@@ -58,7 +59,7 @@ namespace OneShoppingList
             
             if (locator.Settings.IsUserKnown && locator.Settings.SyncEnabled)
             {
-                viewModel.SyncCommand.Execute(null);
+                viewModel.SyncHandler.SyncAsync();
             }
 
             if (locator.Settings.LastShoppingStore != -1 && locator.Settings.LastShoppingStore < viewModel.Shops.Count)
@@ -116,7 +117,7 @@ namespace OneShoppingList
                     }
                     else
                     {
-                        e.Cancel = true;
+                        e.Cancel = locator.Main.SyncHandler.IsRunning;
                     }
                 }
             }
@@ -133,10 +134,6 @@ namespace OneShoppingList
             appbar_sendEmail.Text = AppResources.sendEmailMenu;
 
             this.DataCollectionChanged(null, null);
-
-            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("Data", "Loaded", "ProductItems", DataLocator.Current.ProductItems.Count);
-
-
         }
 
         void SyncCommand_CanExecuteChanged(object sender, EventArgs e)
@@ -165,6 +162,7 @@ namespace OneShoppingList
             // this.SaveState(e);
         }
 
+        private bool RefreshTrialMode = false;
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
             GoogleAnalytics.Tracker tracker = GoogleAnalytics.EasyTracker.GetTracker();
@@ -177,6 +175,14 @@ namespace OneShoppingList
                 tracker.SetCustomDimension(1, "None");
             }
             tracker.SendView("MainPage");
+            if (this.RefreshTrialMode)
+            {
+                ViewModelLocator.Instance.Settings.RefreshIsTrial();
+                this.RefreshTrialMode = false;
+            }
+
+            appbar_sync.IsEnabled = viewModel.SyncCommand.CanExecute(null);
+
             // TODO:
             // this.RestoreState();
         }
@@ -254,12 +260,14 @@ namespace OneShoppingList
 
         private void appbarFavorits_Click(object sender, EventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarButton", "ToolbarButtonFavorites", 0);
             //SetHorizontalTransition();
             NavigationService.Navigate(new Uri("/View/FavoritesPage.xaml", UriKind.Relative));
         }
 
         private void appAddButton_Click(object sender, EventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarButton", "ToolbarButtonAddItems", 0);
             NavigationService.Navigate(new Uri("/View/AddProductItemPage.xaml", UriKind.Relative));
         }
 
@@ -320,46 +328,64 @@ namespace OneShoppingList
 
         private void longListSelector_Link(object sender, LinkUnlinkEventArgs e)
         {
-            //LongListSelector lls = sender as LongListSelector;
+            LongListSelector lls = sender as LongListSelector;
 
-            //ShoppingItem item = e.ContentPresenter.Content as ShoppingItem;
+            ShoppingItem item = e.ContentPresenter.Content as ShoppingItem;
 
-            //if (item == null)
-            //{
-            //    return;
-            //}
+            if (item != null)
+            {
+                Shop shop = lls.DataContext as Shop;
 
-            //Shop shop = lls.DataContext as Shop;
+                if (shop != null && shop.OrderedCategories.Contains(item.Category))
+                {
+                    e.ContentPresenter.Opacity = 1;
+                }
+                else
+                {
+                    e.ContentPresenter.Opacity = 0.5;
+                }
 
-            //if (item != null)
-            //{
-            //    this.Dispatcher.BeginInvoke(() =>
-            //    {
-            //        Grid grid = VisualTreeHelper.GetChild(e.ContentPresenter, 0) as Grid;
-            //        if (grid != null)
-            //        {
-            //            PivotItem pivotItem = e.ContentPresenter.Ancestors<PivotItem>().SingleOrDefault() as PivotItem;
-            //            if (pivotItem != null)
-            //            {
-            //                string currentShop = (pivotItem.DataContext as Shop).Name;
+                this.Dispatcher.BeginInvoke(() =>
+                {
+                    Grid grid = VisualTreeHelper.GetChild(e.ContentPresenter, 0) as Grid;
+                    if (grid != null)
+                    {
+                        PivotItem pivotItem = e.ContentPresenter.Ancestors<PivotItem>().SingleOrDefault() as PivotItem;
+                        if (pivotItem != null)
+                        {
+                            string currentShop = (pivotItem.DataContext as Shop).Name;
 
-            //                TextBlock preferredShop = grid.Descendants<TextBlock>().Where(d => (d as TextBlock).Name == "PreferredShop").FirstOrDefault() as TextBlock;
-            //                if (preferredShop != null)
-            //                {
-            //                    if (preferredShop.Text == currentShop)
-            //                    {
-            //                        preferredShop.Foreground = App.Current.Resources["PhoneAccentBrush"] as Brush;
-            //                    }
-            //                    else
-            //                    {
-            //                        preferredShop.Foreground = App.Current.Resources["PhoneSubtleBrush"] as Brush;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //    );
-            //}
+                            TextBlock preferredShop = grid.Descendants<TextBlock>().Where(d => (d as TextBlock).Name == "PreferredShop").FirstOrDefault() as TextBlock;
+                            if (preferredShop != null)
+                            {
+                                if (preferredShop.Text == currentShop)
+                                {
+                                    preferredShop.Foreground = App.Current.Resources["PhoneAccentBrush"] as Brush;
+                                }
+                                else
+                                {
+                                    preferredShop.Foreground = App.Current.Resources["PhoneSubtleBrush"] as Brush;
+                                }
+                            }
+                        }
+                    }
+                });
+                return;
+            }
+            GroupViewModel<ShoppingItem> category = e.ContentPresenter.Content as GroupViewModel<ShoppingItem>;
+            if (category != null)
+            {
+                Shop shop = lls.DataContext as Shop;
+                if (shop != null && shop.OrderedCategories.Contains(category.Key))
+                {
+                    e.ContentPresenter.Opacity = 1;
+                }
+                else
+                {
+                    e.ContentPresenter.Opacity = 0.5;
+                }
+                return;
+            }
         }
 
         private void longListSelector_Unlink(object sender, LinkUnlinkEventArgs e)
@@ -410,6 +436,7 @@ namespace OneShoppingList
 
         private void appbar_sync_Click(object sender, EventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarButton", "ToolbarButtonSync", 0);
             if (!locator.Settings.IsUserKnown)
             {
                 NavigationService.Navigate(new Uri("/View/SettingsPage.xaml", UriKind.Relative));
@@ -444,17 +471,19 @@ namespace OneShoppingList
             task.Body = sb.ToString();
             task.Subject = AppResources.emailSubject;
             task.Show();
-            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("UserAction", "ButtonPressed", "Mail", 0);
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarButton", "ToolbarButtonEmail", 0);
 
         }
 
         private void more_Click(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/View/MorePage.xaml", UriKind.Relative));
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarButton", "ToolbarButtonSettings", 0);
+            NavigationService.Navigate(new Uri("/View/SettingsPage.xaml", UriKind.Relative));
         }
 
         private void importButton_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("SetupEvents", "SetupButtons", "SetupButtonImport", 0);
             string itemsfilename = "";
             string shopsfilename = "";
             switch (picker.SelectedIndex)
@@ -477,11 +506,13 @@ namespace OneShoppingList
 
         private void syncButton_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("SetupEvents", "SetupButtons", "SetupButtonSync", 0);
             NavigationService.Navigate(new Uri("/View/SettingsPage.xaml?autoreturn=true", UriKind.Relative));
         }
 
         private void addPathButton_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("SetupEvents", "SetupButtons", "SetupButtonFirstPath", 0);
             NavigationService.Navigate(new Uri("/View/AddShopPage.xaml", UriKind.Relative));
         }
 
@@ -492,6 +523,7 @@ namespace OneShoppingList
 
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarButton", "ToolbarButtonAddItems", 0);
             NavigationService.Navigate(new Uri("/View/AddProductItemPage.xaml", UriKind.Relative));
         }
 
@@ -500,5 +532,22 @@ namespace OneShoppingList
             NavigationService.Navigate(new Uri("/YourLastAboutDialog;component/AboutPage.xaml", UriKind.Relative));
         }
 
+        private void buyButtonClicked(object sender, RoutedEventArgs e)
+        {
+            MarketplaceDetailTask detailsTask = new MarketplaceDetailTask();
+            detailsTask.Show();
+            this.RefreshTrialMode = true;
+        }
+
+        private void CategoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button b = sender as Button;
+            if( b == null ) return;
+            var category = b.DataContext as GroupViewModel<ShoppingItem>;
+            if (category == null) return;
+            string uri = String.Format("/View/ShopConfigurationPage.xaml?category={0}", category.Key);
+            NavigationService.Navigate(new Uri(uri, UriKind.Relative));
+
+        }
     }
 }

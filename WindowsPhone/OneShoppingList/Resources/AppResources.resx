@@ -217,7 +217,7 @@
     <value>On</value>
   </data>
   <data name="preferredStore" xml:space="preserve">
-    <value>preferred store / brand / ...</value>
+    <value>preferred brand / store / ...</value>
   </data>
   <data name="productCategory" xml:space="preserve">
     <value>product category</value>
@@ -271,7 +271,7 @@
     <value>sign out</value>
   </data>
   <data name="skyDriveSyncInfo" xml:space="preserve">
-    <value>Sign in with your Microsoft account in order to save your data to SkyDrive, sync them with your other devices or restore them in future on your new phone.
+    <value>Sign in with your Microsoft account in order to save your data to OneDrive, sync them with your other devices or restore them in future on your new phone.
 Use the same account on all devices which you want to keep in sync.</value>
   </data>
   <data name="skyDriveSyncText" xml:space="preserve">
@@ -281,7 +281,7 @@ Use the same account on all devices which you want to keep in sync.</value>
     <value>Sorted for: </value>
   </data>
   <data name="syncButtonText" xml:space="preserve">
-    <value>sync</value>
+    <value>sync now</value>
   </data>
   <data name="unitSize" xml:space="preserve">
     <value>unit size</value>
@@ -302,7 +302,7 @@ Use the same account on all devices which you want to keep in sync.</value>
     <value> items</value>
   </data>
   <data name="skyDriveLocationHint" xml:space="preserve">
-    <value>The complete network communication is secure. Your data remain private, protected with your Microsoft account. We save them to your SkyDrive here: 
+    <value>The complete network communication is secure. Your data remain private, protected with your Microsoft account. We save them to your OneDrive here: 
 home &gt; AppData &gt; OneFamily &gt; ShoppingList
 </value>
   </data>
@@ -361,10 +361,10 @@ home &gt; AppData &gt; OneFamily &gt; ShoppingList
     <value>tools</value>
   </data>
   <data name="moreMenuItem" xml:space="preserve">
-    <value>more...</value>
+    <value>Settings &amp; more</value>
   </data>
   <data name="morePageTitle" xml:space="preserve">
-    <value>more...</value>
+    <value>more</value>
   </data>
   <data name="helpAndAbout" xml:space="preserve">
     <value>help &amp; about</value>
@@ -376,7 +376,7 @@ home &gt; AppData &gt; OneFamily &gt; ShoppingList
     <value>rate</value>
   </data>
   <data name="support" xml:space="preserve">
-    <value>homepage &amp; support</value>
+    <value>support</value>
   </data>
   <data name="addItemTitle" xml:space="preserve">
     <value>add items to your shopping list</value>
@@ -389,5 +389,44 @@ home &gt; AppData &gt; OneFamily &gt; ShoppingList
   </data>
   <data name="editButtonText" xml:space="preserve">
     <value>edit</value>
+  </data>
+  <data name="showAllButtonCaption" xml:space="preserve">
+    <value>Show all</value>
+  </data>
+  <data name="showAllExplanation" xml:space="preserve">
+    <value>{0} items on your shopping list are not available at {1}.</value>
+  </data>
+  <data name="showLessButtonCaption" xml:space="preserve">
+    <value>Hide</value>
+  </data>
+  <data name="connectionErrorMessage" xml:space="preserve">
+    <value>I am sorry, but I could not connect to your OneDrive. Please try to log in again on the Settings page of this App.</value>
+  </data>
+  <data name="showAllExplanationOne" xml:space="preserve">
+    <value>One Item on your shopping list is not available at {0}.</value>
+  </data>
+  <data name="buy" xml:space="preserve">
+    <value>buy</value>
+  </data>
+  <data name="mailToAuthor" xml:space="preserve">
+    <value>bug or suggestion</value>
+  </data>
+  <data name="newInThisVersion" xml:space="preserve">
+    <value>new in this version</value>
+  </data>
+  <data name="NoNetworkAvailable" xml:space="preserve">
+    <value>No network available.</value>
+  </data>
+  <data name="appName" xml:space="preserve">
+    <value>Shopping List</value>
+  </data>
+  <data name="IrecommendYou" xml:space="preserve">
+    <value>I recommend you this App:</value>
+  </data>
+  <data name="mailToFriend" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="voteNextFeature" xml:space="preserve">
+    <value>Vote next feature</value>
   </data>
 </root>

@@ -217,7 +217,7 @@
     <value>Ein</value>
   </data>
   <data name="preferredStore" xml:space="preserve">
-    <value>Vorzugsladen / Marke / ...</value>
+    <value>Marke / Vorzugsladen / ...</value>
   </data>
   <data name="productCategory" xml:space="preserve">
     <value>Produkt Kategorie</value>
@@ -271,7 +271,7 @@
     <value>Abmelden</value>
   </data>
   <data name="skyDriveSyncInfo" xml:space="preserve">
-    <value>Melde Dich mit deinem Microsoft Konto an, um deine Daten auf SkyDrive zu speichern, sie  mit deinen anderen Geräten zu teilen oder sie auf einem anderen Telefon wiederherzustellen.
+    <value>Melde Dich mit deinem Microsoft Konto an, um deine Daten auf OneDrive zu speichern, sie  mit deinen anderen Geräten zu teilen oder sie auf einem anderen Telefon wiederherzustellen.
 Benutze das selbe Konto auf alen Geräten die du miteinander sychronisieren möchtest.</value>
   </data>
   <data name="skyDriveSyncText" xml:space="preserve">
@@ -281,11 +281,11 @@ Benutze das selbe Konto auf alen Geräten die du miteinander sychronisieren möc
     <value>Sortiert für: </value>
   </data>
   <data name="skyDriveLocationHint" xml:space="preserve">
-    <value>Die ganze Kommunikation ist verschlüsselt. Deine Daten bleiben privat und sind mit deinem Microsoft Konto geschützt. Wir speichern sie auf deinem SkyDrive hier:
+    <value>Die ganze Kommunikation ist verschlüsselt. Deine Daten bleiben privat und sind mit deinem Microsoft Konto geschützt. Wir speichern sie auf deinem OneDrive hier:
 home &gt; AppData &gt; OneFamily &gt; ShoppingList</value>
   </data>
   <data name="syncButtonText" xml:space="preserve">
-    <value>sync</value>
+    <value>Jetzt synchronisieren</value>
   </data>
   <data name="unitSize" xml:space="preserve">
     <value>Messeinheit</value>
@@ -333,7 +333,7 @@ home &gt; AppData &gt; OneFamily &gt; ShoppingList</value>
     <value>sync einrichten und fertig</value>
   </data>
   <data name="syncDescription" xml:space="preserve">
-    <value>Hast du deine Datenbank schon auf SkyDrive?</value>
+    <value>Hast du deine Datenbank schon auf OneDrive?</value>
   </data>
   <data name="syncHeader" xml:space="preserve">
     <value>synchronization</value>
@@ -354,16 +354,16 @@ home &gt; AppData &gt; OneFamily &gt; ShoppingList</value>
     <value>Deine Einkaufsliste ist leer.</value>
   </data>
   <data name="syncSettingsHeader" xml:space="preserve">
-    <value>Synchronisieren</value>
+    <value>Sync</value>
   </data>
   <data name="toolsSettingsHeader" xml:space="preserve">
     <value>Werkzeuge</value>
   </data>
   <data name="moreMenuItem" xml:space="preserve">
-    <value>Weiteres...</value>
+    <value>Einstellungen und mehr</value>
   </data>
   <data name="morePageTitle" xml:space="preserve">
-    <value>Weiteres...</value>
+    <value>mehr</value>
   </data>
   <data name="helpAndAbout" xml:space="preserve">
     <value>Hilfe &amp; Info</value>
@@ -375,7 +375,7 @@ home &gt; AppData &gt; OneFamily &gt; ShoppingList</value>
     <value>Bewerte diese App</value>
   </data>
   <data name="support" xml:space="preserve">
-    <value>Homepage &amp; Support</value>
+    <value>Support</value>
   </data>
   <data name="addItemTitle" xml:space="preserve">
     <value>Artikel hinzufügen</value>
@@ -388,5 +388,44 @@ home &gt; AppData &gt; OneFamily &gt; ShoppingList</value>
   </data>
   <data name="editButtonText" xml:space="preserve">
     <value>bearbeiten</value>
+  </data>
+  <data name="showAllButtonCaption" xml:space="preserve">
+    <value>Einblenden</value>
+  </data>
+  <data name="showAllExplanation" xml:space="preserve">
+    <value>{0} Artikel ihrer Einkaufsliste sind bei {1} nicht erhältlich.</value>
+  </data>
+  <data name="showLessButtonCaption" xml:space="preserve">
+    <value>Ausblenden</value>
+  </data>
+  <data name="connectionErrorMessage" xml:space="preserve">
+    <value>Es tut mir leid, ich konnte keine Verbindung zu deinem OneDrive herstellen. Bitte gehe zu den Einstellungen dieser App und versuche dich erneut einzuloggen.</value>
+  </data>
+  <data name="showAllExplanationOne" xml:space="preserve">
+    <value>Ein Artikel ihrer Einkaufsliste ist bei {0} nicht erhältlich.</value>
+  </data>
+  <data name="buy" xml:space="preserve">
+    <value>Kaufen</value>
+  </data>
+  <data name="mailToAuthor" xml:space="preserve">
+    <value>Fehler oder Tipp</value>
+  </data>
+  <data name="newInThisVersion" xml:space="preserve">
+    <value>Neu in dieser Version</value>
+  </data>
+  <data name="appName" xml:space="preserve">
+    <value>Einkaufsliste</value>
+  </data>
+  <data name="IrecommendYou" xml:space="preserve">
+    <value>Ich empfehle dir diese App:</value>
+  </data>
+  <data name="mailToFriend" xml:space="preserve">
+    <value>App Empfehlen</value>
+  </data>
+  <data name="NoNetworkAvailable" xml:space="preserve">
+    <value>Kein Netzwerk verfügbar.</value>
+  </data>
+  <data name="voteNextFeature" xml:space="preserve">
+    <value>Wunschliste</value>
   </data>
 </root>

@@ -13,6 +13,9 @@ using System.Diagnostics;
 using OneShoppingList.Resources;
 using GalaSoft.MvvmLight;
 using OneShoppingList.ViewModel;
+using GalaSoft.MvvmLight.Command;
+using OneShoppingList.Model;
+using Microsoft.Phone.Net.NetworkInformation;
 
 namespace OneShoppingList
 {
@@ -76,6 +79,35 @@ namespace OneShoppingList
             }
         }
 
+        public void RefreshIsTrial()
+        {
+            enforceNextTrialCheck = true;
+            RaisePropertyChanged("IsTrial");
+        }
+
+        private bool enforceNextTrialCheck = true;
+        private bool isTrial = true;
+        public bool IsTrial
+        {
+            get
+            {
+                if( isTrial && enforceNextTrialCheck)
+                {
+                    var licenseinfo = new Microsoft.Phone.Marketplace.LicenseInformation();
+                    isTrial = licenseinfo.IsTrial();
+#if ENFORCE_TRIAL
+                    isTrial = true;
+#endif
+                    if (IsInDesignMode)
+                    {
+                        isTrial = true;
+                    }
+                    this.enforceNextTrialCheck = false;
+                }
+                return isTrial;
+            }
+        }
+
         public bool ShowAllItemsInAllLists
         {
             get
@@ -103,6 +135,56 @@ namespace OneShoppingList
                 base.RaisePropertyChanged("LastFavoritesPivotItem");
             }
         }
+
+        public string ToggleButtonCaption
+        {
+            get
+            {
+                return this.ShowAllItemsInAllLists ? AppResources.showLessButtonCaption : AppResources.showAllButtonCaption;
+            }
+        }
+
+        private RelayCommand toggleShowAllCommand;
+        public RelayCommand ToggleShowAllCommand
+        {
+            get
+            {
+                if (this.toggleShowAllCommand == null)
+                {
+                    toggleShowAllCommand = new RelayCommand(
+                        //Execute:
+                        () =>
+                        {
+                            this.ShowAllItemsInAllLists = !this.ShowAllItemsInAllLists;
+
+                            //foreach (Shop s in ViewModelLocator.Instance.Main.Shops)
+                            //{
+                            //    s.ShoppingListViewModel.RecreateViewModels();
+                            //}
+
+                            foreach (ShoppingItem item in ViewModelLocator.Instance.Main.AllItemsViewModel.ItemsView)
+                            {
+                                if (item.IsOnShoppingList)
+                                {
+                                    item.RaisePropertyChanged("Category");
+                                }
+                            }
+                            Deployment.Current.Dispatcher.BeginInvoke(() =>
+                            {
+                                foreach (Shop s in ViewModelLocator.Instance.Main.Shops)
+                                {
+                                    s.RefreshToggleButtonState();
+                                }
+                            });
+
+                            this.RaisePropertyChanged("ToggleButtonCaption");
+                        }
+                        );
+                }
+                return toggleShowAllCommand;
+            }
+        }
+
 
 
         // TODO: 
@@ -147,6 +229,7 @@ namespace OneShoppingList
                 Save();
                 base.RaisePropertyChanged("UserName");
                 base.RaisePropertyChanged("IsUserKnown");
+                SyncCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -161,6 +244,7 @@ namespace OneShoppingList
         {
             try
             {
+                DeviceNetworkInformation.NetworkAvailabilityChanged += DeviceNetworkInformation_NetworkAvailabilityChanged;
                 isolatedStore = IsolatedStorageSettings.ApplicationSettings;
             }
             catch (Exception e)
@@ -168,6 +252,79 @@ namespace OneShoppingList
                 Debug.WriteLine("Error: Cannot read Application Settings. ");
                 Debug.WriteLine(e.ToString());
             }
+        }
+
+        public SyncHandler SyncHandler
+        {
+            get
+            {
+                return ViewModelLocator.Instance.Main.SyncHandler;
+            }
+        }
+
+        public bool NetworkAvailable
+        {
+            get
+            {
+                return DeviceNetworkInformation.IsNetworkAvailable;
+            }
+        }
+
+        private RelayCommand syncCommand;
+        public RelayCommand SyncCommand
+        {
+            get
+            {
+                if( syncCommand == null )
+                {
+                    syncCommand = new RelayCommand(
+                        () => // Execute:
+                        {
+                            this.SyncHandler.SyncAsync();
+                        },
+                        () => // CanExecute:
+                        {
+                            return !this.SyncHandler.IsRunning && DeviceNetworkInformation.IsNetworkAvailable && this.IsUserKnown;
+                        }
+                    );
+                    this.SyncHandler.PropertyChanged += SyncHandler_PropertyChanged;
+                }
+                return syncCommand;
+            }
+        }
+
+        void SyncHandler_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "IsRunning")
+            {
+                SyncCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        public void RefreshAllNotofications()
+        {
+            this.RaisePropertyChanged("NetworkAvailable");
+            this.RaisePropertyChanged("IsTrial");
+            this.RaisePropertyChanged("IsUserKnown");
+            this.RaisePropertyChanged("UserName");
+            this.RaisePropertyChanged("ShowOnlyFavorites");
+            this.RaisePropertyChanged("ShowAllItemsInAllLists");
+            this.RaisePropertyChanged("SyncEnabled");
+            this.RaisePropertyChanged("SyncEnabled");
+            this.RaisePropertyChanged("SyncEnabled");
+            this.RaisePropertyChanged("SyncEnabled");
+
+            ToggleShowAllCommand.RaiseCanExecuteChanged();
+            SyncCommand.RaiseCanExecuteChanged();
+        }
+
+        void DeviceNetworkInformation_NetworkAvailabilityChanged(object sender, NetworkNotificationEventArgs e)
+        {
+            Deployment.Current.Dispatcher.InvokeAsync(() =>
+                {
+                    base.RaisePropertyChanged("NetworkAvailable");
+                    SyncCommand.RaiseCanExecuteChanged();
+                });
         }
 
         /// <summary>
@@ -212,6 +369,11 @@ namespace OneShoppingList
         /// <returns></returns>
         private valueType GetValueOrDefault<valueType>(string Key, valueType defaultValue)
         {
+            if (this.IsInDesignMode)
+            {
+                return defaultValue;
+            }
+
             valueType value;
 
             // If the key exists, retrieve the value.

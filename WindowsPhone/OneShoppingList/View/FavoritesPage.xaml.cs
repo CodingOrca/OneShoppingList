@@ -82,16 +82,19 @@ namespace OneShoppingList.View
 
         private void SettingsMenuItem_Click(object sender, EventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarMenu", "ToolbarMenuSettings", 0);
             NavigationService.Navigate(new Uri("/View/SettingsPage.xaml", UriKind.Relative));
         }
 
         private void ShopsConfiguration_Click(object sender, EventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarMenu", "ToolbarMenuShoppingPaths", 0);
             NavigationService.Navigate(new Uri("/View/ShopConfigurationPage.xaml", UriKind.Relative));
         }
 
         private void appbar_clearList_Click(object sender, EventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarMenu", "ToolbarMenuClearList", 0);
             if (MessageBoxResult.OK == MessageBox.Show(AppResources.deleteListConfirmation, AppResources.attentionText, MessageBoxButton.OKCancel))
             {
                 viewModel.ClearShoppingList();
@@ -100,6 +103,7 @@ namespace OneShoppingList.View
 
         private void addButton_Click(object sender, EventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarButton", "ToolbarButtonAddItems", 0);
             NavigationService.Navigate(new Uri("/View/AddProductItemPage.xaml", UriKind.Relative));
         }
 
@@ -144,6 +148,7 @@ namespace OneShoppingList.View
         private bool IsCheckBoxClicked = false;
         private void CheckBox_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ListEvents", "CheckBox", "CheckBoxItemToList", 0);
             IsCheckBoxClicked = true;
             // this is to avoid the tap causing the popup to appear, when the checkbox was clicked.
             Dispatcher.BeginInvoke(() => IsCheckBoxClicked = false);
@@ -310,6 +315,7 @@ namespace OneShoppingList.View
  
        private void ApplicationBarIconButton_Click(object sender, EventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarButton", "ToolbarButtonOk", 0);
             NavigationService.GoBack();
         }
 

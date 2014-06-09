@@ -19,8 +19,7 @@
     DataContext="{Binding Main,Source={StaticResource Locator}}"
     shell:SystemTray.IsVisible="True">
 
-    <!--Data context is set to sample data above and LayoutRoot contains the root grid where all other page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+    <Grid x:Name="LayoutRoot" Background="Transparent" Margin="0,-12,0,0">
         <Grid
             Visibility="{Binding Shops.Count, Converter={StaticResource toVisibilityConverter}}">
             <controls:Pivot 
@@ -39,6 +38,7 @@
                 <controls:Pivot.ItemTemplate>
                     <DataTemplate>
                         <toolkit:LongListSelector 
+                            Visibility="{Binding Main.UnsortedShoppingList.Count, Source={StaticResource Locator}, Converter={StaticResource toVisibilityConverter}}"
                             mm:MetroInMotion.IsPivotAnimated="True"
                             ItemsSource="{Binding ShoppingListViewModel.GroupsView}"
                             ScrollingStarted="longListSelector_ScrollingStarted"
@@ -50,26 +50,32 @@
 
                             <toolkit:LongListSelector.GroupFooterTemplate>
                                 <DataTemplate>
-                                    <Grid Height="24" Width="468"/>
+                                    <Grid Height="6" Width="468"/>
                                 </DataTemplate>
                             </toolkit:LongListSelector.GroupFooterTemplate>
                             
 
                             <toolkit:LongListSelector.GroupHeaderTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Vertical">
+                                    <Button
+                                        Style="{StaticResource TiltButtonStyle}"
+                                        Height="54"
+                                        Margin="0,6,0,0"
+                                        Click="CategoryButton_Click"
+                                        >
+                                        <StackPanel Orientation="Vertical">
                                         <TextBlock Text="{Binding Key,Converter={StaticResource toUpperConverter}}" 
-                                        VerticalAlignment="Center"
-                                        mm:MetroInMotion.AnimationLevel="0"
-                                        Margin="12,6,0,0"
-                                        Style="{StaticResource PhoneTextLargeStyle}"
-                                        />
+                                                    VerticalAlignment="Center"
+                                                    mm:MetroInMotion.AnimationLevel="0"
+                                                    Margin="12,0,0,0"
+                                                    Style="{StaticResource PhoneTextLargeStyle}"/>
                                         <Border 
                                             Margin="0,0,0,0"
                                             BorderBrush="{StaticResource PhoneForegroundBrush}"
                                             BorderThickness="1"
                                             />
                                         </StackPanel>
+                                    </Button>
                                 </DataTemplate>
                             </toolkit:LongListSelector.GroupHeaderTemplate>
 
@@ -95,13 +101,13 @@
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="44"/>
-                                            <RowDefinition Height="32"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
 
                                         <Border 
-                                            Margin="0,0,0,0"
+                                            Margin="0,-3,0,3"
                                             BorderBrush="{StaticResource PhoneChromeBrush}"
                                             BorderThickness="1"
                                             Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
@@ -157,10 +163,105 @@
                             
                             <toolkit:LongListSelector.ListFooterTemplate>
                                 <DataTemplate>
-                                    <Button 
-                                        Command="{Binding ShowAllItemsCommand}">
-                                        <TextBlock Text="Toggle Show All"/>
-                                    </Button>
+                                    <StackPanel>
+                                        <Button
+                                            Visibility="{Binding IsTrial, Converter={StaticResource toVisibilityConverter}}"
+                                            DataContext="{Binding Settings, Source={StaticResource Locator}}"
+                                            Background="{StaticResource PhoneAccentBrush}"
+                                            Style="{StaticResource TiltButtonStyle}"
+                                            Click="buyButtonClicked"
+                                            Height="54"
+                                            Margin="0,6,0,0"
+                                            >
+                                            <TextBlock Text="WINDOWS PHONE APPS" 
+                                                    VerticalAlignment="Center"
+                                                    mm:MetroInMotion.AnimationLevel="0"
+                                                    Margin="12,0,0,0"
+                                                    Style="{StaticResource PhoneTextLargeStyle}"/>
+                                            <!--<Border 
+                                            Margin="0,0,0,0"
+                                            BorderBrush="{StaticResource PhoneForegroundBrush}"
+                                            BorderThickness="1"
+                                            />-->
+                                            <!--</StackPanel>-->
+                                        </Button>
+                                        <Grid 
+                                            Width="468" 
+                                            Visibility="{Binding IsTrial, Converter={StaticResource toVisibilityConverter}}"
+                                            DataContext="{Binding Settings, Source={StaticResource Locator}}"
+                                            Background="Transparent"
+                                            >
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="72"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <TextBlock 
+                                                HorizontalAlignment="Left"
+                                                Grid.Column="0" Grid.Row="1"
+                                                Text="One Shopping List"
+                                                TextWrapping="NoWrap"
+                                                Margin="12,0,60,0"
+                                                Style="{StaticResource PhoneTextLargeStyle}"/>
+
+                                            <TextBlock 
+                                                HorizontalAlignment="Left"
+                                                Grid.Row="2" Grid.Column="0"
+                                                Text="Windows Store"
+                                                TextWrapping="NoWrap"
+                                                Margin="12,0,0,0"
+                                                Style="{StaticResource PhoneTextSubtleStyle}"/>
+
+                                            <TextBlock
+                                                Grid.Row="1" Grid.Column="0"
+                                                Text="1"
+                                                TextWrapping="NoWrap"
+                                                Margin="0,0,3,0"
+                                                HorizontalAlignment="Right"
+                                                Style="{StaticResource PhoneTextLargeStyle}"
+                                                />
+                                            <TextBlock
+                                                Grid.Row="2" Grid.Column="0"
+                                                Text="License"
+                                                TextWrapping="NoWrap"
+                                                Margin="0,0,3,0"
+                                                HorizontalAlignment="Right"
+                                                Style="{StaticResource PhoneTextSubtleStyle}"
+                                            />
+
+                                            <Button 
+                                                Margin="0"
+                                                Grid.Row="1"  Grid.RowSpan="2" Grid.Column="1"
+                                                Height="72"
+                                                Width="72"
+                                                Click="buyButtonClicked"
+                                                Style="{StaticResource SampleIconButton}"
+                                                Content="{StaticResource checkBrush}"
+                                                />
+                                            </Grid>
+                                        <TextBlock
+                                            Margin="12,0,0,0"
+                                            Text="{Binding ToggleText}" 
+                                            Visibility="{Binding ShowToggleTextInList, Converter={StaticResource toVisibilityConverter}}"
+                                            TextWrapping="Wrap"/>
+                                        <StackPanel 
+                                            Orientation="Vertical"
+                                            Visibility="{Binding ShowToggleButtonInList, Converter={StaticResource toVisibilityConverter}}"
+                                            >
+                                            <HyperlinkButton 
+                                                HorizontalAlignment="Left"
+                                                Padding="0,6,24,24"
+                                                DataContext="{Binding Settings, Source={StaticResource Locator}}"
+                                                Command="{Binding ToggleShowAllCommand}"
+                                                Content="{Binding ToggleButtonCaption}">
+                                            </HyperlinkButton>
+                                        </StackPanel>
+                                    </StackPanel>
                                 </DataTemplate>
                             </toolkit:LongListSelector.ListFooterTemplate>
                         </toolkit:LongListSelector>
@@ -171,6 +272,8 @@
                         HorizontalAlignment="Right" 
                         VerticalAlignment="Top" 
                         Orientation="Horizontal">
+                <TextBlock Text="{Binding CurrentShop.ShoppingListViewModel.ItemsView.Count}" />
+                <TextBlock Text=" / " />
                 <TextBlock Text="{Binding UnsortedShoppingList.Count}" />
                 <TextBlock Text="{Binding Localized.itemsName}" />
             </StackPanel>
@@ -182,42 +285,58 @@
                     Text="{Binding Localized.yourListEmpty}"
                     Style="{StaticResource PhoneTextLargeStyle}"
                     VerticalAlignment="Top"/>
-                <StackPanel Orientation="Horizontal"
-                            Margin="12,12,0,0">
-                    <Button
-                        x:Name="addButton"
-                        Height="72"
-                        Width="72"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Style="{StaticResource SampleIconButton}"
-                        Content="{StaticResource addBrush}"
-                        Click="addButton_Click"
-                    />
-                    <TextBlock
-                        Text="{Binding Localized.addItemManually}"
-                        VerticalAlignment="Center"
-                        Style="{StaticResource PhoneTextLargeStyle}"
+                <Button Style="{StaticResource TiltButtonStyle}" 
+                    Click="addButton_Click"
+                    BorderThickness="0" Padding="0" Margin="24,12,0,0">
+
+                    <StackPanel Orientation="Horizontal">
+                        <Border VerticalAlignment="Center" 
+                                Margin="0"
+                                HorizontalAlignment="Center" 
+                                Height="48"
+                                Width="48"
+                                BorderBrush="{StaticResource PhoneForegroundBrush}" 
+                                CornerRadius="21" BorderThickness="3">
+                            <Grid Height="48" Width="48"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  OpacityMask="{StaticResource addBrush}" 
+                                  Background="{StaticResource PhoneForegroundBrush}" >
+                            </Grid>
+                        </Border>
+                        <TextBlock
+                            Text="{Binding Localized.addItemManually}"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource PhoneTextLargeStyle}"
                         />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal"
-                            Margin="12,12,0,0">
-                    <Button
-                        x:Name="favButton"
-                        Height="72"
-                        Width="72"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Style="{StaticResource SampleIconButton}"
-                        Content="{StaticResource favoritesBrush}"
-                        Click="favButton_Click"
-                    />
-                    <TextBlock
-                        Text="{Binding Localized.checkInList}"
-                        VerticalAlignment="Center"
-                        Style="{StaticResource PhoneTextLargeStyle}"
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource TiltButtonStyle}" 
+                    Click="addButton_Click"
+                    BorderThickness="0" Padding="0" Margin="24,18,0,0">
+
+                    <StackPanel Orientation="Horizontal">
+                        <Border VerticalAlignment="Center" 
+                                Margin="0"
+                                HorizontalAlignment="Center" 
+                                Height="48"
+                                Width="48"
+                                BorderBrush="{StaticResource PhoneForegroundBrush}" 
+                                CornerRadius="21" BorderThickness="3">
+                            <Grid Height="48" Width="48"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  OpacityMask="{StaticResource favoritesBrush}" 
+                                  Background="{StaticResource PhoneForegroundBrush}" >
+                            </Grid>
+                        </Border>
+                        <TextBlock
+                            Text="{Binding Localized.checkInList}"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource PhoneTextLargeStyle}"
                         />
-                </StackPanel>
+                    </StackPanel>
+                </Button>
             </StackPanel>
             <Button Content="About"
                     x:Name="aboutButton"
@@ -365,9 +484,9 @@
             <shell:ApplicationBarIconButton x:Name="appbar_favorites" IconUri="/Images/appbar.favs.rest.png" Text="favorites" Click="appbarFavorits_Click" />
             <shell:ApplicationBarIconButton x:Name="appbar_sync" IconUri="/Images/appbar.sync.rest.png" Text="sync" Click="appbar_sync_Click"/>
             <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem x:Name="appbar_clearList" Text="einkaufsliste leeren" Click="appbar_clearList_Click"/>
-                <shell:ApplicationBarMenuItem x:Name="appbar_shopsConfig" Text="läden bearbeiten" Click="ShopsConfiguration_Click" />
-                <shell:ApplicationBarMenuItem x:Name="appbar_more" Text="weiteres" Click="more_Click" />
+                <shell:ApplicationBarMenuItem x:Name="appbar_clearList" Text="clear my shopping list" Click="appbar_clearList_Click"/>
+                <shell:ApplicationBarMenuItem x:Name="appbar_shopsConfig" Text="edit shopping paths" Click="ShopsConfiguration_Click" />
+                <shell:ApplicationBarMenuItem x:Name="appbar_more" Text="settings and more" Click="more_Click" />
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>

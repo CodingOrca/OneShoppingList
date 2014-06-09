@@ -37,6 +37,15 @@ namespace OneShoppingList.Model
             Shops = new ObservableCollection<Shop>();
         }
 
+        public void inventSomeDesignData()
+        {
+            ProductItems.Clear();
+            Shops.Clear();
+
+            //ProductItems.Add(new ShoppingItem() { Caption = "Milk", Category = "Froozen Foods", DefaultQuantity = 1, UnitSize = "Bottle", PreferredShop = "Aldi" });
+            //Shops.Add(new Shop() { Name = "Aldi", Key=Guid.NewGuid(), OrderedCategories=new ObservableCollection<string>(){"Froozen Foods"} });
+        }
+
         public void LoadLocalData()
         {
             ProductItems.Clear();
