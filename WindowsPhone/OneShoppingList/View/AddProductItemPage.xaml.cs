@@ -46,6 +46,7 @@ namespace OneShoppingList.View
 
         private void Save_Click(object sender, EventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarButton", "ToolbarButtonSave", 0);
             appbar_save.IsEnabled = false;
             BindingExpression be = quantityBox.GetBindingExpression(TextBox.TextProperty);
             be.UpdateSource();
@@ -144,12 +145,14 @@ namespace OneShoppingList.View
 
         private void Cancel_Click(object sender, EventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarButton", "ToolbarButtonCancel", 0);
             this.IsEnabled = false;
             NavigationService.GoBack();
         }
 
         private void Delete_Click(object sender, EventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarButton", "ToolbarButtonDelete", 0);
             viewModel.DeleteEditItem();
             NavigationService.GoBack();
         }

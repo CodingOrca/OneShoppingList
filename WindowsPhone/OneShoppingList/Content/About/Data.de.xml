@@ -5,10 +5,12 @@
        ...then you need to override the 'Title' attribute of the 'App' node to provide the correct title explicitly here! -->
   <!-- The AdditionalNotes attribute has no equivalent in the WMAppManifest.xml; you can only define its content here -->
   <!-- Explicitly set any of the attributes to an empty string to remove it (including its label) from the dialog -->
-  <App Author="Artur Pusztai"
-       Description="Einkaufliste mit Einkaufspfade und synchronisation mehrerer Geräte über SkyDrive"
-       Publisher=""       
-       AdditionalNotes="Danke an Lumi, Ada und David für ihre Ideen, Hilfe und Geduld. Danke an Sten, Tommi und deren Partnerinnen fürs testen, Ideen und Anregungen." />
+  <App 
+    Title="ONE SHOPPING LIST" 
+    Author="Artur Pusztai"
+    Description="Einkaufliste mit Einkaufspfade und synchronisation mehrerer Geräte über OneDrive"
+    Publisher="" 
+    AdditionalNotes="Danke an Lumi, Ada und David für ihre Ideen, Hilfe und Geduld." />
   <Items>
     <!-- Create a MainItem entry to configure the front page -->
     <!-- The Titel attribute defines the title of the pivot item -->
@@ -37,16 +39,16 @@
     <Item Title="Hilfe"
           Type="text">
 ONE SHOPPING LIST
-Einkaufliste mit Einkaufspfade und Synchronisation mehrerer Geräte über SkyDrive.
+Einkaufliste mit Einkaufspfade und Synchronisation mehrerer Geräte über OneDrive.
 Von nun an, musst du nur noch eine Einkaufsliste pflegen. Sie wird sortiert entsprechend dem Laden in dem du gerade einkaufst, so dass die Reihenfolge der Einträge in deiner Liste deinem Einkaufspfad entspricht.
 
 DEINE EINKAUFSPFADE
 Verwalte deine Einkaufsläden: Wähle die geführten Produktkategorien aus, und die Reihenfolge in der du sie auf deinem Weg durch den Laden erreichst.
 
-SkyDrive SYNC
+OneDrive SYNC
 Du kannst deine Einkaufsliste mit deinen Familienmitgliedern teilen.
 Bei der Synchronisation kombiniert die App alle Änderungen der teilnehmenden Geräte.
-Logge dich mit deinem Microsoft Konto ein, um SkyDrive Sync zu aktivieren.
+Logge dich mit deinem Microsoft Konto ein, um OneDrive Sync zu aktivieren.
 Benutze dasselbe Konto auf allen Geräten, die du miteinander synchronisieren möchtest.
 
 AUTOVERVOLLSTÄNDIGUNG
@@ -63,8 +65,15 @@ Wenn dein Partner einkaufen geht aber kein Windows Phone hat, sende ihm/ihr die 
 
     <Item Title="Verlauf"
            Type="text">
+      Neu in Version 1.5.0.0
+      Artikel die einem Einkaufspfad nicht zugeordnet sind, können nun ausgeblendet werden. Wenn nich ausgeblendet, sind sie ausgegraut.
+      Verbesserte Fehlerbehandlung während der synchronization und bessere behandlung wenn kein Netzwerk verfügbar ist.
+      Auto-Caps bei Eingabe der Artikelnamen.
+      Name der App wurde für Deutsch zu "Einkaufsliste" geändert. Interner name ist nach wie vor One Shopping List.
+      
       1.4.0.0
-      Diese Version behebt ausschliesslich den Fehler, der ab etwa mitte Juli SkyDrive sync verhindert.
+      Diese Version behebt ausschliesslich den Fehler, der ab etwa mitte Juli OneDrive sync verhindert.
+      
       1.1.0.0
       Wenn alles gut geht, wird das die erste Version die im Windows Phone Store für alle Benutzer sichtbar ist. Sie beinhaltet:
       BUG FIXES:

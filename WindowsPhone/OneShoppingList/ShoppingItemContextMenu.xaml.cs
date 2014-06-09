@@ -51,6 +51,7 @@ namespace OneShoppingList
 
         private void removeButton_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ListEvents", "PopupButton", "PopupButtonRemove", 0);
             if (OnRemove != null)
             {
                 OnRemove(this, null);
@@ -59,6 +60,7 @@ namespace OneShoppingList
 
         private void deleteButton_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ListEvents", "PopupButton", "PopupButtonDelete", 0);
             if (OnDelete != null)
             {
                 OnDelete(this, null);
@@ -67,6 +69,7 @@ namespace OneShoppingList
 
         private void editButton_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ListEvents", "PopupButton", "PopupButtonEdit", 0);
             if (OnEdit != null)
             {
                 OnEdit(this, null);
@@ -75,6 +78,7 @@ namespace OneShoppingList
 
         private void addtoFavButton_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ListEvents", "PopupButton", "PopupButtonAddFavorite", 0);
             if (OnAddFavorite != null)
             {
                 OnAddFavorite(this, null);
@@ -83,6 +87,7 @@ namespace OneShoppingList
 
         private void removeFavButton_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ListEvents", "PopupButton", "PopupButtonRemoveFavorite", 0);
             if (OnRemoveFavorite != null)
             {
                 OnRemoveFavorite(this, null);

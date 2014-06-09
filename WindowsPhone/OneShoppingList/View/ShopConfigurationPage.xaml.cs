@@ -46,6 +46,23 @@ namespace OneShoppingList.View
             appbar_newShop.Text = AppResources.newShopText;
             appbar_renameShop.Text = AppResources.renameShopText;
             appbar_deleteShop.Text = AppResources.deleteShopText;
+            ShopCategoryAssignement categoryAssignement = viewModel.CurrentShop.SelectedCategory;
+            viewModel.CurrentShop.SelectedCategory = null;
+
+            if (viewModel.CurrentShop.CategoryAssignements.ItemsView.Count > 0)
+            {
+                if (NavigationContext.QueryString.ContainsKey("category"))
+                {
+                    string category = NavigationContext.QueryString["category"];
+                    categoryAssignement = viewModel.CurrentShop.CategoryAssignements.ItemsView.Where(ca => ca.CategoryName == category).FirstOrDefault();
+                    NavigationContext.QueryString.Remove("category");
+                }
+                if (categoryAssignement == null)
+                {
+                    categoryAssignement = viewModel.CurrentShop.CategoryAssignements.ItemsView[0];
+                }
+                viewModel.CurrentShop.SelectedCategory = categoryAssignement;
+            }
         }
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
@@ -95,6 +112,7 @@ namespace OneShoppingList.View
 
         private void appbar_up_Click(object sender, EventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarButton", "ToolbarButtonUp", 0);
             Shop shop = pivot.SelectedItem as Shop;
             if (shop == null) return;
             shop.MoveUpCommand.Execute(null);
@@ -102,6 +120,7 @@ namespace OneShoppingList.View
 
         private void appbar_down_Click(object sender, EventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarButton", "ToolbarButtonDown", 0);
             Shop shop = pivot.SelectedItem as Shop;
             if (shop == null) return;
             shop.MoveDownCommand.Execute(null);
@@ -109,6 +128,7 @@ namespace OneShoppingList.View
 
         private void appbar_renameCat_Click(object sender, EventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarButton", "ToolbarButtonEditCategory", 0);
             Shop shop = pivot.SelectedItem as Shop;
             if (shop != null)
             {
@@ -119,7 +139,9 @@ namespace OneShoppingList.View
 
         private void CheckBox_Click(object sender, RoutedEventArgs e)
         {
-            Dispatcher.BeginInvoke(() => {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ListEvents", "CheckBox", "CheckBoxCategoryToPath", 0);
+            Dispatcher.BeginInvoke(() =>
+            {
                 Shop shop = pivot.SelectedItem as Shop;
                 if (shop != null)
                 {
@@ -132,11 +154,13 @@ namespace OneShoppingList.View
 
         private void appbar_newShop_Click(object sender, EventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarMenu", "ToolbarMenuNewPath", 0);
             NavigationService.Navigate(new Uri("/View/AddShopPage.xaml", UriKind.Relative));
         }
 
         private void appbar_deleteShop_Click(object sender, EventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarMenu", "ToolbarMenuDelPath", 0);
             Shop shop = pivot.SelectedItem as Shop;
             if (viewModel.DeleteShopCommand.CanExecute(shop))
             {
@@ -154,6 +178,7 @@ namespace OneShoppingList.View
 
         private void appbar_renameShop_Click(object sender, EventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarMenu", "ToolbarMenuEditPath", 0);
             Shop shop = pivot.SelectedItem as Shop;
             if (shop != null)
             {

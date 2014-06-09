@@ -7,7 +7,7 @@ using System.Resources;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("One Shopping List")]
-[assembly: AssemblyDescription("Shopping List with shopping paths and multi-device synchronization via SkyDrive")]
+[assembly: AssemblyDescription("Shopping List with shopping paths and multi-device synchronization via OneDrive")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Artur Pusztai")]
 [assembly: AssemblyProduct("One Shopping List")]

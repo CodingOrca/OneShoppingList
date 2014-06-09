@@ -8,6 +8,8 @@ using System.Windows.Data;
 using GalaSoft.MvvmLight.Command;
 using System.Windows;
 using System;
+using OneShoppingList.ViewModel;
+using OneShoppingList.Resources;
 
 
 namespace OneShoppingList.Model
@@ -22,6 +24,14 @@ namespace OneShoppingList.Model
             Shop newShop = new Shop();
             newShop.Update(this);
             return newShop;
+        }
+
+        public AppResources Localized
+        {
+            get
+            {
+                return new LocalizedStrings().LocalizedResources;
+            }
         }
 
         public override void Update(SyncItemBase source)
@@ -135,56 +145,6 @@ namespace OneShoppingList.Model
                 selectedCategory = value;
                 RaisePropertyChanged(SelectedCategoryPropertyName);
                 this.CommandsCanExecuteChanged();
-            }
-        }
-
-        private RelayCommand showAllItemsCommand;
-        public RelayCommand ShowAllItemsCommand
-        {
-            get
-            {
-                if (this.showAllItemsCommand == null)
-                {
-                    showAllItemsCommand = new RelayCommand(
-                        //Execute:
-                        () => 
-                        {
-                            ViewModel.ViewModelLocator.Instance.Settings.ShowAllItemsInAllLists = !ViewModel.ViewModelLocator.Instance.Settings.ShowAllItemsInAllLists;
-                            this.ShoppingListViewModel.RecreateViewModels();
-                            this.HideUnassignedItemsCommand.RaiseCanExecuteChanged();
-                        }, 
-                        // CanExecute:
-                        () => 
-                        {
-                            return true;// !ViewModel.ViewModelLocator.Instance.Settings.ShowAllItemsInAllLists;
-                        });
-                }
-                return showAllItemsCommand;
-            }
-        }
-
-        private RelayCommand hideUnassignedItemsCommand;
-        public RelayCommand HideUnassignedItemsCommand
-        {
-            get
-            {
-                if (this.hideUnassignedItemsCommand == null)
-                {
-                    hideUnassignedItemsCommand = new RelayCommand(
-                        //Execute:
-                        () =>
-                        {
-                            ViewModel.ViewModelLocator.Instance.Settings.ShowAllItemsInAllLists = true;
-                            this.ShoppingListViewModel.RecreateViewModels();
-                            this.ShowAllItemsCommand.RaiseCanExecuteChanged();
-                        },
-                        // CanExecute:
-                        () =>
-                        {
-                            return ViewModel.ViewModelLocator.Instance.Settings.ShowAllItemsInAllLists;
-                        });
-                }
-                return showAllItemsCommand;
             }
         }
         
@@ -335,5 +295,53 @@ namespace OneShoppingList.Model
             } 
         }
 
+        public string ToggleText
+        {
+            get
+            {
+                int count = ViewModelLocator.Instance.Main.UnsortedShoppingList.Count(item => !this.OrderedCategories.Contains(item.Category));
+                if (count > 1)
+                {
+                    return String.Format(AppResources.showAllExplanation, count, this.Name);
+                }
+                else
+                {
+                    return String.Format(AppResources.showAllExplanationOne, this.Name);
+                }
+            }
+        }
+
+        public bool ShowToggleButtonInList
+        {
+            get
+            {
+                if (ViewModelLocator.Instance.Settings.ShowAllItemsInAllLists)
+                {
+                    int lastCategoryIndex = this.ShoppingListViewModel.GroupsView.Count - 1;
+                    if (lastCategoryIndex < 0) return false;
+                    return !this.OrderedCategories.Contains(this.ShoppingListViewModel.GroupsView[lastCategoryIndex].Key);
+                }
+                else
+                {
+                    return ViewModelLocator.Instance.Main.UnsortedShoppingList.Count != this.ShoppingListViewModel.ItemsView.Count;
+                }
+            }
+        }
+
+        public bool ShowToggleTextInList
+        {
+            get
+            {
+                return this.ShowToggleButtonInList;
+            }
+        }
+
+
+        public void RefreshToggleButtonState()
+        {
+            this.RaisePropertyChanged("ShowToggleTextInList");
+            this.RaisePropertyChanged("ShowToggleButtonInList");
+            this.RaisePropertyChanged("ToggleText");
+        }
     }
 }

@@ -38,6 +38,7 @@ namespace OneShoppingList.View
 
         private void appbar_save_Click(object sender, EventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarButton", "ToolbarButtonSaves", 0);
             viewModel.AddShopCommand.Execute(textBox.Text);
             NavigationService.GoBack();
         }

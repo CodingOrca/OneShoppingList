@@ -110,6 +110,12 @@
     <Resource Include="Toolkit.Content\ie.png" />
     <None Include="Notes.htm" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OneShoppingList\OneShoppingList.csproj">
+      <Project>{BFA95757-DABA-428D-8577-BE21728CBBA5}</Project>
+      <Name>OneShoppingList</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

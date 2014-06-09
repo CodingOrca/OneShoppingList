@@ -14,68 +14,73 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="696" d:DesignWidth="480"
     shell:SystemTray.IsVisible="True"
-    DataContext="{Binding Main, Source={StaticResource Locator}}"
+    DataContext="{Binding Settings, Source={StaticResource Locator}}"
     xmlns:my="clr-namespace:Microsoft.Live.Controls;assembly=Microsoft.Live.Controls">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+    <Grid x:Name="LayoutRoot" Background="Transparent" Margin="0,-11,0,-1">
+        <TextBlock  
+            x:Name="NoNetworkLabel"
+            Visibility="{Binding NetworkAvailable, Converter={StaticResource toVisibilityInvertor}}"
+            Margin="0,17,6,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Text="{Binding Localized.NoNetworkAvailable}"
+            Style="{StaticResource PhoneTextAccentStyle}"/>
         <controls:Pivot 
             Title="{Binding Localized.settingsPageName}">
 
             <controls:PivotItem
                 Header="{Binding Localized.syncSettingsHeader}">
 
-                <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,12">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <ScrollViewer Grid.Row="4">
-                        <StackPanel>
-                            <TextBlock Margin="12,0,0,12" 
-                                       Text="{Binding Localized.skyDriveSyncInfo}"
-                                       TextWrapping="Wrap"
-                                       Visibility="{Binding IsUserKnown,Converter={StaticResource toVisibilityInvertor}}"
-                                       Style="{StaticResource PhoneTextNormalStyle}"/>
-                            <TextBlock Margin="12,0,0,0" 
-                                       Text="{Binding Localized.skyDriveLocationHint}"
-                                       TextWrapping="Wrap"
-                                       Style="{StaticResource PhoneTextNormalStyle}"/>
-                        </StackPanel>
-                    </ScrollViewer>
+                <ScrollViewer>
                     <StackPanel Grid.Row="1" Orientation="Vertical">
-                        <TextBlock Margin="12,0,0,0" Text="{Binding Localized.accountName}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                        <TextBlock Margin="12,0,0,12" Text="{Binding UserName}" Style="{StaticResource PhoneTextLargeStyle}"/>
-                    </StackPanel>
-                    <my:SignInButton Grid.Row="2" Content="Button"
-                                     HorizontalAlignment="Stretch"
-                                     Name="signInButton"
-                                     Branding="Skydrive"
-                                     ClientId="{Binding ClientId}"
-                                     VerticalAlignment="Bottom"
-                                     SignInText="{Binding Localized.signIn}"
-                                     SignOutText="{Binding Localized.signOut}"
-                                     TextType="Custom"
-                                     toolkit:TiltEffect.IsTiltEnabled="True"
-                                     Scopes="wl.skydrive_update wl.offline_access" 
-                                     SessionChanged="signInButton_SessionChanged" />
-
-                    <StackPanel Grid.Row="3" Margin="0,12,0,0">
+                        <TextBlock Margin="12,0,0,0" 
+                                   Text="{Binding Localized.accountName}" 
+                                   Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <TextBlock Margin="12,0,0,12" 
+                                   Text="{Binding UserName}" 
+                                   Style="{StaticResource PhoneTextLargeStyle}"/>
+                        <my:SignInButton
+                                IsEnabled="{Binding NetworkAvailable}"
+                                HorizontalAlignment="Stretch"
+                                Name="signInButton"
+                                Branding="Skydrive"
+                                ClientId="{Binding ClientId}"
+                                VerticalAlignment="Bottom"
+                                SignInText="{Binding Localized.signIn}"
+                                SignOutText="{Binding Localized.signOut}"
+                                TextType="Custom"
+                                toolkit:TiltEffect.IsTiltEnabled="True"
+                                Scopes="wl.skydrive_update wl.offline_access" 
+                                SessionChanged="signInButton_SessionChanged" />
                         <TextBlock 
-                            Margin="12,0,0,-12" 
+                            Margin="12,12,0,-12" 
                             TextWrapping="Wrap"
                             Text="{Binding Localized.skyDriveSyncText}" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                        <toolkit:ToggleSwitch Margin="0,0,0,-24" IsChecked="{Binding SyncEnabled,Mode=TwoWay}" IsEnabled="{Binding IsUserKnown}">
+                        <toolkit:ToggleSwitch Margin="0,0,0,-24" 
+                                              Name="toggleSwitch"
+                                              IsChecked="{Binding SyncEnabled,Mode=TwoWay}" 
+                                              IsEnabled="{Binding IsUserKnown}">
                             <TextBlock Margin="0" Text="{Binding SyncEnabled,Converter={StaticResource boolToStringConverter}}" Style="{StaticResource PhoneTextLargeStyle}"/>
                         </toolkit:ToggleSwitch>
+
+                        <TextBlock Margin="12,0,0,12" 
+                                    Text="{Binding Localized.skyDriveSyncInfo}"
+                                    TextWrapping="Wrap"
+                                    Visibility="{Binding IsUserKnown,Converter={StaticResource toVisibilityInvertor}}"
+                                    Style="{StaticResource PhoneTextNormalStyle}"/>
+                        <TextBlock Margin="12,0,0,0" 
+                                    Text="{Binding Localized.skyDriveLocationHint}"
+                                    TextWrapping="Wrap"
+                                    Style="{StaticResource PhoneTextNormalStyle}"/>
+                        <Button
+                            Command="{Binding SyncCommand}"
+                            Content="{Binding Localized.syncButtonText}"/>
                     </StackPanel>
-                </Grid>
+                </ScrollViewer>
             </controls:PivotItem>
+
             <!--<controls:PivotItem 
                 Header="{Binding Localized.toolsSettingsHeader}">
                 <Button
@@ -85,6 +90,203 @@
                     Click="Button_Click_1"
                 />
             </controls:PivotItem>-->
+            <controls:PivotItem
+                Header="{Binding Localized.morePageTitle}">
+                <ScrollViewer>
+                    <StackPanel>
+                        <Button 
+                            Visibility="{Binding IsTrial, Converter={StaticResource toVisibilityConverter}}"
+                            Style="{StaticResource TiltButtonStyle}" 
+                            Click="Buy_Button_Click"
+                            BorderThickness="0" Padding="0" Margin="12,0,12,12">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                <Border Width="64" Height="64" BorderBrush="{StaticResource PhoneAccentBrush}"  BorderThickness="1" Background="{StaticResource PhoneAccentBrush}">
+                                    <Canvas VerticalAlignment="Center" HorizontalAlignment="Center" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="appbar_marketplace" Width="76" Height="76" Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0">
+                                        <Path Stroke="White" Fill="White" Width="34" Height="40.112" Canvas.Left="21" Canvas.Top="17.138" Stretch="Fill" Data="F1 M 49,57.25L 21,51.75L 21,30.75L 49,25L 55,27L 55,55L 49,57.25 Z M 27,35.5L 27,40L 33,40L 33,34.6L 27,35.5 Z M 33,47.15L 33,41L 27,41L 27,46.25L 33,47.15 Z M 42,33.25L 34,34.45L 34,40L 42,40L 42,33.25 Z M 42,48.5L 42,41L 34,41L 34,47.3L 42,48.5 Z M 41,20.1563C 42.6568,19.6903 45,20.4057 45,22.0625L 44.9999,24.8215L 42.9999,25.2857L 42.9999,23.5938C 42.9999,22.4893 42.1045,21.8457 41,22.1563L 39.9995,22.469L 40.0001,25.8929L 38.0001,26.3571L 37.9995,23.2502C 36.8952,23.561 36,23.7082 36,24.8126L 36,26.7857L 34,27.25L 34,24.3438C 34,22.6872 36.3428,21.7164 37.9994,21.2502L 37.9992,20.7758C 37.9991,19.6713 37.1035,18.9693 35.9989,19.2077L 32.9989,19.9464C 31.8943,20.1849 30.999,21.2736 30.9991,22.3782L 31,27.8215L 29,28.2857L 28.9992,21.844C 28.9989,20.1872 30.3419,18.5541 31.9987,18.1964L 36.9988,17.2078C 38.6556,16.85 39.999,17.9031 39.9992,19.5599L 39.9994,20.469L 41,20.1563 Z "/>
+                                    </Canvas>
+                                </Border>
+                                <Border Margin="12,0,0,0"
+                                    HorizontalAlignment="Stretch" BorderBrush="{StaticResource PhoneAccentBrush}"  BorderThickness="1" Background="{StaticResource PhoneAccentBrush}" Width="368">
+                                    <TextBlock HorizontalAlignment="Left" 
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource PhoneTextBlockBase}"
+                                       FontWeight="Bold"
+                                       FontSize="28"
+                                       Text="{Binding Localized.buy, Converter={StaticResource toUpperConverter}}"/>
+                                </Border>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource TiltButtonStyle}" 
+                            Click="Rate_Button_Click"
+                            BorderThickness="0" Padding="0" Margin="12,0,12,12">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                <Border Width="64" Height="64" BorderBrush="{StaticResource PhoneAccentBrush}"  BorderThickness="1" Background="{StaticResource PhoneAccentBrush}">
+                                    <Border VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="{StaticResource PhoneForegroundBrush}" CornerRadius="24" BorderThickness="3">
+                                        <Grid Height="48" Width="48" OpacityMask="{StaticResource favoritesBrush}" Background="{StaticResource PhoneForegroundBrush}" >
+                                        </Grid>
+                                    </Border>
+                                </Border>
+                                <Border Margin="12,0,0,0"
+                                    HorizontalAlignment="Stretch" BorderBrush="{StaticResource PhoneAccentBrush}"  BorderThickness="1" Background="{StaticResource PhoneAccentBrush}" Width="368">
+                                    <TextBlock HorizontalAlignment="Left" 
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource PhoneTextBlockBase}"
+                                       FontWeight="Bold"
+                                       FontSize="28"
+                                       Text="{Binding Localized.rate, Converter={StaticResource toUpperConverter}}"/>
+                                </Border>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource TiltButtonStyle}" 
+                            Click="About_Button_Click"
+                            BorderThickness="0" Padding="0" Margin="12,24,12,12">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                <Border Width="64" Height="64" BorderBrush="{StaticResource PhoneAccentBrush}"  BorderThickness="1" Background="{StaticResource PhoneAccentBrush}">
+                                    <Border VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="{StaticResource PhoneForegroundBrush}" CornerRadius="24" BorderThickness="3">
+                                        <Grid Height="48" Width="48" OpacityMask="{StaticResource questionBrush}" Background="{StaticResource PhoneForegroundBrush}" >
+                                        </Grid>
+                                    </Border>
+                                </Border>
+                                <Border Margin="12,0,0,0"
+                                    HorizontalAlignment="Stretch" BorderBrush="{StaticResource PhoneAccentBrush}"  BorderThickness="1" Background="{StaticResource PhoneAccentBrush}" Width="368">
+                                    <TextBlock HorizontalAlignment="Left" 
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource PhoneTextBlockBase}"
+                                       FontWeight="Bold"
+                                       FontSize="28"
+                                       Text="{Binding Localized.helpAndAbout, Converter={StaticResource toUpperConverter}}"/>
+                                </Border>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource TiltButtonStyle}" 
+                            Click="Bug_Button_Click"
+                            BorderThickness="0" Padding="0" Margin="12,0,12,12">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                <Border Width="64" Height="64" BorderBrush="{StaticResource PhoneAccentBrush}"  BorderThickness="1" Background="{StaticResource PhoneAccentBrush}">
+                                    <Border VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="{StaticResource PhoneForegroundBrush}" CornerRadius="24" BorderThickness="3">
+                                        <Grid Height="48" Width="48" OpacityMask="{StaticResource emailBrush}" Background="{StaticResource PhoneForegroundBrush}" >
+                                        </Grid>
+                                    </Border>
+                                </Border>
+                                <Border Margin="12,0,0,0"
+                                    HorizontalAlignment="Stretch" BorderBrush="{StaticResource PhoneAccentBrush}"  BorderThickness="1" Background="{StaticResource PhoneAccentBrush}" Width="368">
+                                    <TextBlock HorizontalAlignment="Left" 
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource PhoneTextBlockBase}"
+                                       FontWeight="Bold"
+                                       FontSize="28"
+                                       Text="{Binding Localized.mailToAuthor, Converter={StaticResource toUpperConverter}}"/>
+                                </Border>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource TiltButtonStyle}" 
+                            Click="Support_Button_Click"
+                            BorderThickness="0" Padding="0" Margin="12,0,12,12">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                <Border Width="64" Height="64" BorderBrush="{StaticResource PhoneAccentBrush}"  BorderThickness="1" Background="{StaticResource PhoneAccentBrush}">
+                                    <Border VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="{StaticResource PhoneForegroundBrush}" CornerRadius="24" BorderThickness="3">
+                                        <Grid Height="48" Width="48" OpacityMask="{StaticResource homeBrush}" Background="{StaticResource PhoneForegroundBrush}" >
+                                        </Grid>
+                                    </Border>
+                                </Border>
+                                <Border Margin="12,0,0,0"
+                                    HorizontalAlignment="Stretch" BorderBrush="{StaticResource PhoneAccentBrush}"  BorderThickness="1" Background="{StaticResource PhoneAccentBrush}" Width="368">
+                                    <TextBlock HorizontalAlignment="Left" 
+                                        VerticalAlignment="Center"
+                                        Style="{StaticResource PhoneTextBlockBase}"
+                                        FontWeight="Bold"
+                                        FontSize="28"
+                                        Text="{Binding Localized.support, Converter={StaticResource toUpperConverter}}"/>
+                                </Border>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource TiltButtonStyle}" 
+                            Click="NewThisVersion_Button_Click"
+                            BorderThickness="0" Padding="0" Margin="12,0,12,12">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                <Border Width="64" Height="64" BorderBrush="{StaticResource PhoneAccentBrush}"  BorderThickness="1" Background="{StaticResource PhoneAccentBrush}">
+                                    <Border Width="48" Height="48" VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="{StaticResource PhoneForegroundBrush}" CornerRadius="24" BorderThickness="3">
+                                        <TextBlock Text="i" FontWeight="ExtraBold" FontSize="32" HorizontalAlignment="Center"/>
+                                    </Border>
+                                </Border>
+                                <Border Margin="12,0,0,0"
+                                    HorizontalAlignment="Stretch" BorderBrush="{StaticResource PhoneAccentBrush}"  BorderThickness="1" Background="{StaticResource PhoneAccentBrush}" Width="368">
+                                    <TextBlock HorizontalAlignment="Left" 
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource PhoneTextBlockBase}"
+                                       FontWeight="Bold"
+                                       FontSize="28"
+                                       Text="{Binding Localized.newInThisVersion, Converter={StaticResource toUpperConverter}}"/>
+                                </Border>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource TiltButtonStyle}" 
+                            Click="Vote_Button_Click"
+                            BorderThickness="0" Padding="0" Margin="12,24,12,12">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                <Border Width="64" Height="64" BorderBrush="{StaticResource PhoneAccentBrush}"  BorderThickness="1" Background="{StaticResource PhoneAccentBrush}">
+                                    <Border VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="{StaticResource PhoneForegroundBrush}" CornerRadius="24" BorderThickness="3">
+                                        <Grid Height="48" Width="48" OpacityMask="{StaticResource homeBrush}" Background="{StaticResource PhoneForegroundBrush}" >
+                                        </Grid>
+                                    </Border>
+                                </Border>
+                                <Border Margin="12,0,0,0"
+                                    HorizontalAlignment="Stretch" BorderBrush="{StaticResource PhoneAccentBrush}"  BorderThickness="1" Background="{StaticResource PhoneAccentBrush}" Width="368">
+                                    <TextBlock HorizontalAlignment="Left" 
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource PhoneTextBlockBase}"
+                                       FontWeight="Bold"
+                                       FontSize="28"
+                                       Text="{Binding Localized.voteNextFeature, Converter={StaticResource toUpperConverter}}"/>
+                                </Border>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource TiltButtonStyle}" 
+                            Click="Share_Button_Click"
+                            BorderThickness="0" Padding="0" Margin="12,0,12,12">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                <Border Width="64" Height="64" BorderBrush="{StaticResource PhoneAccentBrush}"  BorderThickness="1" Background="{StaticResource PhoneAccentBrush}">
+                                    <Border VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="{StaticResource PhoneForegroundBrush}" CornerRadius="24" BorderThickness="3">
+                                        <Grid Height="48" Width="48" OpacityMask="{StaticResource emailBrush}" Background="{StaticResource PhoneForegroundBrush}" >
+                                        </Grid>
+                                    </Border>
+                                </Border>
+                                <Border Margin="12,0,0,0"
+                                    HorizontalAlignment="Stretch" BorderBrush="{StaticResource PhoneAccentBrush}"  BorderThickness="1" Background="{StaticResource PhoneAccentBrush}" Width="368">
+                                    <TextBlock HorizontalAlignment="Left" 
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource PhoneTextBlockBase}"
+                                       FontWeight="Bold"
+                                       FontSize="28"
+                                       Text="{Binding Localized.mailToFriend, Converter={StaticResource toUpperConverter}}"/>
+                                </Border>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource TiltButtonStyle}" 
+                            Click="Apps_Button_Click"
+                            BorderThickness="0" Padding="0" Margin="12,0,12,12">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                <Border Width="64" Height="64" BorderBrush="{StaticResource PhoneAccentBrush}"  BorderThickness="1" Background="{StaticResource PhoneAccentBrush}">
+                                    <Border VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="{StaticResource PhoneForegroundBrush}" CornerRadius="24" BorderThickness="3">
+                                        <Grid Height="48" Width="48" OpacityMask="{StaticResource windowsiconBrush}" Background="{StaticResource PhoneForegroundBrush}" >
+                                        </Grid>
+                                    </Border>
+                                </Border>
+                                <Border Margin="12,0,0,0"
+                                    HorizontalAlignment="Stretch" BorderBrush="{StaticResource PhoneAccentBrush}"  BorderThickness="1" Background="{StaticResource PhoneAccentBrush}" Width="368">
+                                    <TextBlock HorizontalAlignment="Left" 
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource PhoneTextBlockBase}"
+                                       FontWeight="Bold"
+                                       FontSize="28"
+                                       Text="{Binding Localized.otherApps, Converter={StaticResource toUpperConverter}}"/>
+                                </Border>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </ScrollViewer>
+            </controls:PivotItem>
         </controls:Pivot>
     </Grid>
 
@@ -97,13 +299,5 @@
             IsIndeterminate="{Binding SyncHandler.IsRunning}"/>
 
     </shell:SystemTray.ProgressIndicator>
-
-    <!--Sample code showing usage of ApplicationBar-->
-    <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar x:Name="appbar" IsVisible="True" IsMenuEnabled="False">
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar.questionmark.rest.png" Text="about" Click="ApplicationBarIconButton_Click_1" />
-            <shell:ApplicationBarIconButton x:Name="syncButton" IconUri="/Images/appbar.sync.rest.png" Text="sync" Click="ApplicationBarIconButton_Click" />
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>
 
 </phone:PhoneApplicationPage>
