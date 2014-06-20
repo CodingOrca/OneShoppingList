@@ -3,10 +3,10 @@
 <analytics xmlns="http://googleanalyticssdk.codeplex.com/ns/easytracker">
 
   <!-- Debug: -->
-  <!--<trackingId>UA-45060032-1</trackingId>-->
+  <trackingId>UA-45060032-1</trackingId>
   
   <!-- Production:-->
-  <trackingId>UA-45060032-2</trackingId>
+  <!--<trackingId>UA-45060032-2</trackingId>-->
   
   <!--Replace placeholder name with your app name. If you leave this empty your WMAppManifest.xml Title will be used-->
   <appName>OneShoppingList</appName>
