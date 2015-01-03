@@ -13,6 +13,7 @@ using System.ComponentModel;
 using GalaSoft.MvvmLight.Command;
 using System.Collections;
 using System.Runtime.Serialization;
+using OneShoppingList.Properties;
 
 namespace OneShoppingList.ViewModel
 {
@@ -30,6 +31,8 @@ namespace OneShoppingList.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
+        private DispatcherTimer myTimer;
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -41,10 +44,24 @@ namespace OneShoppingList.ViewModel
             }
             else
             {
-                // Code runs "for real"
+                myTimer = new DispatcherTimer();
+                myTimer.Interval = TimeSpan.FromSeconds(30);
+                myTimer.Tick += myTimer_Tick;
             }
 
-            Productsfile = Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), @"SkyDrive\AppData\OneFamily\ShoppingList\OneShoppingList.txt");
+            if (String.IsNullOrEmpty(OneDriveRoot))
+            {
+                string file = Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), @"SkyDrive\AppData\OneFamily\ShoppingList\OneShoppingList.txt");
+                if (File.Exists(file))
+                {
+                    OneDriveRoot = Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), @"SkyDrive");
+                }
+                else
+                {
+                    OneDriveRoot = Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), @"OneDrive");
+                }
+            }
+            Productsfile = Path.Combine(Settings.Default.OneDriveRoot, @"AppData\OneFamily\ShoppingList\OneShoppingList.txt");
 
             this.IncreaseQuantityCommand = new RelayCommand<object>(this.IncreaseQuantity, this.CanIncreaseQuantity);
             this.DecreaseQuantityCommand = new RelayCommand<object>(this.DecreaseQuantity, this.CanDecreaseQuantity);
@@ -54,6 +71,49 @@ namespace OneShoppingList.ViewModel
             this.SaveItemCommand = new RelayCommand<object>(this.CloseEditing, this.CanCloseEditing);
             this.SaveCommand = new RelayCommand<object>(this.SaveAll, this.CanSaveAll);
             this.DeleteItemCommand = new RelayCommand<object>(this.DeleteItem, this.CanDeleteItem);
+        }
+
+        void myTimer_Tick(object sender, EventArgs e)
+        {
+            myTimer.Stop();
+            SaveCommand.Execute(null);
+        }
+
+        public string OneDriveRoot
+        {
+            get
+            {
+                return Settings.Default.OneDriveRoot;
+            }
+            set
+            {
+                Settings.Default.OneDriveRoot = value;
+                Settings.Default.Save();
+                RaisePropertyChanged("OneDriveRoot");
+                RetryCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        private RelayCommand retryCommand = null;
+        public RelayCommand RetryCommand
+        {
+            get
+            {
+                if (retryCommand == null)
+                {
+                    retryCommand = new RelayCommand(
+                        () => // Execute
+                        {
+                            LoadData();
+                        },
+                        () => // CanExecute
+                        {
+                            return Directory.Exists(OneDriveRoot);
+                        }
+                    );
+                }
+                return retryCommand;
+            }
         }
 
         [DataContract]
@@ -118,14 +178,6 @@ namespace OneShoppingList.ViewModel
 
         }
 
-        public bool IsConnected
-        {
-            get
-            {
-                return IsSkyDriveRunning && DoesProductFileExists;
-            }
-        }
-
         private bool isDirty = false;
         public bool IsDirty
         {
@@ -142,6 +194,11 @@ namespace OneShoppingList.ViewModel
                 isDirty = value;
                 RaisePropertyChanged("IsDirty");
                 SaveCommand.RaiseCanExecuteChanged();
+                if (myTimer.IsEnabled)
+                {
+                    myTimer.Stop();
+                }
+                myTimer.Start();
             }
         }
 
@@ -256,10 +313,14 @@ namespace OneShoppingList.ViewModel
         FileSystemWatcher fileWatcher = null;
         Dispatcher loadDataDispatcher = null;
 
-        public string Productsfile { get; private set; }
+        public string Productsfile { get; set; }
 
         public void LoadData()
         {
+            if (!IsConnected)
+            {
+                return;
+            }
             fileWatcher = new FileSystemWatcher();
             loadDataDispatcher = Dispatcher.CurrentDispatcher;
 
@@ -332,11 +393,11 @@ namespace OneShoppingList.ViewModel
                     tmpList = jsonSerializer.ReadObject(fileStream) as List<ShoppingListElement>;
                 }
                 IsDirty = false;
-                this.ApplicationState = IsSkyDriveRunning ? "Connected" : "Not connected";
+                this.ApplicationState = IsOneDriveRunning ? "Connected" : "Not connected";
             }
             catch (Exception)
             {
-                this.ApplicationState = "ERROR: Could not read your data from SkyDrive";
+                this.ApplicationState = "ERROR: Could not read your data from OneDrive";
             }
             return tmpList;
         }
@@ -350,11 +411,11 @@ namespace OneShoppingList.ViewModel
                     DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(List<ShoppingListElement>));
                     jsonSerializer.WriteObject(fileStream, tmpList);
                 }
-                this.ApplicationState = IsSkyDriveRunning ? "Connected" : "Not connected";
+                this.ApplicationState = IsOneDriveRunning ? "Connected" : "Not connected";
             }
             catch (Exception)
             {
-                this.ApplicationState = "Could not write your data to SkyDrive";
+                this.ApplicationState = "Could not write your data to OneDrive";
             }
         }
 
@@ -624,14 +685,18 @@ namespace OneShoppingList.ViewModel
             base.Cleanup();
         }
 
-        public bool IsSkyDriveRunning
+        public bool IsOneDriveRunning
         {
             get
             {
                 Process[] processes = Process.GetProcesses();
                 foreach (Process p in processes)
                 {
-                    if (p.ProcessName.StartsWith("SkyDrive"))
+                    if (p.ProcessName.ToLowerInvariant().StartsWith("skydrive"))
+                    {
+                        return true;
+                    }
+                    if (p.ProcessName.ToLowerInvariant().StartsWith("onedrive"))
                     {
                         return true;
                     }
@@ -647,5 +712,15 @@ namespace OneShoppingList.ViewModel
                 return File.Exists(Productsfile);
             }
         }
+
+        public bool IsConnected
+        {
+            get
+            {
+                return IsOneDriveRunning && DoesProductFileExists;
+            }
+        }
+
+
     }
 }
