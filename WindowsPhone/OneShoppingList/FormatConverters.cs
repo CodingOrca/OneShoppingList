@@ -163,17 +163,13 @@ namespace OneShoppingList
         }
     }
 
-    public class ShopToOpacityConverter : IValueConverter
+    public class ToFullOrHalfOpacityConverter : IValueConverter
     {
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Shop CurrentShop = (App.Current.Resources["Locator"] as ViewModelLocator).Main.CurrentShop;
-            string shop = value as string;
-            if (shop == null || CurrentShop == null) return 1.0;
 
-            bool isPrimaryShop = shop == CurrentShop.Name;
-            return isPrimaryShop ? 1.0 : 0.6;
+            return System.Convert.ToBoolean(value) ? 1.0 : 0.5;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -190,6 +186,22 @@ namespace OneShoppingList
             SolidColorBrush transparentBrush = App.Current.Resources["PhoneChromeBrush"] as SolidColorBrush;
             bool criteria = System.Convert.ToBoolean(value);
             return criteria ? accentBrush : transparentBrush;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class ToChromeBrushConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            SolidColorBrush chromeBrush = App.Current.Resources["PhoneChromeBrush"] as SolidColorBrush;
+            SolidColorBrush backgroundBrush = App.Current.Resources["PhoneForBrush"] as SolidColorBrush;
+            bool criteria = System.Convert.ToBoolean(value);
+            return criteria ? chromeBrush : backgroundBrush;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

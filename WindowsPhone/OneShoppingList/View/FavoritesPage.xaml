@@ -25,104 +25,6 @@
             Name="pivot"
             Title="ONE SHOPPING LIST"
             SelectionChanged="pivot_SelectionChanged">
-            <controls:PivotItem
-                Name="latestPivotItem"
-                Margin="12,28,0,0"
-                Header="{Binding Localized.latestTitle}">
-                <ListBox ItemsSource="{Binding RecentList}"
-                         mm:MetroInMotion.IsPivotAnimated="True"
-                         Grid.Row="1"
-                         Margin="0,0,0,3"
-                         toolkit:TiltEffect.IsTiltEnabled="False">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid 
-                                mm:MetroInMotion.AnimationLevel="2"
-                                HorizontalAlignment="Stretch"
-                                Width="468" 
-                                Background="Transparent"
-                                Tap="Grid_Tap"
-                                >
-                                <toolkit:ContextMenuService.ContextMenu>
-                                    <local:ShoppingItemContextMenu 
-                                        DeleteVisibility="Collapsed"
-                                        RemoveVisibility="Collapsed"
-                                        OnEdit="EditButton_Click" 
-                                        OnDelete="CloseContextMenu"
-                                        OnAddFavorite="CloseContextMenu"
-                                        OnRemoveFavorite="CloseContextMenu"
-                                        Opened="menu_Opened"/>
-                                </toolkit:ContextMenuService.ContextMenu>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="72"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="44"/>
-                                    <RowDefinition Height="32"/>
-                                </Grid.RowDefinitions>
-
-
-                                <Border
-                                    Margin="0,0,0,0"
-                                    BorderBrush="{StaticResource PhoneChromeBrush}"
-                                    BorderThickness="1"
-                                    Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
-                                    VerticalAlignment="Top"/>
-
-                                <CheckBox 
-                                    IsChecked="{Binding IsOnShoppingList,Mode=TwoWay}"
-                                    Grid.Row="1" Grid.Column="1" Grid.RowSpan="2"
-                                    Margin="12,0,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Click="CheckBox_Click"
-                                    />
-
-                                <TextBlock 
-                                    VerticalAlignment="Top"
-                                    HorizontalAlignment="Left"
-                                    Grid.Row="1" Grid.Column="0"
-                                    Text="{Binding Caption}"
-                                    TextWrapping="NoWrap"
-                                    Margin="12,0,60,0"
-                                    Style="{StaticResource PhoneTextLargeStyle}"/>
-
-                                <TextBlock 
-                                    mm:MetroInMotion.AnimationLevel="1"
-                                    VerticalAlignment="Top"
-                                    HorizontalAlignment="Left"
-                                    Text="{Binding PreferredShop}"
-                                    Margin="12,0,0,0"
-                                    Grid.Row="2" Grid.Column="0"
-                                    TextWrapping="NoWrap"
-                                    Style="{StaticResource PhoneTextSubtleStyle}"/>
-
-                                <TextBlock
-                                    Grid.Row="1" Grid.Column="0"
-                                    Text="{Binding DefaultQuantity}"
-                                    VerticalAlignment="Top"
-                                    TextWrapping="NoWrap"
-                                    Margin="0"
-                                    HorizontalAlignment="Right"
-                                    Style="{StaticResource PhoneTextLargeStyle}"
-                                    />
-
-                                <TextBlock
-                                    mm:MetroInMotion.AnimationLevel="1"
-                                    Grid.Row="2" Grid.Column="0"
-                                    Text="{Binding UnitSize}"
-                                    TextWrapping="NoWrap"
-                                    HorizontalAlignment="Right"
-                                    Margin="0"
-                                    Style="{StaticResource PhoneTextSubtleStyle}"
-                                    />
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </controls:PivotItem>
             
             <controls:PivotItem
                 Name="favoritesPivotItem"
@@ -279,7 +181,7 @@
                 </toolkit:LongListSelector>
             </controls:PivotItem>
 
-            <controls:PivotItem
+            <!--<controls:PivotItem
                 Name="allPivotItem"
                 Margin="12,28,0,0"
                 Header="{Binding Localized.allTitle}">
@@ -443,7 +345,7 @@
                         </DataTemplate>
                     </toolkit:LongListSelector.ItemTemplate>
                 </toolkit:LongListSelector>
-            </controls:PivotItem>
+            </controls:PivotItem>-->
         </controls:Pivot>
     </Grid>
 
@@ -452,6 +354,7 @@
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
             <shell:ApplicationBarIconButton x:Name="addButton" IconUri="/Images/appbar.add.rest.png" Text="add" Click="addButton_Click" />
             <shell:ApplicationBarIconButton IconUri="/Images/appbar.check.rest.png" Text="ok" Click="ApplicationBarIconButton_Click" />
+            <shell:ApplicationBarIconButton x:Name="searchButton" IconUri="/Images/appbar.feature.search.rest.png" Text="search" Click="searchButton_Click"/>
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem x:Name="appbar_clearList" Text="einkaufsliste leeren" Click="appbar_clearList_Click"/>
                 <shell:ApplicationBarMenuItem x:Name="appbar_shopsConfig" Text="läden bearbeiten" Click="ShopsConfiguration_Click" />
