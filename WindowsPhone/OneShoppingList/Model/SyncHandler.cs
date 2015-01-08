@@ -270,7 +270,7 @@ namespace OneShoppingList.Model
                 {
                     DateTime actualTime = skyDriveHandler.GetFileUpdatedTime(filesToSync[fileIndex]);
                     DateTime lastUpdatedTime = GetLastUpdatedTimeOf(fileIndex);
-                    if (actualTime > lastUpdatedTime)
+                    if (actualTime != lastUpdatedTime)
                     {
                         skyDriveHandler.DownloadAsync(filesToSync[fileIndex], e =>
                             {
@@ -382,6 +382,7 @@ namespace OneShoppingList.Model
                 }
             }
 
+            DataLocator.Current.SaveLocalData();
             if (this.Shops != null || this.ProductItems != null)
             {
                 this.CurrentOperation = SyncOperation.Uploading;
@@ -442,23 +443,6 @@ namespace OneShoppingList.Model
                 if (!uploadStarted)
                 {
                     UploadAsync(fileIndex + 1);
-                }
-            }
-        }
-
-        private void SaveLocalData()
-        {
-            using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
-            {
-                using (IsolatedStorageFileStream stream = isf.OpenFile("OneShoppingList.txt", FileMode.Create))
-                {
-                    DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<ShoppingItem>));
-                    ser.WriteObject(stream, new List<ShoppingItem>(this.ProductItems));
-                }
-                using (IsolatedStorageFileStream stream = isf.OpenFile("OneShoppingStores.txt", FileMode.Create))
-                {
-                    DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<Shop>));
-                    ser.WriteObject(stream, new List<Shop>(this.Shops));
                 }
             }
         }

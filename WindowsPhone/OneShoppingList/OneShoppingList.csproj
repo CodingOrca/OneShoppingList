@@ -133,6 +133,7 @@
     </Compile>
     <Compile Include="FormatConverters.cs" />
     <Compile Include="LinqToVisualTree.cs" />
+    <Compile Include="ListUtils\LazyList.cs" />
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="DebugHelpers\MetroGridHelper.cs" />
     <Compile Include="MetroInMotion.cs" />
@@ -179,6 +180,9 @@
     <Compile Include="View\RenameShopPage.xaml.cs">
       <DependentUpon>RenameShopPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\SearchPage.xaml.cs">
+      <DependentUpon>SearchPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
@@ -204,6 +208,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Images\appbar.chevron.down.png" />
+    <Content Include="Images\appbar.chevron.left.png" />
+    <Content Include="Images\appbar.chevron.right.png" />
+    <Content Include="Images\appbar.chevron.up.png" />
     <Content Include="Images\Home_Icon.png" />
     <Content Include="Images\windowsIcon.png" />
     <Content Include="README_FIRST.txt" />
@@ -238,6 +246,10 @@
     </Page>
     <Page Include="View\RenameShopPage.xaml">
       <SubType>Form</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SearchPage.xaml">
+      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SettingsPage.xaml">

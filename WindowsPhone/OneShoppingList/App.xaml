@@ -19,13 +19,18 @@
     <local:ToVisibilityConverter x:Key="toVisibilityConverter" />
     <local:NToVisibilityConverter x:Key="nToVisibilityConverter" />
     <local:ShopToBrushConverter x:Key="shopToBrushConverter" />
-    <local:ShopToOpacityConverter x:Key="shopToOpacityConverter" />
+    <local:ToFullOrHalfOpacityConverter x:Key="opacityConverter" />
     <local:ToUpperConverter x:Key="toUpperConverter" />
     <local:BoolToActiveBrushConverter x:Key="boolToActiveBrushConverter" />
+    <local:ToChromeBrushConverter x:Key="toChromeBrushConverter" />
     <local:BoolToDisabledBrushConverter x:Key="boolToDisabledBrushConverter" />
     <local:LargerThenConverter x:Key="largerThenConverter" />
     <local:LessThenConverter x:Key="lessThenConverter" />
     <local:StringFormatConverter x:Key="stringFormatConverter" />
+    <ImageBrush x:Key="chevronUpBrush" ImageSource="/Images/appbar.chevron.up.png" />
+    <ImageBrush x:Key="chevronDownBrush" ImageSource="/Images/appbar.chevron.down.png" />
+    <ImageBrush x:Key="chevronLeftBrush" ImageSource="/Images/appbar.chevron.left.png" />
+    <ImageBrush x:Key="chevronRightBrush" ImageSource="/Images/appbar.chevron.right.png" />
     <ImageBrush x:Key="addBrush" ImageSource="/Images/appbar.add.rest.png" />
     <ImageBrush x:Key="minusBrush" ImageSource="/Images/appbar.minus.rest.png" />
     <ImageBrush x:Key="checkBrush" ImageSource="/Images/appbar.check.rest.png" />

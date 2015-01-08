@@ -1,31 +1,20 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Collections.ObjectModel;
-using System.IO.IsolatedStorage;
-using System.IO;
-using System.Runtime.Serialization.Json;
 using GalaSoft.MvvmLight;
-using OneShoppingList.ViewModel;
 using OneShoppingList.Model;
 using GalaSoft.MvvmLight.Command;
 using System.Linq;
-using System.Xml;
 using ListUtils;
 using Microsoft.Phone.Shell;
-using System.Windows.Resources;
 using OneShoppingList.Resources;
 using Microsoft.Phone.Net.NetworkInformation;
+using System.Collections.Specialized;
+using System.Collections;
+using OneShoppingList.ListUtils;
 
 
 namespace OneShoppingList
@@ -193,18 +182,64 @@ namespace OneShoppingList
             }
         }
 
-        public List<ShoppingItem> RecentList
+        private string searchString = "";
+        public string SearchString 
         {
-            get
+            get { return searchString; }
+            set
             {
-                var ordered = from pi in DataLocator.Current.ProductItems 
-                              where !pi.IsDeleted
-                              orderby pi.TimeStamp descending
-                              select pi;
-                return ordered.Take(25).ToList();
+                if (value == searchString) return;
+                searchString = value;
+                RaisePropertyChanged("SearchString");
+
+                UpdateRecentList();
             }
         }
 
+        private void UpdateRecentList()
+        {
+            string filter = SearchString.ToLowerInvariant();
+            var ordered = from pi in DataLocator.Current.ProductItems
+                          where !pi.IsDeleted && (pi.caption.ToLower().Contains(filter) || pi.PreferredShop.ToLower().Contains(filter))
+                          orderby pi.IsOnShoppingList ascending, pi.TimeStamp descending
+                          select pi;
+            recentList.Attach(ordered);
+        }
+
+        private LazyList<ShoppingItem> recentList = null;
+        public LazyList<ShoppingItem> RecentList
+        {
+            get
+            {
+                if (recentList == null)
+                {
+                    recentList = new LazyList<ShoppingItem>();
+                    UpdateRecentList();
+                }
+                return recentList;
+            }
+        }
+
+        private RelayCommand clearSearchCommand = null;
+        public RelayCommand ClearSearchCommand
+        {
+            get
+            {
+                if (clearSearchCommand == null)
+                {
+                    clearSearchCommand = new RelayCommand(
+                        () => // execute
+                        {
+                            this.SearchString = "";
+                        },
+                        () => // CanExecute
+                        {
+                            return this.SearchString != null;
+                        });
+                }
+                return clearSearchCommand;
+            }
+        }
         public SyncHandler SyncHandler { get; private set; }
         private Shop currentShop = null;
         public Shop CurrentShop 
@@ -446,6 +481,7 @@ namespace OneShoppingList
 
         private void Sync()
         {
+            DataLocator.Current.SaveLocalData();
             this.SyncHandler.SyncAsync();
         }
 
@@ -543,4 +579,5 @@ namespace OneShoppingList
             }
         }
     }
+
 }

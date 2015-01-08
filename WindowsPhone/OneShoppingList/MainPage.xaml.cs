@@ -269,6 +269,7 @@ namespace OneShoppingList
         {
             GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarButton", "ToolbarButtonAddItems", 0);
             NavigationService.Navigate(new Uri("/View/AddProductItemPage.xaml", UriKind.Relative));
+            // NavigationService.Navigate(new Uri("/View/SearchPage.xaml", UriKind.Relative));
         }
 
         ContextMenu currentContextMenu = null;
@@ -321,6 +322,7 @@ namespace OneShoppingList
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("NavigationEvents", "CategoryPressed", "CategoryPressedEvent", 0);
             NavigationService.Navigate(new Uri("/View/ShopSelectionPage.xaml", UriKind.Relative));
         }
 
@@ -514,17 +516,6 @@ namespace OneShoppingList
         {
             GoogleAnalytics.EasyTracker.GetTracker().SendEvent("SetupEvents", "SetupButtons", "SetupButtonFirstPath", 0);
             NavigationService.Navigate(new Uri("/View/AddShopPage.xaml", UriKind.Relative));
-        }
-
-        private void favButton_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/View/FavoritesPage.xaml", UriKind.Relative));
-        }
-
-        private void addButton_Click(object sender, RoutedEventArgs e)
-        {
-            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarButton", "ToolbarButtonAddItems", 0);
-            NavigationService.Navigate(new Uri("/View/AddProductItemPage.xaml", UriKind.Relative));
         }
 
         private void aboutButton_Click(object sender, RoutedEventArgs e)

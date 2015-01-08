@@ -24,14 +24,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!--TitlePanel contains the name of the application and page title-->
-        <!--<TextBlock 
-            Name="titlePanel" 
-            Grid.Row="0" 
-            Margin="24,5,0,12"
-            Text="{Binding Localized.addProductTitle}" 
-            FontSize="{StaticResource PhoneFontSizeLarge}"/>-->
-
         <Grid Grid.Row="1"
                     Margin="12,0,0,0">
             <Grid.RowDefinitions>

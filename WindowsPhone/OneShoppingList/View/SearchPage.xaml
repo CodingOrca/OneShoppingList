@@ -1,0 +1,164 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="OneShoppingList.View.SearchPage"
+    xmlns:local="clr-namespace:OneShoppingList"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    mc:Ignorable="d"
+    d:DesignWidth="480" d:DesignHeight="696" FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    DataContext="{Binding Main,Source={StaticResource Locator}}"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid  Margin="12,0,0,0" x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox
+                Grid.ColumnSpan="2"
+                Name="searchBox"
+                Text="{Binding SearchString,Mode=TwoWay}"
+                TextChanged="searchBox_TextChanged"
+                InputScope="Text"
+                VerticalAlignment="Center"
+                LostFocus="searchBox_LostFocus"
+                GotFocus="searchBox_GotFocus"
+                Grid.Row="0">
+            </TextBox>
+            <!--<Button 
+                HorizontalAlignment="Right"
+                BorderThickness="0" 
+                Background="{StaticResource PhoneForegroundBrush}" 
+                Command="{Binding ClearSearchCommand}"
+                Click="Button_Click"
+                VerticalAlignment="Center"
+                Margin="0"
+                Padding="0">
+                <Grid Height="48" Width="48" 
+                      OpacityMask="{StaticResource cancelBrush}" 
+                      Background="{StaticResource PhoneBackgroundBrush}" >
+                </Grid>
+            </Button>-->
+            <!--<Button
+                Name="addButton"
+                VerticalAlignment="Center"
+                Grid.Column="1" 
+                BorderThickness="0"
+                Margin="0"
+                Padding="0"
+                Click="addButton_Click">
+                <Border 
+                    VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="{StaticResource PhoneForegroundBrush}" CornerRadius="24" BorderThickness="3">
+                    <Grid Height="48" Width="48" OpacityMask="{StaticResource addBrush}" Background="{StaticResource PhoneForegroundBrush}" >
+                    </Grid>
+                </Border>
+            </Button>-->
+        </Grid>
+        <ListBox 
+            Grid.Row="1"
+            ItemsSource="{Binding RecentList}"
+            Margin="0,0,0,3"
+            toolkit:TiltEffect.IsTiltEnabled="True">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid 
+                        HorizontalAlignment="Stretch"
+                        Width="468" 
+                        Background="Transparent"
+                        Tap="Grid_Tap">
+                        <toolkit:ContextMenuService.ContextMenu>
+                            <local:ShoppingItemContextMenu 
+                                DeleteVisibility="Collapsed"
+                                RemoveVisibility="Collapsed"
+                                OnEdit="EditButton_Click" 
+                                OnDelete="CloseContextMenu"
+                                OnAddFavorite="CloseContextMenu"
+                                OnRemoveFavorite="CloseContextMenu"
+                                Opened="menu_Opened"/>
+                        </toolkit:ContextMenuService.ContextMenu>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="72"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="44"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+
+                        <Border
+                            Margin="0,0,0,0"
+                            BorderBrush="{StaticResource PhoneChromeBrush}"
+                            BorderThickness="1"
+                            Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                            VerticalAlignment="Top"/>
+
+                        <CheckBox 
+                            IsChecked="{Binding IsOnShoppingList,Mode=TwoWay}"
+                            Grid.Row="1" Grid.Column="1" Grid.RowSpan="2"
+                            Margin="12,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Click="CheckBox_Click"/>
+
+                        <TextBlock 
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Left"
+                            Grid.Row="1" Grid.Column="0"
+                            Text="{Binding Caption}"
+                            TextWrapping="NoWrap"
+                            Margin="12,0,60,0"
+                            Foreground="{Binding IsOnShoppingList,Converter={StaticResource boolToDisabledBrushConverter}}"
+                            Style="{StaticResource PhoneTextLargeStyle}"/>
+
+                        <TextBlock 
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Left"
+                            Text="{Binding PreferredShop}"
+                            Margin="12,0,0,0"
+                            Grid.Row="2" Grid.Column="0"
+                            TextWrapping="NoWrap"
+                            Foreground="{Binding IsOnShoppingList,Converter={StaticResource boolToDisabledBrushConverter}}"
+                            Style="{StaticResource PhoneTextSubtleStyle}"/>
+
+                        <TextBlock
+                            Grid.Row="1" Grid.Column="0"
+                            Text="{Binding DefaultQuantity}"
+                            VerticalAlignment="Top"
+                            TextWrapping="NoWrap"
+                            Margin="0"
+                            HorizontalAlignment="Right"
+                            Foreground="{Binding IsOnShoppingList,Converter={StaticResource boolToDisabledBrushConverter}}"
+                            Style="{StaticResource PhoneTextLargeStyle}"
+                            />
+
+                        <TextBlock
+                            Grid.Row="2" Grid.Column="0"
+                            Text="{Binding UnitSize}"
+                            TextWrapping="NoWrap"
+                            HorizontalAlignment="Right"
+                            Margin="0"
+                            Foreground="{Binding IsOnShoppingList,Converter={StaticResource boolToDisabledBrushConverter}}"
+                            Style="{StaticResource PhoneTextSubtleStyle}"
+                            />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+
+</phone:PhoneApplicationPage>

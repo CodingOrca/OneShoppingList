@@ -15,6 +15,7 @@ using OneShoppingList.Model;
 using OneShoppingList.ViewModel;
 using Microsoft.Phone.Shell;
 using OneShoppingList.Resources;
+using System.Windows.Data;
 
 namespace OneShoppingList.View
 {
@@ -29,6 +30,7 @@ namespace OneShoppingList.View
             Framework.WPHacks.WireOrientationHack(this); 
             viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).Main;
             addButton = ApplicationBar.Buttons[0] as ApplicationBarIconButton;
+            searchButton = ApplicationBar.Buttons[2] as ApplicationBarIconButton;
             appbar_clearList = this.ApplicationBar.MenuItems[0] as ApplicationBarMenuItem;
             appbar_shopsConfig = this.ApplicationBar.MenuItems[1] as ApplicationBarMenuItem;
             appbar_settings = this.ApplicationBar.MenuItems[2] as ApplicationBarMenuItem;
@@ -37,7 +39,7 @@ namespace OneShoppingList.View
 
             this.Loaded += new RoutedEventHandler(EditPage_Loaded);
 
-            if (locator.Settings.LastFavoritesPivotItem != -1 && locator.Settings.LastFavoritesPivotItem < 3)
+            if (locator.Settings.LastFavoritesPivotItem != -1 && locator.Settings.LastFavoritesPivotItem < 2)
             {
                 pivot.SelectedIndex = locator.Settings.LastFavoritesPivotItem;
             }
@@ -322,6 +324,12 @@ namespace OneShoppingList.View
        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
        {
            GoogleAnalytics.EasyTracker.GetTracker().SendView("FavoritesPage");
+       }
+
+       private void searchButton_Click(object sender, EventArgs e)
+       {
+           GoogleAnalytics.EasyTracker.GetTracker().SendEvent("ToolbarEvents", "ToolbarButton", "ToolbarButtonSearch", 0);
+           NavigationService.Navigate(new Uri("/View/SearchPage.xaml", UriKind.Relative));
        }
     }
 }
