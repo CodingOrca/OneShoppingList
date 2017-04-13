@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="One Shopping List" Language="1033" Version="1.0.0.0" Manufacturer="Artur Pusztai" UpgradeCode="7f59650f-d627-4e5e-9874-04566791e5bb">
+		<Package InstallerVersion="300" Compressed="yes" InstallScope="perUser" />
+
+		<MajorUpgrade
+			Schedule="afterInstallInitialize"
+			DowngradeErrorMessage="A newer version of [ProductName] is already installed. Setup will now exit." />
+		<Media Id="1" Cabinet="OneShoppingList.cab" EmbedCab="yes" />
+
+		<!-- Step 1: Define the directory structure -->
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="LocalAppDataFolder">
+				<Directory Id="APPLICATIONROOTDIRECTORY" Name="OneShoppingList"/>
+			</Directory>
+			<Directory Id="ProgramMenuFolder">
+				<Directory Id="ApplicationProgramsFolder" Name="One Shopping List"/>
+			</Directory>
+		</Directory>
+
+		<!-- Step 2: Add files to your installer package -->
+		<DirectoryRef Id="APPLICATIONROOTDIRECTORY">
+			<Component Id="OneShoppingList.exe" Guid="27CA9B51-1E93-4614-B3CF-312D392F2D20">
+				<RemoveFolder Id="APPLICATIONROOTDIRECTORY" On="uninstall"/>
+				<RegistryValue Root="HKCU" Key="Software\Microsoft\OneShoppingList" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+				<File Id="OneShoppingList.exe" Source="$(var.OneShoppingList.TargetDir)" Checksum="yes"/>
+				<File Id="OneShoppingList.exe.config" Source="$(var.OneShoppingList.TargetDir)" Checksum="yes"/>
+				<File Id="GalaSoft.MvvmLight.dll" Source="$(var.OneShoppingList.TargetDir)" Checksum="yes"/>
+				<File Id="GalaSoft.MvvmLight.xml" Source="$(var.OneShoppingList.TargetDir)" Checksum="yes"/>
+				<File Id="GalaSoft.MvvmLight.Extras.dll" Source="$(var.OneShoppingList.TargetDir)" Checksum="yes"/>
+				<File Id="GalaSoft.MvvmLight.Extras.xml" Source="$(var.OneShoppingList.TargetDir)" Checksum="yes"/>
+				<File Id="Kent.Boogaart.Converters.dll" Source="$(var.OneShoppingList.TargetDir)" Checksum="yes"/>
+				<File Id="Kent.Boogaart.Converters.xml" Source="$(var.OneShoppingList.TargetDir)" Checksum="yes"/>
+				<File Id="Kent.Boogaart.HelperTrinity.dll" Source="$(var.OneShoppingList.TargetDir)" Checksum="yes"/>
+				<File Id="Kent.Boogaart.HelperTrinity.xml" Source="$(var.OneShoppingList.TargetDir)" Checksum="yes"/>
+				<File Id="System.Windows.Controls.Input.Toolkit.dll" Source="$(var.OneShoppingList.TargetDir)" Checksum="yes"/>
+				<File Id="System.Windows.Controls.Layout.Toolkit.dll" Source="$(var.OneShoppingList.TargetDir)" Checksum="yes"/>
+				<File Id="System.Windows.Interactivity.dll" Source="$(var.OneShoppingList.TargetDir)" Checksum="yes"/>
+				<File Id="System.Windows.Interactivity.xml" Source="$(var.OneShoppingList.TargetDir)" Checksum="yes"/>
+				<File Id="WPFToolkit.dll" Source="$(var.OneShoppingList.TargetDir)" Checksum="yes"/>
+			</Component>
+		</DirectoryRef>
+
+		<!-- Step 2: Add the shortcut to your installer package -->
+		<DirectoryRef Id="ApplicationProgramsFolder">
+			<Component Id="ApplicationShortcut" Guid="BCEC6387-872C-4E68-9FE5-06C68347ED63">
+				<Shortcut Id="ApplicationStartMenuShortcut"
+						Name="One Shopping List"
+						Description="Desktop companion for the One Shopping List Windows Phone app"
+						Target="[#OneShoppingList.exe]"
+						WorkingDirectory="APPLICATIONROOTDIRECTORY"/>
+				<RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+				<RegistryValue Root="HKCU" Key="Software\Microsoft\OneShoppingList" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+			</Component>
+		</DirectoryRef>
+
+		<!-- Step 3: Tell WiX to install the files -->
+		<Feature Id="OneShoppingList" Title="One Shopping List" Level="1">
+			<ComponentRef Id="OneShoppingList.exe" />
+			<ComponentRef Id="ApplicationShortcut" />
+		</Feature>
+
+
+		<UI>
+			<UIRef Id="WixUI_Minimal" />
+			<Publish Dialog="ExitDialog"
+					Control="Finish"
+					Event="DoAction"
+					Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
+		</UI>
+
+		<Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch One Shopping List" />
+
+		<Property Id="WixShellExecTarget" Value="[#OneShoppingList.exe]" />
+		<CustomAction Id="LaunchApplication"
+				BinaryKey="WixCA"
+				DllEntry="WixShellExec"/>
+
+		<Icon Id="OneShoppingListIcon.ico" SourceFile="$(var.OneShoppingList.ProjectDir)\Resources\ApplicationIcon.ico"/>
+		<Property Id="ARPPRODUCTICON" Value="OneShoppingListIcon.ico" />
+		<WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+	</Product>
+</Wix>

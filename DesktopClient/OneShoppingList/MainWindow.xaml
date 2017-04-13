@@ -30,7 +30,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Background="DodgerBlue" Margin="-6,-6,-6,3" HorizontalAlignment="Left" Width="348">
+            <Grid Grid.Row="0" Background="DodgerBlue" Margin="-6,-6,-6,3">
                 <StackPanel  Margin="12,3,0,3" Orientation="Horizontal">
                     <Button  HorizontalAlignment="Right" VerticalAlignment="Center" 
                     Style="{StaticResource ResourceKey=RoundButton}"
@@ -43,7 +43,7 @@
                         <Image Source="/OneShoppingList;component/Icons/ApplicationIcon32.png" Stretch="None" />
                     </Button>
                     <StackPanel Orientation="Vertical">
-                        <TextBlock Text="ONE SHOPPING LIST" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="SemiBold" FontSize="15" Foreground="White"/>
+                        <TextBlock Text="ONE SHOPPING LIST" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="SemiBold" Foreground="White"/>
                         <!--<StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                         <TextBlock Text="{Binding ShoppingList.Count}" FontWeight="Bold" Foreground="White"/>
                         <TextBlock Text=" Items" FontWeight="Bold" Foreground="White"/>
