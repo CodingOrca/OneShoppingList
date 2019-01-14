@@ -63,15 +63,18 @@ If your partner does not own a windows phone, send him/her an email with the sor
 
     <Item Title="history"
            Type="text">
-      New in version 1.5.0.0
+      1.6.0.0
+      This version fixes the OneDrive sync, which stopped working by end of December 2018.
+
+      1.5.0.0
       Items which are not assigned to a shopping path can now be hidden. When shown, they are rendered dimmed.
       Basic error handling during sync, better handling when no network is available.
       Auto-Caps on the add items page.
-      The name of the App in the Store and on your phone is changed to "Shopping List". Internal name is still One Shopping List.      
+      The name of the App in the Store and on your phone is changed to "Shopping List". Internal name is still One Shopping List.
 
       1.4.0.0
       This version only fixes the OneDrive sync, which stopped working by mid of july.
-      
+
       1.1.0.0
       If everything goes well, this will be the first version visible in the windows phone store to all users. It contains:
       BUG FIXES:

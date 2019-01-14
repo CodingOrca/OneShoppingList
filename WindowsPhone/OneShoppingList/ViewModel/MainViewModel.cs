@@ -64,7 +64,7 @@ namespace OneShoppingList
 
         void DeviceNetworkInformation_NetworkAvailabilityChanged(object sender, NetworkNotificationEventArgs e)
         {
-            Deployment.Current.Dispatcher.InvokeAsync(() =>
+            Deployment.Current.Dispatcher.BeginInvoke(() =>
                 {
                     this.SyncCommand.RaiseCanExecuteChanged();
                 });
@@ -134,13 +134,10 @@ namespace OneShoppingList
                 if (favoritesViewModel == null)
                 {
                     favoritesViewModel = new ListViewModel<ShoppingItem>();
-                    Deployment.Current.Dispatcher.BeginInvoke(() =>
-                        {
-                            favoritesViewModel.GroupProvider = new PropertyGroupDescription { PropertyName = "Category" };
-                            favoritesViewModel.Filter = IsProductItemFavorit;
-                            favoritesViewModel.ItemsSortProvider = new ShoppingCaptionComparer();
-                            favoritesViewModel.Source = DataLocator.Current.ProductItems;
-                        });
+                    favoritesViewModel.GroupProvider = new PropertyGroupDescription { PropertyName = "Category" };
+                    favoritesViewModel.Filter = IsProductItemFavorit;
+                    favoritesViewModel.ItemsSortProvider = new ShoppingCaptionComparer();
+                    favoritesViewModel.Source = DataLocator.Current.ProductItems;
                 }
                 return favoritesViewModel;
             }
@@ -154,13 +151,10 @@ namespace OneShoppingList
                 if(allItemsViewModel == null )
                 {
                     allItemsViewModel = new ListViewModel<ShoppingItem>();
-                    Deployment.Current.Dispatcher.BeginInvoke(() =>
-                        {
-                            allItemsViewModel.GroupProvider = new PropertyGroupDescription { PropertyName = "Category" };
-                            allItemsViewModel.Filter = IsProductItemVisible;
-                            allItemsViewModel.ItemsSortProvider = new ShoppingCaptionComparer();
-                            allItemsViewModel.Source = DataLocator.Current.ProductItems;
-                        });
+                    allItemsViewModel.GroupProvider = new PropertyGroupDescription { PropertyName = "Category" };
+                    allItemsViewModel.Filter = IsProductItemVisible;
+                    allItemsViewModel.ItemsSortProvider = new ShoppingCaptionComparer();
+                    allItemsViewModel.Source = DataLocator.Current.ProductItems;
                 }
                 return allItemsViewModel;
             }
@@ -178,6 +172,8 @@ namespace OneShoppingList
         {
             public int Compare(ShoppingItem x, ShoppingItem y)
             {
+                var groupCompare = x.Category.CompareTo(y.Category);
+                if (groupCompare != 0) return groupCompare;
                 return x.Caption.CompareTo(y.Caption);
             }
         }

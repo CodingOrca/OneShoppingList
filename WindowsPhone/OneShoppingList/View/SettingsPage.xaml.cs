@@ -43,15 +43,33 @@ namespace OneShoppingList
             signInButton.IsEnabled = DeviceNetworkInformation.IsNetworkAvailable;
         }
 
-        private void signInButton_SessionChanged(object sender, Microsoft.Live.Controls.LiveConnectSessionChangedEventArgs e)
+        private async void signInButton_SessionChanged(object sender, Microsoft.Live.Controls.LiveConnectSessionChangedEventArgs e)
         {
             isLoggingOut = false;
 
             if (e.Status == Microsoft.Live.LiveConnectSessionStatus.Connected)
             {
                 LiveConnectClient client = new LiveConnectClient(e.Session);
-                client.GetCompleted += new System.EventHandler<LiveOperationCompletedEventArgs>(client_GetCompleted); ;
-                client.GetAsync("me");
+                try
+                {
+                    var getResult = await client.GetAsync("/me");
+                    if (getResult.Result != null)
+                    {
+                        if (!isLoggingOut)
+                        {
+                            viewModel.UserName = getResult.Result["userPrincipalName"] as string;
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error calling API: " + e.Error.ToString());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK);
+                }
+                signInButton.IsEnabled = DeviceNetworkInformation.IsNetworkAvailable;
             }
             else
             {
@@ -90,22 +108,6 @@ namespace OneShoppingList
         }
 
         private bool isLoggingOut = false;
-
-        void  client_GetCompleted(object sender, LiveOperationCompletedEventArgs e)
-        {
-            if (e.Error == null )
-            {
-                if (!isLoggingOut)
-                {
-                    viewModel.UserName = e.Result["name"] as string;
-                }
-            }
-            else
-            {
-                MessageBox.Show("Error calling API: " + e.Error.ToString());
-            }
-            signInButton.IsEnabled = DeviceNetworkInformation.IsNetworkAvailable;
-        }
 
         private void ApplicationBarIconButton_Click(object sender, EventArgs e)
         {
@@ -209,6 +211,5 @@ namespace OneShoppingList
             task.Subject = AppResources.appName;
             task.Show();
         }
-
     }
 }

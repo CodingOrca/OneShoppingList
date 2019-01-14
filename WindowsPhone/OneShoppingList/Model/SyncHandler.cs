@@ -1,16 +1,18 @@
-﻿using System.Collections.Generic;
-using System.IO.IsolatedStorage;
-using System;
-using System.Diagnostics;
-using System.ComponentModel;
-using Microsoft.Live;
-using System.Runtime.Serialization.Json;
-using System.IO;
-using System.Globalization;
-using System.Windows;
-using System.Threading;
-using OneShoppingList.Resources;
+﻿using Microsoft.Live;
 using Microsoft.Phone.Net.NetworkInformation;
+using OneShoppingList.Resources;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.IO.IsolatedStorage;
+using System.Linq;
+using System.Runtime.Serialization.Json;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace OneShoppingList.Model
 {
@@ -43,11 +45,6 @@ namespace OneShoppingList.Model
             }
         }
 
-        private DateTime GetLastUpdatedTimeOf(int fileIndex)
-        {
-            return fileIndex == 0 ? LastShopsUpdatedTime : LastProductListTimeStamp;
-        }
-
         private string LastShopsUpdatedTimeSettingsKey = "LastShopsUpdatedTime";
         private DateTime LastShopsUpdatedTime
         {
@@ -66,11 +63,8 @@ namespace OneShoppingList.Model
             {
                 if (isolatedStorageSettings.Contains(LastShopsUpdatedTimeSettingsKey))
                 {
-                    if (value.ToString(german) != isolatedStorageSettings[LastShopsUpdatedTimeSettingsKey] as string)
-                    {
-                        isolatedStorageSettings[LastShopsUpdatedTimeSettingsKey] = value.ToString(german);
-                        isolatedStorageSettings.Save();
-                    }
+                    isolatedStorageSettings[LastShopsUpdatedTimeSettingsKey] = value.ToString(german);
+                    isolatedStorageSettings.Save();
                 }
                 else
                 {
@@ -225,106 +219,113 @@ namespace OneShoppingList.Model
 
         private string errorMessage;
 
-        public void SyncAsync()
+        public async Task SyncAsync()
         {
-            this.errorMessage = null;
-            this.IsRunning = true;
-            this.Shops = null;
-            this.ProductItems = null;
-
-            this.CurrentOperation = SyncOperation.Syncing;
-            skyDriveHandler.ConnectAsync(e =>
+            bool repeat = false;
+            int repeatCount = 0;
+            do
+            {
+                repeatCount++;
+                try
                 {
-                    if (e != null && e.Result != null)
+                    this.errorMessage = null;
+                    this.IsRunning = true;
+                    this.Shops = null;
+                    this.ProductItems = null;
+
+                    this.CurrentOperation = SyncOperation.Syncing;
+                    await skyDriveHandler.ConnectAsync();
+                    var stream = await DownloadAsync("OneShoppingStores.txt", LastShopsUpdatedTime);
+                    if (stream != null)
                     {
-                        this.CurrentOperation = SyncOperation.Downloading;
-                        DownloadAsync(0);
+                        DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<Shop>));
+                        object o = ser.ReadObject(stream);
+                        this.Shops = o as List<Shop>;
                     }
-                    else
+                    stream = await DownloadAsync("OneShoppingList.txt", LastProductListTimeStamp);
+                    if (stream != null)
                     {
-                        if (e != null && e.Error != null)
-                        {
-                            this.errorMessage = e.Error.ToString();
-                        }
-                        else
-                        {
-                            this.errorMessage = AppResources.connectionErrorMessage;
-                        }
-                        IsRunning = false;
+                        DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<ShoppingItem>));
+                        object o = ser.ReadObject(stream);
+                        this.ProductItems = o as List<ShoppingItem>;
+
+                    }
+
+                    this.CurrentOperation = SyncOperation.Merging;
+                    var syncTransationTime = DateTime.Now;
+                    MergeAllListsSync();
+
+                    if (this.Shops != null)
+                    {
+                        this.CurrentOperation = SyncOperation.Uploading;
+                        await UploadAsync(this.Shops, filesToSync[0]);
+                    }
+                    if (this.ProductItems != null)
+                    {
+                        this.CurrentOperation = SyncOperation.Uploading;
+                        await UploadAsync(this.ProductItems, filesToSync[1]);
+                    }
+
+                    this.CurrentOperation = SyncOperation.Syncing;
+
+                    // if at least one file was uploaded, get the file list again so that we save the time stamps of oth files.
+                    if (this.Shops != null || this.ProductItems != null)
+                    {
+                        await skyDriveHandler.ConnectAsync();
+
+                        this.LastProductListTimeStamp = skyDriveHandler.GetFileUpdatedTime(filesToSync[1]);
+                        this.LastShopsUpdatedTime = skyDriveHandler.GetFileUpdatedTime(filesToSync[0]);
+                    }
+
+                    this.LastSyncTime = syncTransationTime;
+
+                    this.CurrentOperation = SyncOperation.Done;
+                    this.IsRunning = false;
+                }
+                catch (LiveConnectException ex)
+                {
+                    if (ex.ErrorCode == "InvalidAuthenticationToken")
+                    {
+                        repeat = true;
                     }
                 }
-            );
+                catch (Exception ex)
+                {
+                    this.errorMessage = AppResources.connectionErrorMessage + ex.Message;
+                }
+                finally
+                {
+                    IsRunning = false;
+                }
+                if (repeat && repeatCount <= 1)
+                {
+                    var authClient = new LiveAuthClient(Secrets.ClientID);
+                    authClient.Logout();
+                    await authClient.LoginAsync(new string[] { "Files.ReadWrite", "offline_access", "User.Read" });
+                }
+            }
+            while (repeat && repeatCount <= 1);
         }
 
-        private void DownloadAsync(int fileIndex)
+        private async Task<Stream> DownloadAsync(string fileName, DateTime lastUpdatedTime)
         {
-            if (fileIndex >= filesToSync.Count)
+            if (skyDriveHandler.FileExists(fileName))
             {
-                this.CurrentOperation = SyncOperation.Merging;
-                MergeAllListsSync();
-            }
-            else
-            {
-                bool downloadStarted = false;
-                if (skyDriveHandler.FileExists(filesToSync[fileIndex]))
+                DateTime actualTime = skyDriveHandler.GetFileUpdatedTime(fileName);
+                var deltaTime = actualTime - lastUpdatedTime;
+                if (Math.Abs(deltaTime.TotalSeconds) > 1)
                 {
-                    DateTime actualTime = skyDriveHandler.GetFileUpdatedTime(filesToSync[fileIndex]);
-                    DateTime lastUpdatedTime = GetLastUpdatedTimeOf(fileIndex);
-                    if (actualTime != lastUpdatedTime)
-                    {
-                        skyDriveHandler.DownloadAsync(filesToSync[fileIndex], e =>
-                            {
-                                client_DownloadCompleted(fileIndex, e);
-                            }
-                        );
-                        downloadStarted = true;
-                    }
-                }
-                if (!downloadStarted)
-                {
-                    DownloadAsync(fileIndex + 1);
+                    this.CurrentOperation = SyncOperation.Downloading;
+                    return await skyDriveHandler.DownloadAsync(fileName);
                 }
             }
+            return null;
         }
-
-        private void client_DownloadCompleted(int fileIndex, LiveDownloadCompletedEventArgs e)
-        {
-            if (e != null && e.Error != null)
-            {
-                this.errorMessage = e.Error.ToString();
-            }
-
-            if ( e != null && !e.Cancelled && e.Error == null)
-            {
-                switch (fileIndex)
-                {
-                    case 0:
-                        {
-                            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<Shop>));
-                            object o = ser.ReadObject(e.Result);
-                            this.Shops = o as List<Shop>;
-                            break;
-                        }
-                    case 1:
-                        {
-                            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<ShoppingItem>));
-                            object o = ser.ReadObject(e.Result);
-                            this.ProductItems = o as List<ShoppingItem>;
-                            break;
-                        }
-                }
-            }
-            DownloadAsync(fileIndex + 1);
-        }
-
-        private DateTime syncTransationTime;
 
         private void MergeAllListsSync()
         {
-            syncTransationTime = DateTime.Now;
             if (this.ProductItems != null)
             {
-                DateTime lastUpdatedTime = GetLastUpdatedTimeOf(1);
                 bool uploadNeeded = ListSync.SyncLists(DataLocator.Current.ProductItems, this.ProductItems);
                 this.LastProductListTimeStamp = skyDriveHandler.GetFileUpdatedTime(filesToSync[1]);
                 if (!uploadNeeded)
@@ -334,27 +335,18 @@ namespace OneShoppingList.Model
             }
             else
             {
-                DateTime lastChange = default(DateTime);
-                foreach (ShoppingItem item in DataLocator.Current.ProductItems)
-                {
-                    if (item.TimeStamp > lastChange)
-                    {
-                        lastChange = item.TimeStamp;
-                    }
-                }
+                DateTime lastChange = DataLocator.Current.ProductItems.Count > 0 
+                    ? DataLocator.Current.ProductItems.Max(item => item.TimeStamp) 
+                    : default(DateTime);
+
                 if (!skyDriveHandler.FileExists(filesToSync[1]) || lastChange > LastSyncTime)
                 {
-                    this.ProductItems = new List<ShoppingItem>();
-                    foreach (ShoppingItem item in DataLocator.Current.ProductItems)
-                    {
-                        this.ProductItems.Add(item.Clone() as ShoppingItem);
-                    }
+                    this.ProductItems = DataLocator.Current.ProductItems.Select(item => item.Clone() as ShoppingItem).ToList();
                 }
             }
 
             if (this.Shops != null)
             {
-                DateTime lastUpdatedTime = GetLastUpdatedTimeOf(0);
                 bool uploadNeeded = ListSync.SyncLists(DataLocator.Current.Shops, this.Shops);
                 this.LastShopsUpdatedTime = skyDriveHandler.GetFileUpdatedTime(filesToSync[0]);
                 if (!uploadNeeded)
@@ -364,120 +356,26 @@ namespace OneShoppingList.Model
             }
             else
             {
-                DateTime lastChange = default(DateTime);
-                foreach (Shop item in DataLocator.Current.Shops)
-                {
-                    if (item.TimeStamp > lastChange)
-                    {
-                        lastChange = item.TimeStamp;
-                    }
-                }
+                DateTime lastChange = DataLocator.Current.Shops.Count > 0
+                ? DataLocator.Current.Shops.Max(shop => shop.TimeStamp)
+                : default(DateTime);
+
                 if (!skyDriveHandler.FileExists(filesToSync[0]) || lastChange > LastSyncTime)
                 {
-                    this.Shops = new List<Shop>();
-                    foreach (Shop item in DataLocator.Current.Shops)
-                    {
-                        this.Shops.Add(item.Clone() as Shop);
-                    }
+                    this.Shops = DataLocator.Current.Shops.Select(shop => shop.Clone() as Shop).ToList();
                 }
             }
 
             DataLocator.Current.SaveLocalData();
-            if (this.Shops != null || this.ProductItems != null)
-            {
-                this.CurrentOperation = SyncOperation.Uploading;
-                this.UploadAsync(0);
-            }
-            else
-            {
-                this.LastProductListTimeStamp = skyDriveHandler.GetFileUpdatedTime(filesToSync[1]);
-                this.LastShopsUpdatedTime = skyDriveHandler.GetFileUpdatedTime(filesToSync[0]);
-                this.LastSyncTime = syncTransationTime;
-                this.IsRunning = false;
-            }
         }
 
-        private void UploadAsync(int fileIndex)
+        private async Task UploadAsync(Object listToUpload, string fileName)
         {
-            if (fileIndex >= filesToSync.Count)
-            {
-                this.CurrentOperation = SyncOperation.Syncing;
-                skyDriveHandler.ConnectAsync(ea => UpdateTimestamps(ea));
-            }
-            else
-            {
-                bool uploadStarted = false;
-                switch (fileIndex)
-                {
-                    case 0:
-                        if (this.Shops != null)
-                        {
-                            MemoryStream ms = new MemoryStream();
-                            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<Shop>));
-                            ser.WriteObject(ms, this.Shops);
-                            ms.Seek(0, SeekOrigin.Begin);
-                            skyDriveHandler.UploadAsync(filesToSync[fileIndex], ms, e =>
-                                {
-                                    client_UploadCompleted(fileIndex, e);
-                                }
-                            );
-                            uploadStarted = true;
-                        }
-                        break;
-                    case 1:
-                        if (this.ProductItems != null)
-                        {
-                            MemoryStream ms = new MemoryStream();
-                            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<ShoppingItem>));
-                            ser.WriteObject(ms, this.ProductItems);
-                            ms.Seek(0, SeekOrigin.Begin);
-                            skyDriveHandler.UploadAsync(filesToSync[fileIndex], ms, e =>
-                                {
-                                    client_UploadCompleted(fileIndex, e);
-                                }
-                            );
-                            uploadStarted = true;
-                        }
-                        break;
-                }
-                if (!uploadStarted)
-                {
-                    UploadAsync(fileIndex + 1);
-                }
-            }
-        }
-
-        private void client_UploadCompleted(int fileIndex, LiveOperationCompletedEventArgs e)
-        {
-            if (e != null && e.Error != null)
-            {
-                this.errorMessage = e.Error.ToString();
-            }
-            if (e != null && !e.Cancelled && e.Error == null)
-            {
-            }
-            UploadAsync(fileIndex + 1);
-        }
-
-        private void UpdateTimestamps(LiveOperationCompletedEventArgs e)
-        {
-            if (e!= null && e.Error != null)
-            {
-                this.errorMessage = e.Error.ToString();
-            }
-            if (e != null && !e.Cancelled && e.Error == null)
-            {
-                this.LastSyncTime = syncTransationTime;
-                if (this.ProductItems != null && skyDriveHandler.FileExists(filesToSync[1]))
-                {
-                    this.LastProductListTimeStamp = skyDriveHandler.GetFileUpdatedTime(filesToSync[1]);
-                }
-                if (this.Shops != null && skyDriveHandler.FileExists(filesToSync[0]))
-                {
-                    this.LastShopsUpdatedTime = skyDriveHandler.GetFileUpdatedTime(filesToSync[0]);
-                }
-            }
-            IsRunning = false;
+            MemoryStream ms = new MemoryStream();
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(listToUpload.GetType());
+            ser.WriteObject(ms, listToUpload);
+            ms.Seek(0, SeekOrigin.Begin);
+            await skyDriveHandler.UploadAsync(fileName, ms);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

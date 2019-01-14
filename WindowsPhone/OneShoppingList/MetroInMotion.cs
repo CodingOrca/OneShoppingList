@@ -170,13 +170,13 @@ namespace MetroInMotionUtils
             {
                 LongListSelector lls = d as LongListSelector;
                 llsLinkedItems = new List<FrameworkElement>();
-                lls.Link += (sLi, eLi) =>
+                lls.ItemRealized += (sLi, eLi) =>
                 {
-                    llsLinkedItems.Add(eLi.ContentPresenter);
+                    llsLinkedItems.Add(eLi.Container);
                 };
-                lls.Unlink += (sUli, eUli) =>
+                lls.ItemUnrealized += (sUli, eUli) =>
                 {
-                    llsLinkedItems.Remove(eUli.ContentPresenter);
+                    llsLinkedItems.Remove(eUli.Container);
                 };
             }
 

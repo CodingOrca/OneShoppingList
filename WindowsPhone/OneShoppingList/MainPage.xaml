@@ -37,25 +37,25 @@
                 </controls:Pivot.HeaderTemplate>
                 <controls:Pivot.ItemTemplate>
                     <DataTemplate>
-                        <toolkit:LongListSelector 
+                        <phone:LongListSelector 
                             Visibility="{Binding Main.UnsortedShoppingList.Count, Source={StaticResource Locator}, Converter={StaticResource toVisibilityConverter}}"
                             mm:MetroInMotion.IsPivotAnimated="True"
                             ItemsSource="{Binding ShoppingListViewModel.GroupsView}"
-                            ScrollingStarted="longListSelector_ScrollingStarted"
-                            ScrollingCompleted="longListSelector_ScrollingCompleted"
-                            Link="longListSelector_Link"
-                            Unlink="longListSelector_Unlink"
+                            ManipulationStateChanged="longListSelector_ManipulationStateChanged"
+                            ItemRealized="longListSelector_ItemRealized"
+                            ItemUnrealized="longListSelector_ItemUnrealized"
                             ListFooter="{Binding}"
+                            IsGroupingEnabled="True"
                             >
 
-                            <toolkit:LongListSelector.GroupFooterTemplate>
+                            <phone:LongListSelector.GroupFooterTemplate>
                                 <DataTemplate>
                                     <Grid Height="6" Width="468"/>
                                 </DataTemplate>
-                            </toolkit:LongListSelector.GroupFooterTemplate>
+                            </phone:LongListSelector.GroupFooterTemplate>
                             
 
-                            <toolkit:LongListSelector.GroupHeaderTemplate>
+                            <phone:LongListSelector.GroupHeaderTemplate>
                                 <DataTemplate>
                                     <Button
                                         Style="{StaticResource TiltButtonStyle}"
@@ -77,9 +77,9 @@
                                         </StackPanel>
                                     </Button>
                                 </DataTemplate>
-                            </toolkit:LongListSelector.GroupHeaderTemplate>
+                            </phone:LongListSelector.GroupHeaderTemplate>
 
-                            <toolkit:LongListSelector.ItemTemplate>
+                            <phone:LongListSelector.ItemTemplate>
                                 <DataTemplate>
                                     <Grid 
                                         Width="468" 
@@ -159,9 +159,9 @@
                                             />
                                     </Grid>
                                 </DataTemplate>
-                            </toolkit:LongListSelector.ItemTemplate>
+                            </phone:LongListSelector.ItemTemplate>
                             
-                            <toolkit:LongListSelector.ListFooterTemplate>
+                            <phone:LongListSelector.ListFooterTemplate>
                                 <DataTemplate>
                                     <StackPanel>
                                         <Button
@@ -263,8 +263,8 @@
                                         </StackPanel>
                                     </StackPanel>
                                 </DataTemplate>
-                            </toolkit:LongListSelector.ListFooterTemplate>
-                        </toolkit:LongListSelector>
+                            </phone:LongListSelector.ListFooterTemplate>
+                        </phone:LongListSelector>
                     </DataTemplate>
                 </controls:Pivot.ItemTemplate>
             </controls:Pivot>

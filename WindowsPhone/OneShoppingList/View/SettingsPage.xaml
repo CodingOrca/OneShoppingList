@@ -52,7 +52,7 @@
                                 SignOutText="{Binding Localized.signOut}"
                                 TextType="Custom"
                                 toolkit:TiltEffect.IsTiltEnabled="True"
-                                Scopes="wl.skydrive_update wl.offline_access" 
+                                Scopes="Files.ReadWrite offline_access User.Read" 
                                 SessionChanged="signInButton_SessionChanged" />
                         <TextBlock 
                             Margin="12,12,0,-12" 

@@ -39,7 +39,7 @@ namespace OneShoppingList.View
 
             this.Loaded += new RoutedEventHandler(EditPage_Loaded);
 
-            if (locator.Settings.LastFavoritesPivotItem != -1 && locator.Settings.LastFavoritesPivotItem < 2)
+            if (locator.Settings.LastFavoritesPivotItem >= 0 && locator.Settings.LastFavoritesPivotItem < 2)
             {
                 pivot.SelectedIndex = locator.Settings.LastFavoritesPivotItem;
             }
@@ -163,114 +163,114 @@ namespace OneShoppingList.View
             cm.IsOpen = true;
         }
 
-        private void LongListSelector_GroupViewOpened(object sender, GroupViewOpenedEventArgs e)
-        {
-            LongListSelector longListSelector = sender as LongListSelector;
+        //private void LongListSelector_GroupViewOpened(object sender, GroupViewOpenedEventArgs e)
+        //{
+        //    LongListSelector longListSelector = sender as LongListSelector;
 
-            //Hold a reference to the active long lls selector.
-            longListSelector = sender as LongListSelector;
+        //    //Hold a reference to the active long lls selector.
+        //    longListSelector = sender as LongListSelector;
 
-            //Construct and begin a swivel animation to pop in the group view.
-            IEasingFunction quadraticEase = new QuadraticEase { EasingMode = EasingMode.EaseOut };
-            Storyboard _swivelShow = new Storyboard();
-            ItemsControl groupItems = e.ItemsControl;
+        //    //Construct and begin a swivel animation to pop in the group view.
+        //    IEasingFunction quadraticEase = new QuadraticEase { EasingMode = EasingMode.EaseOut };
+        //    Storyboard _swivelShow = new Storyboard();
+        //    ItemsControl groupItems = e.ItemsControl;
 
-            foreach (var item in groupItems.Items)
-            {
-                UIElement container = groupItems.ItemContainerGenerator.ContainerFromItem(item) as UIElement;
-                if (container != null)
-                {
-                    Button content = VisualTreeHelper.GetChild(container, 0) as Button;
-                    if (content != null)
-                    {
-                        DoubleAnimationUsingKeyFrames showAnimation = new DoubleAnimationUsingKeyFrames();
+        //    foreach (var item in groupItems.Items)
+        //    {
+        //        UIElement container = groupItems.ItemContainerGenerator.ContainerFromItem(item) as UIElement;
+        //        if (container != null)
+        //        {
+        //            Button content = VisualTreeHelper.GetChild(container, 0) as Button;
+        //            if (content != null)
+        //            {
+        //                DoubleAnimationUsingKeyFrames showAnimation = new DoubleAnimationUsingKeyFrames();
 
-                        EasingDoubleKeyFrame showKeyFrame1 = new EasingDoubleKeyFrame();
-                        showKeyFrame1.KeyTime = TimeSpan.FromMilliseconds(0);
-                        showKeyFrame1.Value = -90;
-                        showKeyFrame1.EasingFunction = quadraticEase;
+        //                EasingDoubleKeyFrame showKeyFrame1 = new EasingDoubleKeyFrame();
+        //                showKeyFrame1.KeyTime = TimeSpan.FromMilliseconds(0);
+        //                showKeyFrame1.Value = -90;
+        //                showKeyFrame1.EasingFunction = quadraticEase;
 
-                        EasingDoubleKeyFrame showKeyFrame2 = new EasingDoubleKeyFrame();
-                        showKeyFrame2.KeyTime = TimeSpan.FromMilliseconds(300);
-                        showKeyFrame2.Value = 0;
-                        showKeyFrame2.EasingFunction = quadraticEase;
+        //                EasingDoubleKeyFrame showKeyFrame2 = new EasingDoubleKeyFrame();
+        //                showKeyFrame2.KeyTime = TimeSpan.FromMilliseconds(300);
+        //                showKeyFrame2.Value = 0;
+        //                showKeyFrame2.EasingFunction = quadraticEase;
 
-                        showAnimation.KeyFrames.Add(showKeyFrame1);
-                        showAnimation.KeyFrames.Add(showKeyFrame2);
+        //                showAnimation.KeyFrames.Add(showKeyFrame1);
+        //                showAnimation.KeyFrames.Add(showKeyFrame2);
 
-                        Storyboard.SetTargetProperty(showAnimation, new PropertyPath(PlaneProjection.RotationXProperty));
-                        Storyboard.SetTarget(showAnimation, content.Projection);
+        //                Storyboard.SetTargetProperty(showAnimation, new PropertyPath(PlaneProjection.RotationXProperty));
+        //                Storyboard.SetTarget(showAnimation, content.Projection);
 
-                        _swivelShow.Children.Add(showAnimation);
-                    }
-                }
-            }
+        //                _swivelShow.Children.Add(showAnimation);
+        //            }
+        //        }
+        //    }
 
-            _swivelShow.Begin();
-        }
+        //    _swivelShow.Begin();
+        //}
 
-        private void LongListSelector_GroupViewClosing(object sender, GroupViewClosingEventArgs e)
-        {
-            LongListSelector longListSelector = sender as LongListSelector;
+        //private void LongListSelector_GroupViewClosing(object sender, GroupViewClosingEventArgs e)
+        //{
+        //    LongListSelector longListSelector = sender as LongListSelector;
 
-            //Cancelling automatic closing and scrolling to do it manually.
-            e.Cancel = true;
+        //    //Cancelling automatic closing and scrolling to do it manually.
+        //    e.Cancel = true;
 
-            //Dispatch the swivel animation for performance on the UI thread.
-            Dispatcher.BeginInvoke(() =>
-            {
-                //Construct and begin a swivel animation to pop out the group view.
-                IEasingFunction quadraticEase = new QuadraticEase { EasingMode = EasingMode.EaseOut };
-                Storyboard _swivelHide = new Storyboard();
-                ItemsControl groupItems = e.ItemsControl;
+        //    //Dispatch the swivel animation for performance on the UI thread.
+        //    Dispatcher.BeginInvoke(() =>
+        //    {
+        //        //Construct and begin a swivel animation to pop out the group view.
+        //        IEasingFunction quadraticEase = new QuadraticEase { EasingMode = EasingMode.EaseOut };
+        //        Storyboard _swivelHide = new Storyboard();
+        //        ItemsControl groupItems = e.ItemsControl;
 
-                foreach (var item in groupItems.Items)
-                {
-                    UIElement container = groupItems.ItemContainerGenerator.ContainerFromItem(item) as UIElement;
-                    if (container != null)
-                    {
-                        Button content = VisualTreeHelper.GetChild(container, 0) as Button;
-                        if (content != null)
-                        {
-                            DoubleAnimationUsingKeyFrames showAnimation = new DoubleAnimationUsingKeyFrames();
+        //        foreach (var item in groupItems.Items)
+        //        {
+        //            UIElement container = groupItems.ItemContainerGenerator.ContainerFromItem(item) as UIElement;
+        //            if (container != null)
+        //            {
+        //                Button content = VisualTreeHelper.GetChild(container, 0) as Button;
+        //                if (content != null)
+        //                {
+        //                    DoubleAnimationUsingKeyFrames showAnimation = new DoubleAnimationUsingKeyFrames();
 
-                            EasingDoubleKeyFrame showKeyFrame1 = new EasingDoubleKeyFrame();
-                            showKeyFrame1.KeyTime = TimeSpan.FromMilliseconds(0);
-                            showKeyFrame1.Value = 0;
-                            showKeyFrame1.EasingFunction = quadraticEase;
+        //                    EasingDoubleKeyFrame showKeyFrame1 = new EasingDoubleKeyFrame();
+        //                    showKeyFrame1.KeyTime = TimeSpan.FromMilliseconds(0);
+        //                    showKeyFrame1.Value = 0;
+        //                    showKeyFrame1.EasingFunction = quadraticEase;
 
-                            EasingDoubleKeyFrame showKeyFrame2 = new EasingDoubleKeyFrame();
-                            showKeyFrame2.KeyTime = TimeSpan.FromMilliseconds(125);
-                            showKeyFrame2.Value = 90;
-                            showKeyFrame2.EasingFunction = quadraticEase;
+        //                    EasingDoubleKeyFrame showKeyFrame2 = new EasingDoubleKeyFrame();
+        //                    showKeyFrame2.KeyTime = TimeSpan.FromMilliseconds(125);
+        //                    showKeyFrame2.Value = 90;
+        //                    showKeyFrame2.EasingFunction = quadraticEase;
 
-                            showAnimation.KeyFrames.Add(showKeyFrame1);
-                            showAnimation.KeyFrames.Add(showKeyFrame2);
+        //                    showAnimation.KeyFrames.Add(showKeyFrame1);
+        //                    showAnimation.KeyFrames.Add(showKeyFrame2);
 
-                            Storyboard.SetTargetProperty(showAnimation, new PropertyPath(PlaneProjection.RotationXProperty));
-                            Storyboard.SetTarget(showAnimation, content.Projection);
+        //                    Storyboard.SetTargetProperty(showAnimation, new PropertyPath(PlaneProjection.RotationXProperty));
+        //                    Storyboard.SetTarget(showAnimation, content.Projection);
 
-                            _swivelHide.Children.Add(showAnimation);
-                        }
-                    }
-                }
+        //                    _swivelHide.Children.Add(showAnimation);
+        //                }
+        //            }
+        //        }
 
-                _swivelHide.Completed += (s1, e1) =>
-                {
-                    if (e.SelectedGroup != null)
-                    {
-                        longListSelector.ScrollToGroup(e.SelectedGroup);
-                    }
-                    //Close group view.
-                    if (longListSelector != null)
-                    {
-                        longListSelector.CloseGroupView();
-                    }
-                };
-                _swivelHide.Begin();
+        //        _swivelHide.Completed += (s1, e1) =>
+        //        {
+        //            if (e.SelectedGroup != null)
+        //            {
+        //                longListSelector.ScrollToGroup(e.SelectedGroup);
+        //            }
+        //            //Close group view.
+        //            if (longListSelector != null)
+        //            {
+        //                longListSelector.CloseGroupView();
+        //            }
+        //        };
+        //        _swivelHide.Begin();
 
-            });
-        }
+        //    });
+        //}
 
 
         private void PhoneApplicationPage_LayoutUpdated(object sender, EventArgs e)
@@ -289,22 +289,22 @@ namespace OneShoppingList.View
             }
         }
 
-        private void longListSelector_Link(object sender, LinkUnlinkEventArgs e)
-        {
-        }
+        //private void longListSelector_Link(object sender, LinkUnlinkEventArgs e)
+        //{
+        //}
 
-        private void longListSelector_Unlink(object sender, LinkUnlinkEventArgs e)
-        {
-            if (currentContextMenu != null && currentContextMenu.IsOpen)
-            {
-                Grid grid = currentContextMenu.Owner as Grid;
-                object parentLLS = grid.Ancestors<LongListSelector>().SingleOrDefault();
-                if (parentLLS == sender || parentLLS == null)
-                {
-                    currentContextMenu.IsOpen = false;
-                }
-            }
-        }
+        //private void longListSelector_Unlink(object sender, LinkUnlinkEventArgs e)
+        //{
+        //    if (currentContextMenu != null && currentContextMenu.IsOpen)
+        //    {
+        //        Grid grid = currentContextMenu.Owner as Grid;
+        //        object parentLLS = grid.Ancestors<LongListSelector>().SingleOrDefault();
+        //        if (parentLLS == sender || parentLLS == null)
+        //        {
+        //            currentContextMenu.IsOpen = false;
+        //        }
+        //    }
+        //}
 
         private bool isInitialized = false;
         private void pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)

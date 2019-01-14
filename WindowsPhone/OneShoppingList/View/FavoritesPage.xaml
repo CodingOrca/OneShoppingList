@@ -18,7 +18,32 @@
     LayoutUpdated="PhoneApplicationPage_LayoutUpdated"
     DataContext="{Binding Main,Source={StaticResource Locator}}"
     shell:SystemTray.IsVisible="True">
-
+    <phone:PhoneApplicationPage.Resources>
+        <phone:JumpListItemBackgroundConverter x:Key="BackgroundConverter"/>
+        <phone:JumpListItemForegroundConverter x:Key="ForegroundConverter"/>
+        <Style x:Key="JumpListStyle" TargetType="phone:LongListSelector">
+            <Setter Property="LayoutMode" Value="List" />
+            <Setter Property="Margin" Value="12,12,0,0"/>
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Border Background="{Binding Converter={StaticResource BackgroundConverter}}" 
+                            Width="470" 
+                            Height="70" 
+                            Margin="6">
+                            <TextBlock Text="{Binding Key}"
+                                Foreground="{Binding Converter= {StaticResource ForegroundConverter}}"
+                                FontFamily="{StaticResource PhoneFontFamilySemiBold}"
+                                FontSize="28"
+                                Padding="2"
+                                VerticalAlignment="Bottom"/>
+                        </Border>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </phone:PhoneApplicationPage.Resources>
+    
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent" Margin="0,-12,0,0">
         <controls:Pivot 
@@ -31,51 +56,22 @@
                 Margin="12,28,0,0"
                 Header="{Binding Localized.favoritesTitle}">
                 
-                <toolkit:LongListSelector 
+                <phone:LongListSelector 
+                    IsGroupingEnabled="True"
+                    JumpListStyle="{StaticResource JumpListStyle}"
                     mm:MetroInMotion.IsPivotAnimated="True"
                     Name="favoritesListSelector"
                     toolkit:TiltEffect.IsTiltEnabled="False"
                     ItemsSource="{Binding FavoritesViewModel.GroupsView}"
-                    ScrollingStarted="longListSelector_ScrollingStarted"
-                    Link="longListSelector_Link"
-                    Unlink="longListSelector_Unlink"
                     >
 
-                    <toolkit:LongListSelector.GroupItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel 
-                                Orientation="Vertical"
-                                Width="468"
-                                Margin="12,0,0,0"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center"
-                                toolkit:TiltEffect.IsTiltEnabled="True"/>
-                        </ItemsPanelTemplate>
-                    </toolkit:LongListSelector.GroupItemsPanel>
-
-                    <toolkit:LongListSelector.GroupItemTemplate>
-                        <DataTemplate>
-                            <Button
-                                Background="{StaticResource PhoneAccentBrush}"
-                                Style="{StaticResource TiltButtonStyle}"
-                                Height="54"
-                                Margin="0,6,0,6"
-                                >
-                                <TextBlock
-                                    Text="{Binding Key,Converter={StaticResource toUpperConverter}}"
-                                    Style="{StaticResource PhoneTextLargeStyle}"
-                                    HorizontalAlignment="Center"/>
-                            </Button>
-                        </DataTemplate>
-                    </toolkit:LongListSelector.GroupItemTemplate>
-
-                    <toolkit:LongListSelector.GroupFooterTemplate>
+                    <phone:LongListSelector.GroupFooterTemplate>
                         <DataTemplate>
                             <Grid Height="24" Width="468"/>
                         </DataTemplate>
-                    </toolkit:LongListSelector.GroupFooterTemplate>
+                    </phone:LongListSelector.GroupFooterTemplate>
 
-                    <toolkit:LongListSelector.GroupHeaderTemplate>
+                    <phone:LongListSelector.GroupHeaderTemplate>
                         <DataTemplate>
                             <Border 
                                 mm:MetroInMotion.AnimationLevel="0"
@@ -91,9 +87,9 @@
                                     />
                             </Border>
                         </DataTemplate>
-                    </toolkit:LongListSelector.GroupHeaderTemplate>
+                    </phone:LongListSelector.GroupHeaderTemplate>
 
-                    <toolkit:LongListSelector.ItemTemplate>
+                    <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <Grid 
                                 mm:MetroInMotion.AnimationLevel="2"
@@ -177,60 +173,31 @@
                                     />
                             </Grid>
                         </DataTemplate>
-                    </toolkit:LongListSelector.ItemTemplate>
-                </toolkit:LongListSelector>
+                    </phone:LongListSelector.ItemTemplate>
+                </phone:LongListSelector>
             </controls:PivotItem>
 
-            <!--<controls:PivotItem
+            <controls:PivotItem
                 Name="allPivotItem"
                 Margin="12,28,0,0"
                 Header="{Binding Localized.allTitle}">
 
-                <toolkit:LongListSelector 
+                <phone:LongListSelector 
+                    IsGroupingEnabled="True"
+                    JumpListStyle="{StaticResource JumpListStyle}"
                     mm:MetroInMotion.IsPivotAnimated="True"
                     Name="allItemsListSelector"
                     toolkit:TiltEffect.IsTiltEnabled="False"
                     ItemsSource="{Binding AllItemsViewModel.GroupsView}"
-                    ScrollingStarted="longListSelector_ScrollingStarted"
-                    Link="longListSelector_Link"
-                    Unlink="longListSelector_Unlink"
                     >
 
-                    <toolkit:LongListSelector.GroupItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel 
-                                Orientation="Vertical"
-                                Width="468"
-                                Margin="12,0,0,0"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center"
-                                toolkit:TiltEffect.IsTiltEnabled="True"/>
-                        </ItemsPanelTemplate>
-                    </toolkit:LongListSelector.GroupItemsPanel>
-
-                    <toolkit:LongListSelector.GroupItemTemplate>
-                        <DataTemplate>
-                            <Button
-                                Background="{StaticResource PhoneAccentBrush}"
-                                Style="{StaticResource TiltButtonStyle}"
-                                Height="54"
-                                Margin="0,6,0,6"
-                                >
-                                <TextBlock
-                                    Text="{Binding Key,Converter={StaticResource toUpperConverter}}"
-                                    Style="{StaticResource PhoneTextLargeStyle}"
-                                    HorizontalAlignment="Center"/>
-                            </Button>
-                        </DataTemplate>
-                    </toolkit:LongListSelector.GroupItemTemplate>
-
-                    <toolkit:LongListSelector.GroupFooterTemplate>
+                    <phone:LongListSelector.GroupFooterTemplate>
                         <DataTemplate>
                             <Grid Height="24" Width="468"/>
                         </DataTemplate>
-                    </toolkit:LongListSelector.GroupFooterTemplate>
+                    </phone:LongListSelector.GroupFooterTemplate>
 
-                    <toolkit:LongListSelector.GroupHeaderTemplate>
+                    <phone:LongListSelector.GroupHeaderTemplate>
                         <DataTemplate>
                             <Border 
                                 mm:MetroInMotion.AnimationLevel="0"
@@ -246,9 +213,9 @@
                                     />
                             </Border>
                         </DataTemplate>
-                    </toolkit:LongListSelector.GroupHeaderTemplate>
+                    </phone:LongListSelector.GroupHeaderTemplate>
 
-                    <toolkit:LongListSelector.ItemTemplate>
+                    <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <Grid 
                                 mm:MetroInMotion.AnimationLevel="2"
@@ -343,9 +310,9 @@
                                     />
                             </Grid>
                         </DataTemplate>
-                    </toolkit:LongListSelector.ItemTemplate>
-                </toolkit:LongListSelector>
-            </controls:PivotItem>-->
+                    </phone:LongListSelector.ItemTemplate>
+                </phone:LongListSelector>
+            </controls:PivotItem>
         </controls:Pivot>
     </Grid>
 

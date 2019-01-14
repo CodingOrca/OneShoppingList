@@ -2,6 +2,10 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
+bin/
+packages/
+obj/
+Secrets.cs
 /DesktopClient/OneShoppingList/bin
 /DesktopClient/OneShoppingList/obj
 /DesktopClient/OneShoppingList/OneShoppingList.csproj.user

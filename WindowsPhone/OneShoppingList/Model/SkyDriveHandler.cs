@@ -20,6 +20,7 @@ using System.IO;
 using System.IO.IsolatedStorage;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace OneShoppingList
 {
@@ -153,145 +154,95 @@ namespace OneShoppingList
             }
         }
 
-        public void ConnectAsync(Action<LiveOperationCompletedEventArgs> onCompleted)
+        public async Task ConnectAsync()
         {
             if (IsRunning) return;
-            auth = new LiveAuthClient(clientId: Secrets.ClientID);
-            auth.InitializeCompleted += OnLoginCompleted;
+            auth = new LiveAuthClient(Secrets.ClientID);
 
-            IsRunning = true;
-
-            CurrentOperation = LiveOperation.Login;
-
-            auth.InitializeAsync(onCompleted);
-        }
-
-        private void OnLoginCompleted(object sender, LoginCompletedEventArgs e)
-        {
-            if (e.Status == LiveConnectSessionStatus.Connected)
+            try
             {
+                IsRunning = true;
+                CurrentOperation = LiveOperation.Login;
+
+                var e = await auth.InitializeAsync();
+                if (e.Status != LiveConnectSessionStatus.Connected)
+                {
+                    this.ErrorMessage = "Login error, try again later. " + e.State;
+                    throw new Exception(this.ErrorMessage);
+                }
                 session = e.Session;
                 client = new LiveConnectClient(session);
-                client.GetCompleted += client_OperationCompleted;
-                client.PostCompleted += client_OperationCompleted;
-                client.DownloadCompleted += client_DownloadCompleted;
-                client.UploadCompleted += client_UploadCompleted;
 
-                if (String.IsNullOrWhiteSpace(ApplicationFolderID))
-                {
-                    CreateFolderHierarchyAsync(e.UserState);
-                }
-                else
+                if (!String.IsNullOrWhiteSpace(ApplicationFolderID))
                 {
                     CurrentOperation = LiveOperation.GetApplicationFolderList;
-                    client.GetAsync("/" + ApplicationFolderID + "/files", e.UserState);
+                    try
+                    {
+                        applicationFolderContent = await GetFolderList(ApplicationFolderID);
+                        return;
+                    }
+                    catch (LiveConnectException ex)
+                    {
+                        if (ex.ErrorCode != "itemNotFound")
+                        {
+                            throw;
+                        }
+                        // if resource not found, we fall try to create the hierarchy again as if ApplicationFolderID would have been null
+                        ApplicationFolderID = null;
+                    }
                 }
+                await CreateFolderHierarchyAsync();
+                applicationFolderContent = await GetFolderList(ApplicationFolderID);
             }
-            else
+            finally
             {
-                this.ErrorMessage = "Login error, try again later. " + ((e.Error != null) ? e.Error.ToString() : "");
                 IsRunning = false;
-                Action<LiveOperationCompletedEventArgs> onCompleted = e.UserState as Action<LiveOperationCompletedEventArgs>;
-                if (onCompleted != null)
-                {
-                    onCompleted(null);
-                }
             }
-
         }
 
-        private void CreateFolderHierarchyAsync(object userstate)
+        private async Task<IList> GetFolderList(string folderId)
+        {
+            var result = await client.GetAsync("/me/drive/items/" + folderId + "/children");
+            return result.Result["value"] as IList;
+        }
+
+        private async Task CreateFolderHierarchyAsync()
         {
             currentIndex = 0;
             currentFolderId = null;
 
             CurrentOperation = LiveOperation.Login;
-            client.GetAsync("me", userstate);
+            var e = await client.GetAsync("/me");
+            UserName = e.Result["userPrincipalName"] as string;
+
+            CurrentOperation = LiveOperation.GetFolder;
+            e = await client.GetAsync("/me/drive/root");
+            var rootFolderId = e.Result["id"] as string;
+
+            var appFolderId = await CreateSubfolderIfNotExists(rootFolderId, "AppData");
+            var familyFolderId = await CreateSubfolderIfNotExists(appFolderId, "OneFamily");
+            ApplicationFolderID = await CreateSubfolderIfNotExists(familyFolderId, "ShoppingList");
         }
 
-        private void client_OperationCompleted(object sender, LiveOperationCompletedEventArgs e)
+        private async Task<string> CreateSubfolderIfNotExists(string parentFolderId, string subfolder)
         {
-            if (e.Error != null)
+            CurrentOperation = LiveOperation.GetFolderList;
+            var list = await GetFolderList(parentFolderId);
+            var folderInfo = FindItemByName(subfolder, list);
+            string subfolderId = folderInfo != null ? folderInfo["id"] as string : null;
+            if (subfolderId == null)
             {
-                LiveConnectException liveException = e.Error as LiveConnectException;
-                if (CurrentOperation == LiveOperation.GetApplicationFolderList && this.ApplicationFolderID != null && liveException.ErrorCode == "resource_not_found")
-                {
-                    ApplicationFolderID = null;
-                    CreateFolderHierarchyAsync(e.UserState);
-                }
-                else
-                {
-                    ErrorMessage = "Communication error, try again later. " + e.Error.ToString();
-                    IsRunning = false;
-                    Action<LiveOperationCompletedEventArgs> onCompleted = e.UserState as Action<LiveOperationCompletedEventArgs>;
-                    if (onCompleted != null)
-                    {
-                        onCompleted(e);
-                    }
-                }
-                return;
+                subfolderId = await CreateFolder(parentFolderId, subfolder);
             }
+            return subfolderId;
+        }
 
-            switch (CurrentOperation)
-            {
-                case LiveOperation.Login:
-                    UserName = e.Result["name"] as string;
-                    CurrentOperation = LiveOperation.GetFolder;
-                    client.GetAsync("/me/skydrive", e.UserState);
-                    break;
-                case LiveOperation.GetFolder:
-                    currentFolderId = e.Result["id"] as string;
-                    CurrentOperation = LiveOperation.GetFolderList;
-                    client.GetAsync("/" + currentFolderId + "/files", e.UserState);
-                    break;
-                case LiveOperation.GetFolderList:
-                    string previousFolderId = currentFolderId;
-                    IList list = e.Result["data"] as IList;
-                    string folderName = Path[currentIndex++];
-                    IDictionary<string, object> folder = FindItemByName(folderName, list);
-                    currentFolderId = folder != null ? folder["id"] as string : null;
-                    if (currentFolderId == null)
-                    {
-                        CurrentOperation = LiveOperation.CreateFolder;
-                        string parameter = "{\"name\" : \"" + folderName + "\", \"description\" : \"Your private data managed by apps running on your devices\"}";
-                        client.PostAsync("/" + previousFolderId, parameter, e.UserState);
-                    }
-                    else if (currentIndex < Path.Count)
-                    {
-                        CurrentOperation = LiveOperation.GetFolderList;
-                        client.GetAsync("/" + currentFolderId + "/files", e.UserState);
-                    }
-                    else
-                    {
-                        ApplicationFolderID = currentFolderId;
-                        CurrentOperation = LiveOperation.GetApplicationFolderList;
-                        client.GetAsync("/" + ApplicationFolderID + "/files", e.UserState);
-                    }
-                    break;
-                case LiveOperation.CreateFolder:
-                    currentFolderId = e.Result["id"] as string;
-                    if (currentIndex < Path.Count)
-                    {
-                        CurrentOperation = LiveOperation.GetFolderList;
-                        client.GetAsync("/" + currentFolderId + "/files", e.UserState);
-                    }
-                    else
-                    {
-                        ApplicationFolderID = currentFolderId;
-                        CurrentOperation = LiveOperation.GetApplicationFolderList;
-                        client.GetAsync("/" + ApplicationFolderID + "/files", e.UserState);
-                    }
-                    break;
-                case LiveOperation.GetApplicationFolderList:
-                    applicationFolderContent = e.Result["data"] as IList;
-                    isRunning = false;
-                    Action<LiveOperationCompletedEventArgs> onCompleted = e.UserState as Action<LiveOperationCompletedEventArgs>;
-                    if (onCompleted != null)
-                    {
-                        onCompleted(e);
-                    }
-                    break;
-            }
+        private async Task<string> CreateFolder(string parentFolderId, string folderName)
+        {
+            CurrentOperation = LiveOperation.CreateFolder;
+            string parameter = "{\"name\" : \"" + folderName + "\", \"folder\": { }}";
+            var e = await client.PostAsync("/me/drive/items/" + parentFolderId + "/children", parameter);
+            return e.Result["id"] as string;
         }
 
         private static IDictionary<string, object> FindItemByName(string fileName, IList list)
@@ -327,48 +278,30 @@ namespace OneShoppingList
             {
                 try
                 {
-                    datetime = Convert.ToDateTime(item["updated_time"]);
+                    datetime = Convert.ToDateTime(item["lastModifiedDateTime"]);
                 }
                 catch { }
             }
             return datetime;
         }
 
-        public void DownloadAsync(string filename, Action<LiveDownloadCompletedEventArgs> onCompleted)
+        public async Task<Stream> DownloadAsync(string filename)
         {
             string fileID = FindItemByName(filename, this.applicationFolderContent)["id"] as string;
             if (fileID != null)
             {
-                client.DownloadAsync(path: String.Format("/{0}/content", fileID), userState: onCompleted);
+                var downloadResult = await client.DownloadAsync(string.Format("/me/drive/items/{0}/content", fileID));
+                return downloadResult.Stream;
             }
-            else
-            {
-                onCompleted(new LiveDownloadCompletedEventArgs(new FileNotFoundException("filename"), false, onCompleted));
-            }
+            return null;
         }
 
-        private void client_DownloadCompleted(object sender, LiveDownloadCompletedEventArgs e)
+        public async Task UploadAsync(string filename, Stream stream)
         {
-            Action<LiveDownloadCompletedEventArgs> onCompleted = e.UserState as Action<LiveDownloadCompletedEventArgs>;
-            if (onCompleted != null)
+            using (var reader = new StreamReader(stream))
             {
-                onCompleted(e);
-            }
-        }
-
-        public void UploadAsync(string filename, Stream stream, Action<LiveOperationCompletedEventArgs> onCompleted)
-        {
-            client.UploadAsync(path: String.Format("/{0}", ApplicationFolderID), fileName: filename, 
-                option:OverwriteOption.Overwrite, inputStream: stream, userState: onCompleted);
-        }
-
-        private void client_UploadCompleted(object sender, LiveOperationCompletedEventArgs e)
-        {
-            Action<LiveOperationCompletedEventArgs> onCompleted;
-            onCompleted = e.UserState as Action<LiveOperationCompletedEventArgs>;
-            if (onCompleted != null)
-            {
-                onCompleted(e);
+                var body = reader.ReadToEnd();
+                await client.PutAsync(String.Format("/me/drive/items/{0}:/{1}:/content", ApplicationFolderID, filename), body);
             }
         }
 

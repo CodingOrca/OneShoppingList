@@ -310,9 +310,6 @@ namespace OneShoppingList
             this.RaisePropertyChanged("ShowOnlyFavorites");
             this.RaisePropertyChanged("ShowAllItemsInAllLists");
             this.RaisePropertyChanged("SyncEnabled");
-            this.RaisePropertyChanged("SyncEnabled");
-            this.RaisePropertyChanged("SyncEnabled");
-            this.RaisePropertyChanged("SyncEnabled");
 
             ToggleShowAllCommand.RaiseCanExecuteChanged();
             SyncCommand.RaiseCanExecuteChanged();
@@ -320,7 +317,7 @@ namespace OneShoppingList
 
         void DeviceNetworkInformation_NetworkAvailabilityChanged(object sender, NetworkNotificationEventArgs e)
         {
-            Deployment.Current.Dispatcher.InvokeAsync(() =>
+            Deployment.Current.Dispatcher.BeginInvoke(() =>
                 {
                     base.RaisePropertyChanged("NetworkAvailable");
                     SyncCommand.RaiseCanExecuteChanged();

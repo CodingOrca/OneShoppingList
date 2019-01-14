@@ -165,7 +165,7 @@ namespace OneShoppingList
         private bool RefreshTrialMode = false;
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-            GoogleAnalytics.Tracker tracker = GoogleAnalytics.EasyTracker.GetTracker();
+            var tracker = GoogleAnalytics.EasyTracker.GetTracker();
             if (ViewModelLocator.Instance.Settings.IsUserKnown)
             {
                 tracker.SetCustomDimension(1, "SkyDrive");
@@ -231,31 +231,34 @@ namespace OneShoppingList
             }
         }
 
-        private void longListSelector_ScrollingStarted(object sender, EventArgs e)
+        void longListSelector_ManipulationStateChanged(object sender, EventArgs e)
         {
-            if (currentContextMenu != null && currentContextMenu.IsOpen)
+            var lls = sender as LongListSelector;
+            if (lls == null) return;
+            if (lls.ManipulationState != System.Windows.Controls.Primitives.ManipulationState.Idle)
             {
-                currentContextMenu.IsOpen = false;
-            }
+                if (currentContextMenu != null && currentContextMenu.IsOpen)
+                {
+                    currentContextMenu.IsOpen = false;
+                }
 
-            LongListSelector lls = sender as LongListSelector;
-            if (lls.SelectedItem != null)
+                if (lls.SelectedItem != null)
+                {
+                    lls.SelectedItem = null;
+                }
+                this.Focus();
+                this.ApplicationBar.IsMenuEnabled = false;
+                appbar_sendEmail.IsEnabled = false;
+                appbar_add.IsEnabled = false;
+                appbar_favorites.IsEnabled = false;
+                appbar_sync.IsEnabled = false;
+            }
+            else
             {
-                lls.SelectedItem = null;
+                this.ApplicationBar.IsMenuEnabled = true;
+                DataCollectionChanged(sender, null);
+                appbar_sync.IsEnabled = viewModel.SyncCommand.CanExecute(null);
             }
-            this.Focus();
-            this.ApplicationBar.IsMenuEnabled = false;
-            appbar_sendEmail.IsEnabled = false;
-            appbar_add.IsEnabled = false;
-            appbar_favorites.IsEnabled = false;
-            appbar_sync.IsEnabled = false;
-        }
-
-        private void longListSelector_ScrollingCompleted(object sender, EventArgs e)
-        {
-            this.ApplicationBar.IsMenuEnabled = true;
-            DataCollectionChanged(sender, null);
-            appbar_sync.IsEnabled = viewModel.SyncCommand.CanExecute(null);
         }
 
         private void appbarFavorits_Click(object sender, EventArgs e)
@@ -328,11 +331,10 @@ namespace OneShoppingList
 
         Dictionary<int, List<FrameworkElement>> linkedItems = new Dictionary<int, List<FrameworkElement>>();
 
-        private void longListSelector_Link(object sender, LinkUnlinkEventArgs e)
+        void longListSelector_ItemRealized(object sender, ItemRealizationEventArgs e)
         {
             LongListSelector lls = sender as LongListSelector;
-
-            ShoppingItem item = e.ContentPresenter.Content as ShoppingItem;
+            ShoppingItem item = e.Container.Content as ShoppingItem;
 
             if (item != null)
             {
@@ -340,19 +342,19 @@ namespace OneShoppingList
 
                 if (shop != null && shop.OrderedCategories.Contains(item.Category))
                 {
-                    e.ContentPresenter.Opacity = 1;
+                    e.Container.Opacity = 1;
                 }
                 else
                 {
-                    e.ContentPresenter.Opacity = 0.5;
+                    e.Container.Opacity = 0.5;
                 }
 
                 this.Dispatcher.BeginInvoke(() =>
                 {
-                    Grid grid = VisualTreeHelper.GetChild(e.ContentPresenter, 0) as Grid;
+                    Grid grid = VisualTreeHelper.GetChild(e.Container, 0) as Grid;
                     if (grid != null)
                     {
-                        PivotItem pivotItem = e.ContentPresenter.Ancestors<PivotItem>().SingleOrDefault() as PivotItem;
+                        PivotItem pivotItem = e.Container.Ancestors<PivotItem>().SingleOrDefault() as PivotItem;
                         if (pivotItem != null)
                         {
                             string currentShop = (pivotItem.DataContext as Shop).Name;
@@ -374,23 +376,23 @@ namespace OneShoppingList
                 });
                 return;
             }
-            GroupViewModel<ShoppingItem> category = e.ContentPresenter.Content as GroupViewModel<ShoppingItem>;
+            GroupViewModel<ShoppingItem> category = e.Container.Content as GroupViewModel<ShoppingItem>;
             if (category != null)
             {
                 Shop shop = lls.DataContext as Shop;
                 if (shop != null && shop.OrderedCategories.Contains(category.Key))
                 {
-                    e.ContentPresenter.Opacity = 1;
+                    e.Container.Opacity = 1;
                 }
                 else
                 {
-                    e.ContentPresenter.Opacity = 0.5;
+                    e.Container.Opacity = 0.5;
                 }
                 return;
             }
         }
 
-        private void longListSelector_Unlink(object sender, LinkUnlinkEventArgs e)
+        private void longListSelector_ItemUnrealized(object seender, ItemRealizationEventArgs e)
         {
             if (currentContextMenu != null && currentContextMenu.IsOpen)
             {

@@ -65,7 +65,10 @@ Wenn dein Partner einkaufen geht aber kein Windows Phone hat, sende ihm/ihr die 
 
     <Item Title="Verlauf"
            Type="text">
-      Neu in Version 1.5.0.0
+      1.6.0.0
+      Diese Version behebnt den Fehler, der ab ende Dezember 2018 OneDrive sync verheindert.
+      
+      1.5.0.0
       Artikel die einem Einkaufspfad nicht zugeordnet sind, können nun ausgeblendet werden. Wenn nich ausgeblendet, sind sie ausgegraut.
       Verbesserte Fehlerbehandlung während der synchronization und bessere behandlung wenn kein Netzwerk verfügbar ist.
       Auto-Caps bei Eingabe der Artikelnamen.
