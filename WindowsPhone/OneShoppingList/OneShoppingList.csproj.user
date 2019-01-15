@@ -2,11 +2,11 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <CurrentDeployCmdId>256</CurrentDeployCmdId>
-    <CurrentDeployID>A6BAF594-9315-40C3-AD16-F5B8A425A7AB</CurrentDeployID>
+    <CurrentDeployID>1AAFB3E8-5202-4480-A5F0-8D44CD04FA32</CurrentDeployID>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <CurrentDeployCmdId>256</CurrentDeployCmdId>
-    <CurrentDeployID>A6BAF594-9315-40C3-AD16-F5B8A425A7AB</CurrentDeployID>
+    <CurrentDeployID>1AAFB3E8-5202-4480-A5F0-8D44CD04FA32</CurrentDeployID>
   </PropertyGroup>
   <PropertyGroup>
     <PublishUrlHistory />
@@ -17,6 +17,14 @@
     <ErrorReportUrlHistory />
     <FallbackCulture>en-US</FallbackCulture>
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <CurrentDeployCmdId>256</CurrentDeployCmdId>
+    <CurrentDeployID>1AAFB3E8-5202-4480-A5F0-8D44CD04FA32</CurrentDeployID>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <CurrentDeployCmdId>256</CurrentDeployCmdId>
+    <CurrentDeployID>1AAFB3E8-5202-4480-A5F0-8D44CD04FA32</CurrentDeployID>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
